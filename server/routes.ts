@@ -48,30 +48,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         createdAt: demoUser.createdAt
       };
       
-      // Force session regeneration to ensure clean session
-      req.session.regenerate((err) => {
+      // We'll use a simpler approach - store demoUser in the session directly
+      req.session.demoUser = demoUserResponse;
+      req.session.isDemoMode = true;
+      
+      // Save the session immediately
+      req.session.save((err) => {
         if (err) {
-          return res.status(500).json({ error: "Session regeneration failed" });
+          console.error("Session save error:", err);
+          return res.status(500).json({ error: "Failed to save demo session" });
         }
         
-        // Log the user in as the demo user
-        req.login(demoUser, (err) => {
-          if (err) {
-            return res.status(500).json({ error: "Failed to login as demo user" });
-          }
-          
-          // Save the session to ensure it's stored before responding
-          req.session.save((err) => {
-            if (err) {
-              return res.status(500).json({ error: "Failed to save session" });
-            }
-            
-            // Set explicit cookie header to help with certain browser environments
-            res.setHeader('Set-Cookie', `connect.sid=${req.sessionID}; Path=/; HttpOnly; Max-Age=${7*24*60*60}`);
-            
-            res.status(200).json(demoUserResponse);
-          });
-        });
+        res.status(200).json(demoUserResponse);
       });
     } catch (error) {
       console.error("Demo login error:", error);
@@ -181,9 +169,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Helper function to check if user is authenticated or in demo mode
+  function isUserAuthorized(req: Express.Request): boolean {
+    return req.isAuthenticated() || (req.session.isDemoMode === true && req.session.demoUser !== undefined);
+  }
+  
+  // Helper function to get user ID (works for both regular and demo users)
+  function getUserId(req: Express.Request): number {
+    if (req.session.isDemoMode && req.session.demoUser) {
+      return req.session.demoUser.id;
+    }
+    
+    return req.user!.id;
+  }
+  
+  // Helper function to check if user is in demo mode
+  function isInDemoMode(req: Express.Request): boolean {
+    return req.session.isDemoMode === true && req.session.demoUser !== undefined;
+  }
+  
   // Get recent tests for user
   app.get("/api/tests/recent", async (req, res) => {
-    if (!req.isAuthenticated()) {
+    if (!isUserAuthorized(req)) {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
@@ -256,7 +263,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get a specific test
   app.get("/api/tests/:id", async (req, res) => {
-    if (!req.isAuthenticated()) {
+    if (!isUserAuthorized(req)) {
       return res.status(401).json({ message: "Not authenticated" });
     }
 
@@ -345,7 +352,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get test results
   app.get("/api/tests/:id/results", async (req, res) => {
-    if (!req.isAuthenticated()) {
+    if (!isUserAuthorized(req)) {
       return res.status(401).json({ message: "Not authenticated" });
     }
 

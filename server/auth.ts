@@ -134,7 +134,14 @@ export function setupAuth(app: Express) {
   });
 
   app.get("/api/user", (req, res) => {
+    // First check if we have a demo user in the session
+    if (req.session.isDemoMode && req.session.demoUser) {
+      return res.json(req.session.demoUser);
+    }
+    
+    // Otherwise use standard authentication
     if (!req.isAuthenticated()) return res.status(401).json({ message: "Not authenticated" });
+    
     // Don't send the password back to the client
     const { password, ...userWithoutPassword } = req.user as SelectUser;
     res.json(userWithoutPassword);

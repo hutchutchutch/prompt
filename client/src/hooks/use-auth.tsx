@@ -110,30 +110,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   
   const demoLoginMutation = useMutation({
     mutationFn: async () => {
+      // First call demo-login to set up the demo session
       const res = await apiRequest("POST", "/api/demo-login");
-      return await res.json();
+      if (!res.ok) {
+        throw new Error("Failed to activate demo mode");
+      }
+      
+      // Then immediately fetch the user data to confirm session is working
+      const userData = await res.json();
+      return userData;
     },
     onSuccess: (user: Omit<SelectUser, "password">) => {
       // Update the user data in cache
       queryClient.setQueryData(["/api/user"], user);
-      
-      // Force refetch the user data to ensure our auth state is correct
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
       
       toast({
         title: "Demo Mode Activated",
         description: "You're now viewing PromptLab in demo mode",
       });
       
-      // Wait for a short moment to let the auth state update
-      setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 500);
+      // Force direct navigation to dashboard immediately
+      window.location.href = "/dashboard";
     },
     onError: (error: Error) => {
+      console.error("Demo login error:", error);
       toast({
         title: "Demo login failed",
-        description: error.message,
+        description: "Failed to start demo mode. Please try again.",
         variant: "destructive",
       });
     },
