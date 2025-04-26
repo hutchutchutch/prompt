@@ -163,6 +163,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     try {
+      // Check if this is the demo user
+      if (req.user!.id === 999) {
+        // Return demo data for the demo user
+        const demoData = [
+          {
+            id: 1001,
+            userId: 999,
+            promptText: "Classify this customer support email as urgent or non-urgent",
+            desiredOutcome: "Accurate classification with explanation",
+            status: "completed",
+            redTeamEnabled: true,
+            createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
+            completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 + 30000), // 30 seconds later
+          },
+          {
+            id: 1002,
+            userId: 999,
+            promptText: "Extract key entities from this medical research abstract",
+            desiredOutcome: "List of medical terms, conditions, treatments, and key findings",
+            status: "completed",
+            redTeamEnabled: false,
+            createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+            completedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000 + 45000), // 45 seconds later
+          },
+          {
+            id: 1003,
+            userId: 999,
+            promptText: "Summarize the key points from this quarterly earnings call transcript",
+            desiredOutcome: "Brief summary with financial highlights and growth metrics",
+            status: "completed",
+            redTeamEnabled: true,
+            createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
+            completedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000 + 60000), // 1 minute later
+          },
+          {
+            id: 1004,
+            userId: 999,
+            promptText: "Generate a detailed API documentation for this code snippet",
+            desiredOutcome: "Complete documentation with examples, parameters, and return values",
+            status: "completed", 
+            redTeamEnabled: false,
+            createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15 days ago
+            completedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000 + 50000), // 50 seconds later
+          },
+          {
+            id: 1005,
+            userId: 999,
+            promptText: "Explain the concept of quantum computing to a high school student",
+            desiredOutcome: "Simple explanation with metaphors and practical examples",
+            status: "completed",
+            redTeamEnabled: true,
+            createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000), // 20 days ago
+            completedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000 + 40000), // 40 seconds later
+          }
+        ];
+        return res.json(demoData);
+      }
+      
+      // For regular users, get data from storage
       const tests = await storage.getPromptTestsByUserId(req.user!.id, 5);
       res.json(tests);
     } catch (err) {
@@ -178,6 +237,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     try {
       const testId = parseInt(req.params.id);
+      
+      // Check if this is the demo user and a test ID in the demo range (1001-1005)
+      if (req.user!.id === 999 && testId >= 1001 && testId <= 1005) {
+        // Return demo test data
+        const demoTests = {
+          1001: {
+            id: 1001,
+            userId: 999,
+            promptText: "Classify this customer support email as urgent or non-urgent",
+            desiredOutcome: "Accurate classification with explanation",
+            status: "completed",
+            redTeamEnabled: true,
+            createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+            completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000 + 30000),
+          },
+          1002: {
+            id: 1002,
+            userId: 999,
+            promptText: "Extract key entities from this medical research abstract",
+            desiredOutcome: "List of medical terms, conditions, treatments, and key findings",
+            status: "completed",
+            redTeamEnabled: false,
+            createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+            completedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000 + 45000),
+          },
+          1003: {
+            id: 1003,
+            userId: 999,
+            promptText: "Summarize the key points from this quarterly earnings call transcript",
+            desiredOutcome: "Brief summary with financial highlights and growth metrics",
+            status: "completed",
+            redTeamEnabled: true,
+            createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+            completedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000 + 60000),
+          },
+          1004: {
+            id: 1004,
+            userId: 999,
+            promptText: "Generate a detailed API documentation for this code snippet",
+            desiredOutcome: "Complete documentation with examples, parameters, and return values",
+            status: "completed", 
+            redTeamEnabled: false,
+            createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+            completedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000 + 50000),
+          },
+          1005: {
+            id: 1005,
+            userId: 999,
+            promptText: "Explain the concept of quantum computing to a high school student",
+            desiredOutcome: "Simple explanation with metaphors and practical examples",
+            status: "completed",
+            redTeamEnabled: true,
+            createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000),
+            completedAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000 + 40000),
+          }
+        };
+        
+        const demoTest = demoTests[testId as keyof typeof demoTests];
+        if (demoTest) {
+          return res.json(demoTest);
+        }
+      }
+      
+      // For regular users, get data from storage
       const test = await storage.getPromptTest(testId);
       
       if (!test) {
@@ -203,6 +326,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
     try {
       const testId = parseInt(req.params.id);
+      
+      // Check if this is the demo user and a test ID in the demo range (1001-1005)
+      if (req.user!.id === 999 && testId >= 1001 && testId <= 1005) {
+        // Return demo results based on the test type
+        const getDemoResultsForTest = (testId: number) => {
+          // Create results for 4 different models with 3 variants each
+          const models = [
+            { id: "gpt-4", name: "GPT-4 Turbo", provider: "OpenAI" },
+            { id: "gpt-35", name: "GPT-3.5 Turbo", provider: "OpenAI" },
+            { id: "claude-2", name: "Claude 2", provider: "Anthropic" },
+            { id: "gemini-pro", name: "Gemini Pro", provider: "Google" }
+          ];
+          
+          const variants = ["baseline", "cot", "self-critique"];
+          const results = [];
+          
+          // Generate different quality scores based on the model and variant
+          for (let i = 0; i < models.length; i++) {
+            const model = models[i];
+            for (let j = 0; j < variants.length; j++) {
+              const variant = variants[j];
+              
+              // Quality scores are higher for more advanced models and better techniques
+              const baseQuality = 6.5 + (2.5 * (models.length - i) / models.length);
+              const variantBonus = j * 0.7;  // Better variant means higher score
+              const qualityScore = Math.min(10, baseQuality + variantBonus);
+              
+              // Cost is higher for advanced models
+              const costScale = (i + 1) / models.length;
+              const costUsd = 0.005 + (0.045 * costScale);
+              
+              // Latency is lower for simpler models
+              const baseLatency = 2000;
+              const modelLatency = baseLatency * (1 + i * 0.5);
+              const variantLatency = baseLatency * (1 + j * 0.3);
+              const latencyMs = modelLatency + variantLatency;
+              
+              results.push({
+                id: 1000 + (i * 10) + j,
+                testId,
+                modelId: model.id,
+                variantId: variant,
+                output: `Sample output for ${model.name} using ${variant} variant. This demonstrates the quality of response you would get from this model and approach.`,
+                qualityScore,
+                latencyMs,
+                costUsd,
+                vulnerabilityStatus: testId % 2 === 0 ? 'safe' : (i === 0 ? 'partial' : 'safe'),
+                metadata: {
+                  modelProvider: model.provider,
+                  modelName: model.name,
+                  variantName: variant === "baseline" ? "Baseline" : variant === "cot" ? "Chain-of-Thought" : "Self-Critique",
+                },
+                createdAt: new Date(Date.now() - (Math.random() * 24 * 60 * 60 * 1000)),
+              });
+            }
+          }
+          
+          return results;
+        };
+        
+        return res.json(getDemoResultsForTest(testId));
+      }
+      
+      // For regular users, get data from storage
       const test = await storage.getPromptTest(testId);
       
       if (!test) {
@@ -296,6 +483,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     try {
+      // Check if this is the demo user
+      if (req.user!.id === 999) {
+        // Return demo data for the demo user
+        const demoLibrary = [
+          {
+            id: 2001,
+            userId: 999,
+            testId: 1001,
+            name: "Customer Support Classification",
+            category: "Classification",
+            nextScheduled: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days in future
+            createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
+          },
+          {
+            id: 2002,
+            userId: 999,
+            testId: 1002,
+            name: "Medical Entity Extraction",
+            category: "Entity Extraction",
+            nextScheduled: null,
+            createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+          },
+          {
+            id: 2003,
+            userId: 999,
+            testId: 1003,
+            name: "Financial Report Summary",
+            category: "Summarization",
+            nextScheduled: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days in future
+            createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+          },
+        ];
+        return res.json(demoLibrary);
+      }
+      
+      // For regular users, get data from storage
       const savedPrompts = await storage.getSavedPromptsByUserId(req.user!.id);
       res.json(savedPrompts);
     } catch (err) {
@@ -323,6 +546,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all frameworks
   app.get("/api/frameworks", async (req, res) => {
     try {
+      // For demo user, return pre-set frameworks
+      if (req.isAuthenticated() && req.user!.id === 999) {
+        const demoFrameworks = [
+          {
+            id: 1,
+            name: "Chain-of-Thought",
+            description: "Instructs the model to break down its reasoning step-by-step",
+            enabled: true,
+            lastUpdated: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+          },
+          {
+            id: 2,
+            name: "Self-Critique",
+            description: "Models evaluate their own outputs and refine their answers",
+            enabled: true,
+            lastUpdated: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+          },
+          {
+            id: 3,
+            name: "Tree-of-Thought",
+            description: "Explores multiple reasoning paths simultaneously",
+            enabled: true,
+            lastUpdated: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+          },
+          {
+            id: 4,
+            name: "Few-Shot Learning",
+            description: "Provides examples in the prompt to guide the model response",
+            enabled: true,
+            lastUpdated: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+          }
+        ];
+        return res.json(demoFrameworks);
+      }
+      
+      // For regular users, get data from storage
       const frameworks = await storage.getFrameworks();
       res.json(frameworks);
     } catch (err) {

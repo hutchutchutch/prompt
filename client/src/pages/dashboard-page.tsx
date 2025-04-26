@@ -24,9 +24,9 @@ export default function DashboardPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "completed":
-        return <Badge variant="success">Completed</Badge>;
+        return <Badge className="bg-green-100 text-green-800 border-green-200">Completed</Badge>;
       case "running":
-        return <Badge variant="warning">Running</Badge>;
+        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Running</Badge>;
       case "failed":
         return <Badge variant="destructive">Failed</Badge>;
       default:
@@ -124,45 +124,45 @@ export default function DashboardPage() {
             <ul className="divide-y divide-gray-200">
               {recentTests?.map((test) => (
                 <li key={test.id}>
-                  <Link href={test.status === "completed" ? `/results/${test.id}` : `/wizard/progress?testId=${test.id}`}>
-                    <a className="block hover:bg-gray-50">
-                      <div className="px-4 py-4 sm:px-6">
-                        <div className="flex items-center justify-between">
-                          <div className="truncate">
-                            <div className="flex items-center">
-                              <p className="text-sm font-medium text-primary truncate">
-                                {test.promptText.length > 50 
-                                  ? `${test.promptText.substring(0, 50)}...` 
-                                  : test.promptText}
-                              </p>
-                              <div className="ml-2">
-                                {getStatusBadge(test.status)}
-                              </div>
-                            </div>
-                            <div className="mt-2 flex">
-                              <div className="flex items-center text-sm text-gray-500">
-                                <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                                <span>{formatDistanceToNow(new Date(test.createdAt), { addSuffix: true })}</span>
-                              </div>
-                              {test.redTeamEnabled && (
-                                <div className="ml-4 flex items-center text-sm text-gray-500">
-                                  <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                  </svg>
-                                  <span>Red-team enabled</span>
-                                </div>
-                              )}
+                  <div className="block hover:bg-gray-50 cursor-pointer" onClick={() => 
+                    navigate(test.status === "completed" ? `/results/${test.id}` : `/wizard/progress?testId=${test.id}`)
+                  }>
+                    <div className="px-4 py-4 sm:px-6">
+                      <div className="flex items-center justify-between">
+                        <div className="truncate">
+                          <div className="flex items-center">
+                            <p className="text-sm font-medium text-primary truncate">
+                              {test.promptText.length > 50 
+                                ? `${test.promptText.substring(0, 50)}...` 
+                                : test.promptText}
+                            </p>
+                            <div className="ml-2">
+                              {getStatusBadge(test.status)}
                             </div>
                           </div>
-                          <div className="ml-5 flex-shrink-0">
-                            <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                            </svg>
+                          <div className="mt-2 flex">
+                            <div className="flex items-center text-sm text-gray-500">
+                              <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                              <span>{formatDistanceToNow(new Date(test.createdAt), { addSuffix: true })}</span>
+                            </div>
+                            {test.redTeamEnabled && (
+                              <div className="ml-4 flex items-center text-sm text-gray-500">
+                                <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                                <span>Red-team enabled</span>
+                              </div>
+                            )}
                           </div>
                         </div>
+                        <div className="ml-5 flex-shrink-0">
+                          <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
                       </div>
-                    </a>
-                  </Link>
+                    </div>
+                  </div>
                 </li>
               ))}
             </ul>

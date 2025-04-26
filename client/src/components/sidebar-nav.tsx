@@ -51,19 +51,21 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
   return (
     <nav className={cn("flex flex-col space-y-1", className)} {...props}>
       {items.map((item) => (
-        <Link key={item.href} href={item.href}>
-          <a
-            className={cn(
-              "flex items-center px-3 py-2 text-sm font-medium rounded-md",
-              location === item.href
-                ? "bg-primary/10 text-primary"
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-            )}
-          >
-            <item.icon className="mr-3 h-5 w-5" />
-            <span>{item.title}</span>
-          </a>
-        </Link>
+        <div key={item.href} className="w-full">
+          <Link href={item.href}>
+            <div
+              className={cn(
+                "flex items-center px-3 py-2 text-sm font-medium rounded-md cursor-pointer",
+                location === item.href
+                  ? "bg-primary/10 text-primary"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+              )}
+            >
+              <item.icon className="mr-3 h-5 w-5" />
+              <span>{item.title}</span>
+            </div>
+          </Link>
+        </div>
       ))}
       
       <button
