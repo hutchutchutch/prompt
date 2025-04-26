@@ -55,8 +55,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return res.status(500).json({ error: "Failed to authenticate demo user" });
         }
         
-        // Mark the session with demo flag for special handling and isolation
+        // Mark the session with demo flag and user data for special handling and isolation
         req.session.isDemoMode = true;
+        req.session.demoUser = demoUserResponse;
         
         // Set a short expiration (30 minutes) for demo sessions
         const thirtyMinutes = 30 * 60 * 1000;

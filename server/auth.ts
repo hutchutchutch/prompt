@@ -48,7 +48,8 @@ export function setupAuth(app: Express) {
       secure: false, // Always false for development
       sameSite: "lax",
       path: "/",
-    }
+    },
+    name: "promptlab.sid"
   };
 
   app.set("trust proxy", 1);

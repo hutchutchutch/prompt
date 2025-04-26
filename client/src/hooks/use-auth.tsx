@@ -110,23 +110,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   
   const demoLoginMutation = useMutation({
     mutationFn: async () => {
-      // First call demo-login to set up the demo session
+      // Call demo-login to set up the demo session
       const res = await apiRequest("POST", "/api/demo-login");
       if (!res.ok) {
         throw new Error("Failed to activate demo mode");
       }
       
-      // Then immediately fetch the user data to confirm session is working
+      // Get the user data from the response
       const userData = await res.json();
-      
-      // Add a slight delay to ensure session is properly stored
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Perform an additional API call to verify authentication
-      const verifyRes = await fetch('/api/user');
-      if (!verifyRes.ok) {
-        throw new Error("Demo session verification failed");
-      }
       
       return userData;
     },
@@ -140,7 +131,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         variant: "default",
       });
       
-      // Use a full page reload to dashboard to ensure clean state
+      // Navigate to dashboard
       window.location.href = "/dashboard";
     },
     onError: (error: Error) => {
