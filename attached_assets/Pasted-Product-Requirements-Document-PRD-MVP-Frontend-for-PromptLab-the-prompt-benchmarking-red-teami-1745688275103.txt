@@ -1,0 +1,193 @@
+Product Requirements Document (PRD)
+MVP Frontend for PromptLab – the prompt-benchmarking & red-teaming SaaS
+
+0 · Document purpose
+This PRD defines the minimum-viable features, UX, and success criteria for the web front-end of PromptLab.
+It is written so that an LLM-powered “frontend web-app builder” (e.g. a code-generation agent) can translate each requirement into Vite + React + Tailwind (shadcn/ui) components.
+
+1 · Goals & success metrics
+
+Goal	KPI (MVP)	Success target
+Let visitors understand product value in ≤ 30 s	⌚ Average time-to-CTA click on landing	< 30 s
+Enable paid users to run a full prompt test	% of users completing Wizard end-to-end	≥ 80 %
+Surface best model+prompt combo clearly	% users who select “Save to Library” on Results page	≥ 60 %
+Highlight security issues	% tests where red-team flag is noticed (hover / click)	≥ 70 %
+Performance	First Contentful Paint on SPA	< 1 s (desktop), < 2 s (mobile)
+2 · Personas & tiers
+Visitor “Sam” – curious PM; anonymous, lands on home page, sees “Prompt of the Day”.
+
+Subscriber “Ava” – indie prompt engineer; pays $29/mo; needs cost/speed/quality tables, red-team toggle.
+
+Admin “Devon” – internal; uploads new prompt-iteration frameworks & red-team attack sets.
+
+3 · In-scope vs. out-of-scope (MVP)
+
+In scope	Out of scope
+Public landing page with Prompt-of-Day	Self-service team seats & roles
+Auth (email+password, Magic Link)	SSO (Google, GitHub)
+Wizard to run one test batch	Bulk CSV import
+Results Matrix + scatter-plots	Custom chart builder
+Library (list, view, re-run)	Version diff / history graphs
+Red-team toggle & vulnerability badge	Automatic patch suggestions
+Admin page: enable/disable frameworks & attacks	Full CRUD for pricing feeds
+4 · User flow (SPA)
+mermaid
+Copy
+Edit
+graph LR
+LP(Landing) -->|Sign up| Auth
+LP -->|Test now| WizardStep1
+Auth --> Dashboard
+Dashboard --> WizardStep1(Prompt + Outcome)
+WizardStep1 --> WizardStep2(Models & Frameworks)
+WizardStep2 --> WizardStep3(Settings + Red-team)
+WizardStep3 --> Progress(Job status WS)
+Progress --> ResultsMatrix
+ResultsMatrix -->|Save| Library
+Library -->|View| ResultDetail
+Dashboard --> Library
+Dashboard --> Admin[Admin (only role=admin)]
+5 · Functional requirements by screen
+5.1 Landing (“Prompt of the Day”)
+Hero Card – prompt text, best model, metrics chips (Cost, Speed, Quality).
+
+CTA buttons – “Try your prompt” → Wizard, “Sign In”.
+
+Educational accordion – How it works, Pricing, Security.
+
+5.2 Auth
+Email/password + magic-link option (using Clerk or Auth.js).
+
+Error & success toasts.
+
+5.3 Dashboard (after login)
+Left sidebar nav: Dashboard • Library • Admin (if role) • Documentation.
+
+New Test button.
+
+Recent runs table (5 latest) with status pill.
+
+5.4 Wizard (3 steps)
+
+Step	Components
+1 Prompt	PromptInput (autosize textarea), DesiredOutcomeInput (textarea), char/token counter
+2 Models & Frameworks	ModelSelector (checkbox grid, group by provider), FrameworkSelector (pill toggle), ConcurrencyPreview notice
+3 Settings	IterationBudgetInput (slider / numeric), RedTeamToggle, Run button
+Validation: disable Run until required fields.
+
+5.5 Progress / Live run
+Status card per variant×model row: spinner, % complete, first-token latency timer.
+
+WebSocket subscription to /job/:id/events.
+
+5.6 Results Matrix
+Heat-map table (rows = models, cols = variants).
+
+Clicking cell opens Result Drawer with
+
+Raw output
+
+Quality score, human override toggle
+
+Latency chart (sparkline)
+
+Cost breakdown
+
+Vulnerability badge (✅ Safe · ⚠️ Partial · ❌ Failed)
+
+Scatter tabs:
+
+Cost vs Quality
+
+Speed vs Quality
+
+Cost vs Speed
+
+Primary CTA “Save to Library” → modal to name & schedule re-test.
+
+5.7 Library
+Table with saved combos: Name, Last score, Next scheduled, Red-team status.
+
+Row actions: View, Re-run, Delete.
+
+5.8 Admin (role=admin)
+Frameworks panel – list folders in /services/plugins, toggle enabled.
+
+Red-team attacks – table of attack sets, enable/disable, upload JSON.
+
+Model catalogue – force-refresh price feed.
+
+6 · Component inventory (shadcn/ui + custom)
+
+Component	Key props
+PromptInput	value, onChange, maxTokens
+ModelSelector	models[], selected, onToggle
+FrameworkBadge	name, enabled
+ScatterPlot (Recharts)	xKey, yKey, data[]
+HeatCell	score, vulnFlag
+ProgressBar	percent, status
+VulnBadge	`status = safe
+7 · Non-functional requirements
+Performance – SPA bundle ≤ 250 kB gzipped; code-split wizard & admin routes.
+
+Accessibility – WCAG 2.1 AA; keyboard nav across tables & modals.
+
+Security –
+
+CSP headers via backend.
+
+XSS-safe rendering of raw model output (monospace, sanitise HTML).
+
+Telemetry – page-view and CTA click events sent to PostHog.
+
+Error handling – global error boundary with friendly copy.
+
+8 · Dependencies & interfaces
+
+Dependency	Interface
+API Gateway	REST / tRPC endpoint /api/job (POST start), /api/job/:id/events (WS)
+Pricing feed	/api/pricing – returns JSON per model
+Auth	JWT in HttpOnly cookie
+CDN	CloudFront for static assets
+9 · Measurement & analytics instrumentation
+Log Prompt length, Model count, Framework count per run.
+
+Capture Red-team enabled boolean.
+
+Track time from Run click → Results ready (UX latency).
+
+Funnel: Landing → Signup → Completed run → Saved combo.
+
+10 · Milestones & estimated effort (ideal-days)
+
+Milestone	Owner	Days
+Design tokens + shadcn theme	FE	1
+Landing + Auth flow	FE	2
+Wizard (UI only)	FE	3
+WS progress view	FE	2
+Results Matrix + scatter plots	FE	3
+Library views	FE	1
+Admin panel skeleton	FE	1
+QA & accessibility pass	FE	1
+Total		14
+11 · Risks & mitigations
+
+Risk	Likelihood	Impact	Mitigation
+Complex WS state bugs	M	H	Use tRPC subscription helpers + exhaustive tests
+Charts overwhelm non-tech users	M	M	Default to “Recommended combo” summary card first
+Red-team outputs may contain disallowed content	L	H	Sanitize + show warning mask, click to reveal
+✅ Deliverable for builder
+A Vite monorepo branch containing:
+
+pgsql
+Copy
+Edit
+apps/web/
+  src/
+    pages/{index,auth,dashboard,wizard,results,library,admin}.tsx
+    components/{…}.tsx
+    lib/{api.ts, ws.ts}
+  index.html
+  tailwind.config.js
+All components typed with TypeScript, styled via Tailwind tokens, using shadcn/ui primitives.
+
