@@ -1,0 +1,57 @@
+“One-click demo” pattern — key principles
+
+Principle	Why it matters	How to implement
+Never truly “bypass” auth	You still need a server-issued identity so RBAC, rate-limits, and audit logs work.	Create a backend endpoint POST /auth/demo that signs and returns a short-lived JWT (or session cookie) whose claims include role: "demo" and a synthetic user_id such as demo-fixed or demo-<uuid>.
+Isolate data	Prevent leaks, keep demo experience snappy, and let you reset state easily.	Point all demo requests at (a) a separate database/schema filled with synthetic data, or (b) the same DB but under a dedicated tenant_id = DEMO. Add a nightly job that truncates or reseeds.
+Least privilege role	A mis-scoped demo token is the biggest risk.	In your RBAC table create a demo role that has:
+• read-only access to most tables
+• no mutation on PII or billing tables
+• limited feature flags (e.g., no API-key page).
+Ephemeral or read-only writes	You want people to click around freely without cluttering the DB.	Two common patterns:
+1. Ephemeral user: generate a fresh demo‐<uuid> user on each click and store state in Redis with a 30-min TTL.
+2. Read-only sandbox: accept writes but direct them to an in-memory or shadow table that resets every few hours.
+Rate-limit & abuse protection	Public demo endpoints are magnets for scrapers and fuzzers.	Apply lower global rate-limits to the demo role, block API calls that cost $ (LLM, e-mail), and log IPs separately.
+Hard-coded secrets belong in env, not client	Prevent someone from lifting demo credentials and using them against prod.	Store the demo user’s hashed password or signing secret in env vars; never ship it in the bundle.
+Clear “demo mode” banner	UX clarity + legal protection (no SLA).	Render a persistent badge or top-bar in the UI when role === "demo". Disable “upgrade” flows that would normally mutate billing.
+Minimal flow
+pgsql
+Copy
+Edit
+Landing page
+ └─▶  “Try live demo” button
+      └─▶  POST /auth/demo           (no body)
+            └─▶ server creates JWT { sub:"demo-8ffa", role:"demo", exp:+30m }
+                 ←  Set-Cookie: session=<jwt>; HttpOnly; SameSite=Lax
+Landing redirects to /dashboard (token now on request headers)
+How to store the demo account
+Seed data on startup
+
+sql
+Copy
+Edit
+INSERT INTO users(id, email, role, password_hash)
+VALUES ('demo-fixed', 'demo@yourapp', 'demo', '$argon2hash');
+Mark it as special
+In the users table:
+
+sql
+Copy
+Edit
+is_demo BOOLEAN DEFAULT FALSE
+Set TRUE only for this user so you can exclude it from analytics, billing, etc.
+
+Optionally generate per-session users
+If you prefer no shared login, create a user row every time /auth/demo is hit, set is_demo = TRUE, and store nothing else permanent.
+
+Security checklist
+☑️ Demo JWT max-age ≤ 1 h and non-refreshable.
+
+☑️ role: demo blocked by middleware from hitting any endpoint tagged costly, admin or mutation.
+
+☑️ CSP and CORS identical to real app.
+
+☑️ Separate API key quotas if the demo can trigger paid third-party calls (e.g., LLMs).
+
+☑️ Regular automated test ensuring demo user cannot escalate privileges.
+
+Implementing the pattern above lets prospects play with a realistic dashboard instantly, while keeping production data, costs, and compliance posture safe.

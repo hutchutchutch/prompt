@@ -13,6 +13,14 @@ declare global {
   }
 }
 
+// Extend SessionData to include our custom properties for demo mode
+declare module 'express-session' {
+  interface SessionData {
+    isDemoMode?: boolean;
+    demoUser?: Omit<SelectUser, 'password'>;
+  }
+}
+
 const scryptAsync = promisify(scrypt);
 
 async function hashPassword(password: string) {

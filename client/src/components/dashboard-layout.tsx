@@ -15,9 +15,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   
   // User avatar display - show first letter of username if available
   const userInitial = user?.username ? user.username[0].toUpperCase() : "U";
+  const isDemo = user?.role === "demo";
   
   return (
     <div className="min-h-screen bg-gray-100">
+      {/* Demo Mode Banner */}
+      {isDemo && (
+        <div className="bg-primary text-white text-center py-1 px-4 text-sm font-medium flex items-center justify-center">
+          <span className="mr-2">🔍</span>
+          <span>Demo Mode - Explore PromptLab features with pre-loaded data</span>
+        </div>
+      )}
       {/* Sidebar for desktop */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
         <div className="flex-1 flex flex-col min-h-0 bg-white border-r border-gray-200">
@@ -43,7 +51,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     {user?.username}
                   </p>
                   <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-                    {user?.role === "admin" ? "Admin" : "Pro Subscriber"}
+                    {user?.role === "admin" ? "Admin" : user?.role === "demo" ? "Demo User" : "Pro Subscriber"}
                   </p>
                 </div>
               </div>

@@ -29,10 +29,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
   setupAuth(app);
   
-  // Demo mode endpoint - special login for demo purposes
+  // Demo mode endpoint - one-click demo access
   app.post("/api/demo-login", async (req, res) => {
     try {
-      // Get the demo user from storage
+      // Get the fixed demo user from storage
       const demoUser = await storage.getDemoUser();
       
       if (!demoUser) {
@@ -48,18 +48,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         createdAt: demoUser.createdAt
       };
       
-      // We'll use a simpler approach - store demoUser in the session directly
-      req.session.demoUser = demoUserResponse;
-      req.session.isDemoMode = true;
-      
-      // Save the session immediately
-      req.session.save((err) => {
+      // Log in the user properly through passport
+      req.login(demoUser, (err) => {
         if (err) {
-          console.error("Session save error:", err);
-          return res.status(500).json({ error: "Failed to save demo session" });
+          console.error("Login error:", err);
+          return res.status(500).json({ error: "Failed to authenticate demo user" });
         }
         
-        res.status(200).json(demoUserResponse);
+        // Mark the session with demo flag for special handling and isolation
+        req.session.isDemoMode = true;
+        
+        // Set a short expiration (30 minutes) for demo sessions
+        const thirtyMinutes = 30 * 60 * 1000;
+        req.session.cookie.maxAge = thirtyMinutes;
+        
+        // Save the session explicitly to ensure it's stored
+        req.session.save((err) => {
+          if (err) {
+            console.error("Session save error:", err);
+            return res.status(500).json({ error: "Failed to save demo session" });
+          }
+          
+          // Return the user info
+          res.status(200).json(demoUserResponse);
+        });
       });
     } catch (error) {
       console.error("Demo login error:", error);

@@ -94,7 +94,7 @@ export class MemStorage implements IStorage {
       username: 'demo_user',
       email: 'demo@promptlab.ai',
       password: 'hashed_password_not_usable',
-      role: 'user',
+      role: 'demo',
       createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
     };
     this.users.set(demoUser.id, demoUser);

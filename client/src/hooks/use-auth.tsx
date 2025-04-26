@@ -118,6 +118,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       // Then immediately fetch the user data to confirm session is working
       const userData = await res.json();
+      
+      // Add a slight delay to ensure session is properly stored
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Perform an additional API call to verify authentication
+      const verifyRes = await fetch('/api/user');
+      if (!verifyRes.ok) {
+        throw new Error("Demo session verification failed");
+      }
+      
       return userData;
     },
     onSuccess: (user: Omit<SelectUser, "password">) => {
@@ -126,10 +136,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       toast({
         title: "Demo Mode Activated",
-        description: "You're now viewing PromptLab in demo mode",
+        description: "Welcome to PromptLab demo",
+        variant: "default",
       });
       
-      // Force direct navigation to dashboard immediately
+      // Use a full page reload to dashboard to ensure clean state
       window.location.href = "/dashboard";
     },
     onError: (error: Error) => {
