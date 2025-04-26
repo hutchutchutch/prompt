@@ -7,7 +7,7 @@ interface CyclingTextProps {
   className?: string;
 }
 
-export function CyclingText({ texts, interval = 3000, className }: CyclingTextProps) {
+export function CyclingText({ texts, interval = 8000, className }: CyclingTextProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(false);
 

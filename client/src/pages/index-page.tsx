@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,13 +7,34 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import PromptOfDay from "@/components/prompt-of-day";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { LlmTaskShowcase } from "@/components/llm-task-showcase";
+import { CyclingText } from "@/components/cycling-text";
 import { examplePrompts } from "@/data/example-prompts";
 import { useAuth } from "@/hooks/use-auth";
 
 export default function IndexPage() {
   const { user } = useAuth();
+  const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+  const taskTypes = [
+    "classification",
+    "entityExtraction",
+    "summarization",
+    "documentation",
+    "explanation"
+  ];
+  const currentTask = taskTypes[currentTaskIndex];
+  const taskData = examplePrompts[currentTask as keyof typeof examplePrompts];
+  const allTaskCategories = taskTypes.map(type => examplePrompts[type as keyof typeof examplePrompts].taskCategory);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTaskIndex((current) => (current + 1) % taskTypes.length);
+    }, 8000); // 8 seconds per task type
+    
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <main className="min-h-screen">
@@ -88,13 +109,53 @@ export default function IndexPage() {
         {/* What LLMs Do Well Section */}
         <div className="my-16">
           <LlmTaskShowcase
-            promptText={examplePrompts.classification.promptText}
-            taskCategory={examplePrompts.classification.taskCategory}
-            bestQuality={examplePrompts.classification.bestQuality}
-            bestValue={examplePrompts.classification.bestValue}
-            fastest={examplePrompts.classification.fastest}
-            businessValue={examplePrompts.classification.businessValue}
+            promptText={taskData.promptText}
+            taskCategory={taskData.taskCategory}
+            bestQuality={taskData.bestQuality}
+            bestValue={taskData.bestValue}
+            fastest={taskData.fastest}
+            businessValue={taskData.businessValue}
           />
+        </div>
+        
+        {/* Prompt of the Day */}
+        <div className="my-16 bg-white rounded-lg shadow-md overflow-hidden max-w-4xl mx-auto">
+          <CardHeader className="px-6 py-4 bg-primary text-white">
+            <CardTitle className="text-xl font-semibold">Prompt of the Day: {taskData.taskCategory}</CardTitle>
+          </CardHeader>
+          
+          <CardContent className="px-6 py-4">
+            <div className="prompt-font text-sm bg-gray-50 p-4 rounded border border-gray-200 mb-4">
+              {taskData.promptText}
+            </div>
+            
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between">
+              <div>
+                <span className="font-medium">Best model: </span>
+                <span className="text-primary">{taskData.bestQuality.model}</span>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
+                <Badge variant="outline" className="bg-green-100 text-green-800 hover:bg-green-100">
+                  Quality: {taskData.bestQuality.score.toFixed(1)}/10
+                </Badge>
+                <Badge variant="outline" className="bg-blue-100 text-blue-800 hover:bg-blue-100">
+                  Speed: {taskData.bestQuality.time}ms
+                </Badge>
+                <Badge variant="outline" className="bg-purple-100 text-purple-800 hover:bg-purple-100">
+                  Cost: ${taskData.bestQuality.cost.toFixed(5)}
+                </Badge>
+              </div>
+            </div>
+          </CardContent>
+          
+          <CardFooter className="px-6 py-3 bg-gray-50 border-t border-gray-200">
+            <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
+              <Link href={user ? "/wizard" : "/auth"}>
+                Try with your settings →
+              </Link>
+            </Button>
+          </CardFooter>
         </div>
 
         {/* How It Works Section */}

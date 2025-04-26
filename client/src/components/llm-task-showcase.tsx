@@ -42,11 +42,7 @@ export function LlmTaskShowcase({
   businessValue,
 }: LlmTaskShowcaseProps) {
   const llmTasks = [
-    "Classification",
-    "Entity Extraction",
-    "Summarization",
-    "Documentation",
-    "Explanation & Commentary",
+    taskCategory
   ];
 
   return (
@@ -54,7 +50,7 @@ export function LlmTaskShowcase({
       <div className="text-center mb-8">
         <h2 className="text-3xl text-left font-bold mb-3">
           What LLMs Can Do For You:{" "}
-          <CyclingText texts={llmTasks} className="text-primary" />
+          <span className="text-primary">{taskCategory}</span>
         </h2>
         <p className="text-gray-600 text-left max-w-2xl mx-auto">
           LLMs excel at a variety of tasks. Here's how different models
