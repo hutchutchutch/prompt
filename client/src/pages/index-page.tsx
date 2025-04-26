@@ -86,6 +86,14 @@ export default function IndexPage() {
               >
                 Docs
               </Link>
+              <Button 
+                variant="outline" 
+                className="text-blue-600 border-blue-300 hover:bg-blue-50"
+                onClick={() => demoLoginMutation.mutate()}
+                disabled={demoLoginMutation.isPending}
+              >
+                {demoLoginMutation.isPending ? "Loading..." : "Try Demo"}
+              </Button>
               {user ? (
                 <Button asChild>
                   <Link href="/dashboard">Dashboard</Link>
@@ -111,9 +119,17 @@ export default function IndexPage() {
           <p className="mt-4 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
             Find the best model and prompt combination for your use case.
           </p>
-          <div className="mt-8 flex justify-center space-x-4">
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button asChild size="lg">
               <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
+            </Button>
+            <Button 
+              variant="secondary" 
+              size="lg"
+              onClick={() => demoLoginMutation.mutate()}
+              disabled={demoLoginMutation.isPending}
+            >
+              {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
             </Button>
             <Button variant="outline" size="lg" asChild>
               <Link href="#how-it-works">Learn more</Link>
@@ -191,12 +207,30 @@ export default function IndexPage() {
             </div>
           </CardContent>
           
-          <CardFooter className="px-6 py-3 bg-gray-50 border-t border-gray-200">
-            <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
-              <Link href={user ? "/wizard" : "/auth"}>
-                Try with your settings →
-              </Link>
-            </Button>
+          <CardFooter className="px-6 py-3 bg-gray-50 border-t border-gray-200 flex justify-between">
+            {user ? (
+              <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
+                <Link href="/wizard">
+                  Try with your settings →
+                </Link>
+              </Button>
+            ) : (
+              <div className="flex gap-6">
+                <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
+                  <Link href="/auth">
+                    Sign in to try →
+                  </Link>
+                </Button>
+                <Button 
+                  variant="link" 
+                  className="text-sm p-0 h-auto text-primary" 
+                  onClick={() => demoLoginMutation.mutate()}
+                  disabled={demoLoginMutation.isPending}
+                >
+                  {demoLoginMutation.isPending ? "Loading..." : "Try in demo mode →"}
+                </Button>
+              </div>
+            )}
           </CardFooter>
         </div>
 
