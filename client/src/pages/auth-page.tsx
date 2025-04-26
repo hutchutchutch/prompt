@@ -14,7 +14,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 
 export default function AuthPage() {
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
-  const { user, loginMutation, registerMutation } = useAuth();
+  const { user, loginMutation, registerMutation, demoLoginMutation } = useAuth();
   const [, navigate] = useLocation();
 
   // Redirect if already logged in
@@ -202,7 +202,20 @@ export default function AuthPage() {
                     </div>
                   </div>
                   
-                  <div className="mt-6">
+                  <div className="mt-6 space-y-3">
+                    <Button 
+                      variant="default" 
+                      className="w-full" 
+                      type="button"
+                      onClick={() => demoLoginMutation.mutate()}
+                      disabled={demoLoginMutation.isPending}
+                    >
+                      <svg viewBox="0 0 24 24" className="h-5 w-5 text-white mr-2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
+                      </svg>
+                      {demoLoginMutation.isPending ? "Starting demo..." : "Try Demo"}
+                    </Button>
+                    
                     <Button variant="outline" className="w-full" type="button">
                       <svg className="h-5 w-5 text-gray-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
@@ -305,6 +318,32 @@ export default function AuthPage() {
                     and{" "}
                     <a href="#" className="text-primary hover:text-primary/80">Privacy Policy</a>.
                   </p>
+                </div>
+                
+                <div className="mt-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <Separator />
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="px-2 bg-white text-gray-500">Or try instantly</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-6">
+                    <Button 
+                      variant="default" 
+                      className="w-full" 
+                      type="button"
+                      onClick={() => demoLoginMutation.mutate()}
+                      disabled={demoLoginMutation.isPending}
+                    >
+                      <svg viewBox="0 0 24 24" className="h-5 w-5 text-white mr-2" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
+                      </svg>
+                      {demoLoginMutation.isPending ? "Starting demo..." : "Try Demo (No Sign Up)"}
+                    </Button>
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>

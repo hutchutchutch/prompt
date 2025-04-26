@@ -99,7 +99,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                         {user?.username}
                       </p>
                       <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
-                        {user?.role === "admin" ? "Admin" : "Pro Subscriber"}
+                        {user?.role === "admin" ? "Admin" : user?.role === "demo" ? "Demo User" : "Pro Subscriber"}
                       </p>
                     </div>
                   </div>
