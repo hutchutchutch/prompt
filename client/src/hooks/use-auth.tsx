@@ -35,13 +35,49 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
+  
+  // Check for demo user in session storage
+  const getDemoUser = () => {
+    try {
+      const storedUser = sessionStorage.getItem('demoUser');
+      if (storedUser) {
+        return JSON.parse(storedUser) as Omit<SelectUser, "password">;
+      }
+    } catch (err) {
+      console.error("Error reading demo user from session storage:", err);
+      sessionStorage.removeItem('demoUser');
+    }
+    return null;
+  };
+  
   const {
     data: user,
     error,
     isLoading,
   } = useQuery<Omit<SelectUser, "password"> | null, Error>({
     queryKey: ["/api/user"],
-    queryFn: getQueryFn({ on401: "returnNull" }),
+    queryFn: async () => {
+      try {
+        // First check for demo user in session storage
+        const demoUser = getDemoUser();
+        if (demoUser) {
+          return demoUser;
+        }
+        
+        // Otherwise try the API
+        const res = await fetch("/api/user");
+        if (!res.ok) {
+          if (res.status === 401) {
+            return null;
+          }
+          throw new Error("Failed to fetch user");
+        }
+        return await res.json();
+      } catch (error) {
+        console.error("Error in auth query:", error);
+        return null;
+      }
+    },
   });
 
   const loginMutation = useMutation({
@@ -90,14 +126,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
+      // Check if we have a demo user in session storage
+      const isDemoMode = !!sessionStorage.getItem('demoUser');
+      
+      // If in demo mode, just clear the session storage
+      if (isDemoMode) {
+        sessionStorage.removeItem('demoUser');
+        return;
+      }
+      
+      // Otherwise, perform a real logout API call
       await apiRequest("POST", "/api/logout");
     },
     onSuccess: () => {
+      // Clear any demo user data in session storage (just to be safe)
+      sessionStorage.removeItem('demoUser');
+      
+      // Reset cached user data
       queryClient.setQueryData(["/api/user"], null);
+      
       toast({
         title: "Logged out",
         description: "You've been successfully logged out",
       });
+      
+      // Redirect to the auth page
+      window.location.href = "/auth";
     },
     onError: (error: Error) => {
       toast({
@@ -119,6 +173,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Get the user data from the response
       const userData = await res.json();
       
+      // Store demo user data in session storage for persistence
+      sessionStorage.setItem('demoUser', JSON.stringify({
+        ...userData,
+        isDemoUser: true
+      }));
+      
       return userData;
     },
     onSuccess: (user: Omit<SelectUser, "password">) => {
@@ -131,11 +191,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         variant: "default",
       });
       
-      // Navigate to dashboard
+      // Force a full page reload to dashboard to ensure clean state with demo data
       window.location.href = "/dashboard";
     },
     onError: (error: Error) => {
       console.error("Demo login error:", error);
+      // Clear any existing demo data to be safe
+      sessionStorage.removeItem('demoUser');
+      
       toast({
         title: "Demo login failed",
         description: "Failed to start demo mode. Please try again.",
