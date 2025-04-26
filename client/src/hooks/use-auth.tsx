@@ -119,6 +119,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         title: "Demo Mode Activated",
         description: "You're now viewing PromptLab in demo mode",
       });
+      
+      // Redirect to dashboard page
+      window.location.href = "/dashboard";
     },
     onError: (error: Error) => {
       toast({
