@@ -31,27 +31,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Demo mode endpoint - special login for demo purposes
   app.post("/api/demo-login", async (req, res) => {
-    // Get the demo user from storage
-    const demoUser = await storage.getDemoUser();
-    
-    if (!demoUser) {
-      return res.status(404).json({ error: "Demo user not found" });
+    try {
+      // Get the demo user from storage
+      const demoUser = await storage.getDemoUser();
+      
+      if (!demoUser) {
+        return res.status(404).json({ error: "Demo user not found" });
+      }
+      
+      // Create a copy without the password for client response
+      const demoUserResponse = {
+        id: demoUser.id,
+        username: demoUser.username,
+        email: demoUser.email,
+        role: demoUser.role,
+        createdAt: demoUser.createdAt
+      };
+      
+      // Force session regeneration to ensure clean session
+      req.session.regenerate((err) => {
+        if (err) {
+          return res.status(500).json({ error: "Session regeneration failed" });
+        }
+        
+        // Log the user in as the demo user
+        req.login(demoUser, (err) => {
+          if (err) {
+            return res.status(500).json({ error: "Failed to login as demo user" });
+          }
+          
+          // Save the session to ensure it's stored before responding
+          req.session.save((err) => {
+            if (err) {
+              return res.status(500).json({ error: "Failed to save session" });
+            }
+            
+            // Set explicit cookie header to help with certain browser environments
+            res.setHeader('Set-Cookie', `connect.sid=${req.sessionID}; Path=/; HttpOnly; Max-Age=${7*24*60*60}`);
+            
+            res.status(200).json(demoUserResponse);
+          });
+        });
+      });
+    } catch (error) {
+      console.error("Demo login error:", error);
+      res.status(500).json({ error: "Internal server error during demo login" });
     }
-    
-    // Create a copy without the password for client response
-    const demoUserResponse = {
-      id: demoUser.id,
-      username: demoUser.username,
-      email: demoUser.email,
-      role: demoUser.role,
-      createdAt: demoUser.createdAt
-    };
-    
-    // Log the user in as the demo user
-    req.login(demoUser, (err) => {
-      if (err) return res.status(500).json({ error: "Failed to login as demo user" });
-      res.status(200).json(demoUserResponse);
-    });
   });
 
   // Create HTTP server

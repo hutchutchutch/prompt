@@ -114,14 +114,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return await res.json();
     },
     onSuccess: (user: Omit<SelectUser, "password">) => {
+      // Update the user data in cache
       queryClient.setQueryData(["/api/user"], user);
+      
+      // Force refetch the user data to ensure our auth state is correct
+      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      
       toast({
         title: "Demo Mode Activated",
         description: "You're now viewing PromptLab in demo mode",
       });
       
-      // Redirect to dashboard page
-      window.location.href = "/dashboard";
+      // Wait for a short moment to let the auth state update
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 500);
     },
     onError: (error: Error) => {
       toast({
