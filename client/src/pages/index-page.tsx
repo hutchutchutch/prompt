@@ -16,6 +16,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 export default function IndexPage() {
   const { user } = useAuth();
+  const [selectedTaskType, setSelectedTaskType] = useState<string | null>(null);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const taskTypes = [
     "classification",
@@ -24,17 +25,31 @@ export default function IndexPage() {
     "documentation",
     "explanation"
   ];
-  const currentTask = taskTypes[currentTaskIndex];
+  
+  const currentTask = selectedTaskType || taskTypes[currentTaskIndex];
   const taskData = examplePrompts[currentTask as keyof typeof examplePrompts];
   const allTaskCategories = taskTypes.map(type => examplePrompts[type as keyof typeof examplePrompts].taskCategory);
   
   useEffect(() => {
+    if (selectedTaskType) return; // Don't cycle if user has selected a tab
+    
     const interval = setInterval(() => {
       setCurrentTaskIndex((current) => (current + 1) % taskTypes.length);
     }, 8000); // 8 seconds per task type
     
     return () => clearInterval(interval);
-  }, []);
+  }, [selectedTaskType]);
+  
+  // Handle tab selection to pause animation
+  const handleTaskSelect = (taskType: string) => {
+    if (selectedTaskType === taskType) {
+      // If clicking the already selected tab, resume animation
+      setSelectedTaskType(null);
+    } else {
+      // Otherwise, select that tab and pause animation
+      setSelectedTaskType(taskType);
+    }
+  };
 
   return (
     <main className="min-h-screen">
@@ -108,6 +123,33 @@ export default function IndexPage() {
 
         {/* What LLMs Do Well Section */}
         <div className="my-16">
+          <h2 className="text-3xl font-bold mb-6">What LLMs Can Do For You</h2>
+          
+          {/* Task Type Tabs */}
+          <div className="flex overflow-x-auto pb-2 mb-6 space-x-2 border-b">
+            {taskTypes.map((taskType, index) => {
+              const isActive = currentTask === taskType;
+              const taskCategory = examplePrompts[taskType as keyof typeof examplePrompts].taskCategory;
+              return (
+                <button
+                  key={taskType}
+                  onClick={() => handleTaskSelect(taskType)}
+                  className={`px-4 py-2 rounded-t-lg whitespace-nowrap transition-colors ${
+                    isActive 
+                      ? "bg-primary text-white font-medium"
+                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                  } ${
+                    currentTaskIndex === index && !selectedTaskType
+                      ? "ring-2 ring-primary ring-opacity-50"
+                      : ""
+                  }`}
+                >
+                  {taskCategory}
+                </button>
+              );
+            })}
+          </div>
+          
           <LlmTaskShowcase
             promptText={taskData.promptText}
             taskCategory={taskData.taskCategory}

@@ -48,14 +48,9 @@ export function LlmTaskShowcase({
   return (
     <div className="bg-gradient-to-b from-blue-50 to-white py-10 px-4 rounded-xl border border-blue-100">
       <div className="text-center mb-8">
-        <h2 className="text-3xl text-left font-bold mb-3">
-          What LLMs Can Do For You:{" "}
-          <span className="text-primary">{taskCategory}</span>
-        </h2>
-        <p className="text-gray-600 text-left max-w-2xl mx-auto">
-          LLMs excel at a variety of tasks. Here's how different models
-          performed on today's prompt for{" "}
-          <span className="font-medium text-primary">{taskCategory}</span>.
+        <p className="text-gray-600 text-left max-w-2xl">
+          Here's how different models performed on this{" "}
+          <span className="font-medium text-primary">{taskCategory.toLowerCase()}</span> prompt.
         </p>
         
         {/* Display business value section if available */}
