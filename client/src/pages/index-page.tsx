@@ -85,8 +85,16 @@ export default function IndexPage() {
           </div>
         </div>
 
-        {/* Prompt of the Day */}
-        <PromptOfDay />
+        {/* What LLMs Do Well Section */}
+        <div className="my-16">
+          <LlmTaskShowcase
+            promptText={examplePrompts.classification.promptText}
+            taskCategory={examplePrompts.classification.taskCategory}
+            bestQuality={examplePrompts.classification.bestQuality}
+            bestValue={examplePrompts.classification.bestValue}
+            fastest={examplePrompts.classification.fastest}
+          />
+        </div>
 
         {/* How It Works Section */}
         <div id="how-it-works" className="my-16 max-w-4xl mx-auto">
