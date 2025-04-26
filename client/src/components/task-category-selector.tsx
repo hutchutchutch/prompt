@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { 
   Card, 
@@ -18,7 +18,6 @@ interface TaskCategorySelectorProps {
 
 export function TaskCategorySelector({ onSelect }: TaskCategorySelectorProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [, setLocation] = useLocation();
 
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
@@ -27,14 +26,12 @@ export function TaskCategorySelector({ onSelect }: TaskCategorySelectorProps) {
     }
   };
 
-  const handleStartNewTest = () => {
+  // Generate wizard URL with selected category as a query parameter
+  const getWizardUrl = () => {
     if (selectedCategory) {
-      // Navigate to wizard with pre-selected template category
-      setLocation(`/wizard?category=${encodeURIComponent(selectedCategory)}`);
-    } else {
-      // Navigate to wizard without template
-      setLocation("/wizard");
+      return `/wizard?category=${encodeURIComponent(selectedCategory)}`;
     }
+    return "/wizard";
   };
 
   return (
@@ -79,8 +76,10 @@ export function TaskCategorySelector({ onSelect }: TaskCategorySelectorProps) {
           </CardContent>
           <CardFooter className="bg-white bg-opacity-50 pt-2">
             <div className="flex justify-end w-full">
-              <Button size="sm" variant="default" onClick={handleStartNewTest}>
-                Use This Template
+              <Button size="sm" variant="default" asChild>
+                <Link href={getWizardUrl()}>
+                  Use This Template
+                </Link>
               </Button>
             </div>
           </CardFooter>
