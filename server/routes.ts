@@ -28,6 +28,31 @@ const connections = new Map<number, Set<WebSocket>>();
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
   setupAuth(app);
+  
+  // Demo mode endpoint - special login for demo purposes
+  app.post("/api/demo-login", async (req, res) => {
+    // Get the demo user from storage
+    const demoUser = await storage.getDemoUser();
+    
+    if (!demoUser) {
+      return res.status(404).json({ error: "Demo user not found" });
+    }
+    
+    // Create a copy without the password for client response
+    const demoUserResponse = {
+      id: demoUser.id,
+      username: demoUser.username,
+      email: demoUser.email,
+      role: demoUser.role,
+      createdAt: demoUser.createdAt
+    };
+    
+    // Log the user in as the demo user
+    req.login(demoUser, (err) => {
+      if (err) return res.status(500).json({ error: "Failed to login as demo user" });
+      res.status(200).json(demoUserResponse);
+    });
+  });
 
   // Create HTTP server
   const httpServer = createServer(app);

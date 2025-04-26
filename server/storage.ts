@@ -45,8 +45,11 @@ export interface IStorage {
   getModels(): Promise<Model[]>;
   updateModel(id: number, enabled: boolean): Promise<Model>;
   
+  // Demo access method
+  getDemoUser(): Promise<User | undefined>;
+  
   // Session store
-  sessionStore: session.SessionStore;
+  sessionStore: any; // Using any type for session store to avoid import issues
 }
 
 export class MemStorage implements IStorage {
@@ -66,7 +69,7 @@ export class MemStorage implements IStorage {
   currentRedTeamAttackId: number;
   currentModelId: number;
   
-  sessionStore: session.SessionStore;
+  sessionStore: any; // Using any type for sessionStore to avoid typescript issues
 
   constructor() {
     this.users = new Map();
@@ -84,6 +87,17 @@ export class MemStorage implements IStorage {
     this.currentFrameworkId = 1;
     this.currentRedTeamAttackId = 1;
     this.currentModelId = 1;
+    
+    // Add a demo user
+    const demoUser: User = {
+      id: 999,
+      username: 'demo_user',
+      email: 'demo@promptlab.ai',
+      password: 'hashed_password_not_usable',
+      role: 'user',
+      createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+    };
+    this.users.set(demoUser.id, demoUser);
     
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000,
@@ -364,6 +378,11 @@ export class MemStorage implements IStorage {
     
     this.modelsMap.set(id, updatedModel);
     return updatedModel;
+  }
+  
+  // Demo access method
+  async getDemoUser(): Promise<User | undefined> {
+    return this.users.get(999); // Return the demo user with ID 999 if it exists
   }
 }
 

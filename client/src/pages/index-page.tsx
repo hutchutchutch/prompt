@@ -15,7 +15,7 @@ import { examplePrompts } from "@/data/example-prompts";
 import { useAuth } from "@/hooks/use-auth";
 
 export default function IndexPage() {
-  const { user } = useAuth();
+  const { user, demoLoginMutation } = useAuth();
   const [selectedTaskType, setSelectedTaskType] = useState<string | null>(null);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const taskTypes = [

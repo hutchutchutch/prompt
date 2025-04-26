@@ -16,6 +16,7 @@ type AuthContextType = {
   loginMutation: UseMutationResult<Omit<SelectUser, "password">, Error, LoginData>;
   logoutMutation: UseMutationResult<void, Error, void>;
   registerMutation: UseMutationResult<Omit<SelectUser, "password">, Error, RegisterData>;
+  demoLoginMutation: UseMutationResult<Omit<SelectUser, "password">, Error, void>;
 };
 
 // Extended user schema with email validation
@@ -106,6 +107,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
     },
   });
+  
+  const demoLoginMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("POST", "/api/demo-login");
+      return await res.json();
+    },
+    onSuccess: (user: Omit<SelectUser, "password">) => {
+      queryClient.setQueryData(["/api/user"], user);
+      toast({
+        title: "Demo Mode Activated",
+        description: "You're now viewing PromptLab in demo mode",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Demo login failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   return (
     <AuthContext.Provider
@@ -116,6 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loginMutation,
         logoutMutation,
         registerMutation,
+        demoLoginMutation,
       }}
     >
       {children}
