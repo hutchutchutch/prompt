@@ -1,4 +1,3 @@
-import { CyclingText } from "@/components/cycling-text";
 import {
   Card,
   CardContent,
@@ -41,25 +40,30 @@ export function LlmTaskShowcase({
   fastest,
   businessValue,
 }: LlmTaskShowcaseProps) {
-  const llmTasks = [
-    taskCategory
-  ];
+  const llmTasks = [taskCategory];
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-white py-10 px-4 rounded-xl border border-blue-100">
       <div className="text-center mb-8">
         <p className="text-gray-600 text-left max-w-2xl">
           Here's how different models performed on this{" "}
-          <span className="font-medium text-primary">{taskCategory.toLowerCase()}</span> prompt.
+          <span className="font-medium text-primary">
+            {taskCategory.toLowerCase()}
+          </span>{" "}
+          prompt.
         </p>
-        
+
         {/* Display business value section if available */}
         {businessValue && (
           <div className="bg-green-50 border border-green-100 rounded-lg p-4 mt-4 text-left">
-            <h3 className="text-base font-semibold text-green-800 mb-1">Business Impact</h3>
+            <h3 className="text-base font-semibold text-green-800 mb-1">
+              Business Impact
+            </h3>
             <p className="text-sm text-gray-700">{businessValue.description}</p>
             <div className="mt-2 inline-block bg-white px-3 py-1 rounded-full border border-green-200">
-              <p className="text-sm font-medium text-green-700">{businessValue.metric}</p>
+              <p className="text-sm font-medium text-green-700">
+                {businessValue.metric}
+              </p>
             </div>
           </div>
         )}

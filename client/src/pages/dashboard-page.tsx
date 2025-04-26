@@ -9,6 +9,7 @@ import { CalendarIcon, Timer, DollarSign, BarChart2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { PromptTest } from "@/types";
 import { Badge } from "@/components/ui/badge";
+import { TaskCategorySelector } from "@/components/task-category-selector";
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -93,6 +94,11 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
+      </div>
+      
+      {/* Task Categories Section */}
+      <div className="mb-8">
+        <TaskCategorySelector />
       </div>
 
       <div>
