@@ -3,6 +3,10 @@ export const examplePrompts = {
   classification: {
     promptText: "Classify the sentiment of the following customer feedback as positive, negative, or neutral: 'I was initially hesitant about the product, but after using it for a month, I'm impressed with how well it works. The customer service could be more responsive though.'",
     taskCategory: "Classification",
+    businessValue: {
+      description: "Automatically categorize thousands of customer reviews and support tickets to prioritize responses and identify product issues before they escalate. Our e-commerce clients use sentiment classification to route feedback to appropriate teams.",
+      metric: "Reduces customer churn by 23% through faster issue resolution"
+    },
     bestQuality: {
       model: "GPT-4",
       provider: "OpenAI",
@@ -32,6 +36,10 @@ export const examplePrompts = {
   entityExtraction: {
     promptText: "Extract all named entities (people, organizations, locations, dates) from the following text: 'On April 15, 2023, Dr. Sarah Johnson from Stanford University presented her research on climate change at the UN Climate Summit in Geneva, Switzerland. The research was funded by the National Science Foundation.'",
     taskCategory: "Entity Extraction",
+    businessValue: {
+      description: "Automatically extract and organize key information from thousands of research papers, news articles, and legal documents to build searchable knowledge bases and identify trends. Healthcare companies use this to track clinical research developments.",
+      metric: "Reduces research time by 78% and increases discovery of relevant connections by 42%"
+    },
     bestQuality: {
       model: "GPT-4",
       provider: "OpenAI",
@@ -61,6 +69,10 @@ export const examplePrompts = {
   summarization: {
     promptText: "Summarize the following academic abstract in 2-3 sentences using simple language that a high school student could understand:\n\n'This paper presents a novel approach to quantum error correction using topological codes. We demonstrate a fault-tolerant protocol that achieves an error threshold of 1% using only nearest-neighbor interactions on a 2D lattice. Our numerical simulations show that this approach outperforms surface codes by a factor of 2-3 in resource requirements while maintaining comparable error suppression capabilities.'",
     taskCategory: "Summarization",
+    businessValue: {
+      description: "Transform lengthy reports, articles, and transcripts into clear, concise takeaways. Financial services firms use summarization to digest quarterly earnings calls and extract key insights from market reports at scale.",
+      metric: "Increases analyst productivity by 35% and improves information retention by 64%"
+    },
     bestQuality: {
       model: "GPT-4 Turbo",
       provider: "OpenAI",
@@ -90,6 +102,10 @@ export const examplePrompts = {
   documentation: {
     promptText: "Write a clear, concise docstring for the following Python function:\n\n```python\ndef fetch_weather_data(location, date=None, units='metric', include_hourly=False):\n    \"\"\"[Your docstring here]\"\"\"\n    base_url = 'https://api.weatherservice.com/v2/'\n    \n    params = {\n        'location': location,\n        'units': units,\n        'include_hourly': str(include_hourly).lower()\n    }\n    \n    if date is not None:\n        params['date'] = date.strftime('%Y-%m-%d')\n    \n    response = requests.get(base_url, params=params)\n    response.raise_for_status()\n    \n    return response.json()\n```",
     taskCategory: "Documentation",
+    businessValue: {
+      description: "Generate comprehensive technical documentation for software at scale, improving code readability and maintenance efficiency. Software development teams use this to automatically document APIs and create developer guides for complex systems.",
+      metric: "Reduces documentation time by 82% and increases developer onboarding speed by 47%"
+    },
     bestQuality: {
       model: "GPT-4",
       provider: "OpenAI",
@@ -119,6 +135,10 @@ export const examplePrompts = {
   explanation: {
     promptText: "Explain how CRISPR gene editing technology works in simple terms, as if you were explaining it to a curious 12-year-old.",
     taskCategory: "Explanation & Commentary",
+    businessValue: {
+      description: "Create engaging educational content and customer support materials that simplify complex concepts. Educational technology companies use this to develop learning modules that increase student comprehension of difficult subjects.",
+      metric: "Improves learning outcomes by 31% and reduces customer support inquiries by 55%"
+    },
     bestQuality: {
       model: "GPT-4",
       provider: "OpenAI",

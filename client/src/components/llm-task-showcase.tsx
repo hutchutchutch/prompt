@@ -1,5 +1,11 @@
 import { CyclingText } from "@/components/cycling-text";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CheckCircle, Clock, DollarSign } from "lucide-react";
@@ -13,12 +19,18 @@ interface ModelResult {
   output: string;
 }
 
+interface BusinessValue {
+  description: string;
+  metric: string;
+}
+
 interface LlmTaskShowcaseProps {
   promptText: string;
   taskCategory: string;
   bestQuality: ModelResult;
   bestValue: ModelResult;
   fastest: ModelResult;
+  businessValue?: BusinessValue;
 }
 
 export function LlmTaskShowcase({
@@ -26,33 +38,49 @@ export function LlmTaskShowcase({
   taskCategory,
   bestQuality,
   bestValue,
-  fastest
+  fastest,
+  businessValue,
 }: LlmTaskShowcaseProps) {
   const llmTasks = [
     "Classification",
     "Entity Extraction",
     "Summarization",
     "Documentation",
-    "Explanation & Commentary"
+    "Explanation & Commentary",
   ];
 
   return (
     <div className="bg-gradient-to-b from-blue-50 to-white py-10 px-4 rounded-xl border border-blue-100">
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold mb-3">
-          What LLMs Do Well: <CyclingText texts={llmTasks} className="text-primary" />
+        <h2 className="text-3xl text-left font-bold mb-3">
+          What LLMs Can Do For You:{" "}
+          <CyclingText texts={llmTasks} className="text-primary" />
         </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          LLMs excel at a variety of tasks. Here's how different models performed on today's prompt 
-          for <span className="font-medium text-primary">{taskCategory}</span>.
+        <p className="text-gray-600 text-left max-w-2xl mx-auto">
+          LLMs excel at a variety of tasks. Here's how different models
+          performed on today's prompt for{" "}
+          <span className="font-medium text-primary">{taskCategory}</span>.
         </p>
+        
+        {/* Display business value section if available */}
+        {businessValue && (
+          <div className="bg-green-50 border border-green-100 rounded-lg p-4 mt-4 text-left">
+            <h3 className="text-base font-semibold text-green-800 mb-1">Business Impact</h3>
+            <p className="text-sm text-gray-700">{businessValue.description}</p>
+            <div className="mt-2 inline-block bg-white px-3 py-1 rounded-full border border-green-200">
+              <p className="text-sm font-medium text-green-700">{businessValue.metric}</p>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mb-6">
         <Card className="bg-gray-50 border-gray-200">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg">Prompt of the Day</CardTitle>
-            <CardDescription>Example prompt for {taskCategory.toLowerCase()}</CardDescription>
+            <CardDescription>
+              Example prompt for {taskCategory.toLowerCase()}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="bg-white p-4 rounded-md border border-gray-200 prompt-font text-sm">
@@ -77,26 +105,17 @@ export function LlmTaskShowcase({
             Fastest Response
           </TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="quality" className="space-y-4">
-          <ModelResultCard
-            result={bestQuality}
-            highlightType="quality"
-          />
+          <ModelResultCard result={bestQuality} highlightType="quality" />
         </TabsContent>
-        
+
         <TabsContent value="value" className="space-y-4">
-          <ModelResultCard
-            result={bestValue}
-            highlightType="value"
-          />
+          <ModelResultCard result={bestValue} highlightType="value" />
         </TabsContent>
-        
+
         <TabsContent value="speed" className="space-y-4">
-          <ModelResultCard
-            result={fastest}
-            highlightType="speed"
-          />
+          <ModelResultCard result={fastest} highlightType="speed" />
         </TabsContent>
       </Tabs>
     </div>
@@ -105,7 +124,7 @@ export function LlmTaskShowcase({
 
 interface ModelResultCardProps {
   result: ModelResult;
-  highlightType: 'quality' | 'value' | 'speed';
+  highlightType: "quality" | "value" | "speed";
 }
 
 function ModelResultCard({ result, highlightType }: ModelResultCardProps) {
@@ -121,24 +140,32 @@ function ModelResultCard({ result, highlightType }: ModelResultCardProps) {
               </Badge>
             </CardTitle>
             <CardDescription>
-              {highlightType === 'quality' ? 'Highest quality score' :
-               highlightType === 'value' ? 'Best cost-to-quality ratio' :
-               'Fastest response time'}
+              {highlightType === "quality"
+                ? "Highest quality score"
+                : highlightType === "value"
+                  ? "Best cost-to-quality ratio"
+                  : "Fastest response time"}
             </CardDescription>
           </div>
           <div className="flex items-center space-x-4 text-sm">
             <div className="flex items-center">
-              <span className={`font-medium ${highlightType === 'quality' ? 'text-green-600' : 'text-gray-500'}`}>
+              <span
+                className={`font-medium ${highlightType === "quality" ? "text-green-600" : "text-gray-500"}`}
+              >
                 Score: {result.score.toFixed(1)}
               </span>
             </div>
             <div className="flex items-center">
-              <span className={`font-medium ${highlightType === 'value' ? 'text-green-600' : 'text-gray-500'}`}>
+              <span
+                className={`font-medium ${highlightType === "value" ? "text-green-600" : "text-gray-500"}`}
+              >
                 ${result.cost.toFixed(5)}
               </span>
             </div>
             <div className="flex items-center">
-              <span className={`font-medium ${highlightType === 'speed' ? 'text-green-600' : 'text-gray-500'}`}>
+              <span
+                className={`font-medium ${highlightType === "speed" ? "text-green-600" : "text-gray-500"}`}
+              >
                 {result.time}ms
               </span>
             </div>

@@ -93,6 +93,7 @@ export default function IndexPage() {
             bestQuality={examplePrompts.classification.bestQuality}
             bestValue={examplePrompts.classification.bestValue}
             fastest={examplePrompts.classification.fastest}
+            businessValue={examplePrompts.classification.businessValue}
           />
         </div>
 
