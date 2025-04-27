@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -48,13 +48,22 @@ interface EnhancedTestData extends PromptTest {
 }
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { user, demoLoginMutation } = useAuth();
   const [, navigate] = useLocation();
 
-  // Fetch recent tests
+  // First, let's use the demo login to authenticate automatically for testing
+  useEffect(() => {
+    if (!user) {
+      // Use the demo login mode to see test data
+      demoLoginMutation.mutate();
+    }
+  }, [user, demoLoginMutation]);
+
+  // Fetch recent tests - only when user is authenticated
   const { data: rawRecentTests, isLoading: isLoadingTests, error: testsError } = useQuery<PromptTest[]>({
     queryKey: ["/api/tests/recent"],
     staleTime: 60000, // 1 minute
+    enabled: !!user, // Only run this query if the user is authenticated
   });
 
   // Process tests to add enhanced data (for UI only)
@@ -234,9 +243,17 @@ export default function DashboardPage() {
       <div>
         <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Tests</h2>
         
-        {isLoading ? (
+        {!user ? (
           <Card>
-            <CardContent className="h-40 flex items-center justify-center">
+            <CardContent className="h-40 flex flex-col items-center justify-center">
+              <p className="text-sm text-gray-500 mb-4">Authenticating with demo mode...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </CardContent>
+          </Card>
+        ) : isLoading ? (
+          <Card>
+            <CardContent className="h-40 flex flex-col items-center justify-center">
+              <p className="text-sm text-gray-500 mb-4">Loading test data...</p>
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </CardContent>
           </Card>
