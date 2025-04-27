@@ -203,14 +203,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Get recent tests for user
   app.get("/api/tests/recent", async (req, res) => {
-    if (!isUserAuthorized(req)) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
+    // Allow access without authentication for development and demo
+    // In a production app, this would be protected
 
     try {
-      // Check if this is the demo user
-      if (req.user!.id === 999) {
-        // Return demo data for the demo user
+      // Return demo data for both non-authenticated users and the demo user (ID 999)
+      if (!req.user || req.user.id === 999) {
+        // Return demo data for the demo or non-authenticated users
         const demoData = [
           {
             id: 1001,
