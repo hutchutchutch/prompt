@@ -155,4 +155,31 @@ export function setupAuth(app: Express) {
     const { password, ...userWithoutPassword } = req.user as SelectUser;
     res.json(userWithoutPassword);
   });
+
+  // Demo login endpoint
+  app.post("/api/demo-login", async (req, res, next) => {
+    try {
+      // Set demo mode in session
+      req.session.isDemoMode = true;
+      
+      // Get or create a demo user
+      const demoUser = await storage.getDemoUser();
+      
+      if (!demoUser) {
+        return res.status(500).json({ message: "Failed to create demo user" });
+      }
+      
+      // Store demo user in session without password
+      const { password, ...demoUserWithoutPassword } = demoUser;
+      req.session.demoUser = {
+        ...demoUserWithoutPassword,
+        // Custom properties handled client-side
+      };
+      
+      // Return the demo user data
+      res.status(200).json(req.session.demoUser);
+    } catch (err) {
+      next(err);
+    }
+  });
 }

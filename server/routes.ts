@@ -1,10 +1,11 @@
-import type { Express } from "express";
+import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
-import { InsertPromptTest, InsertPromptResult, InsertSavedPrompt } from "@shared/schema";
+import { InsertPromptTest, InsertPromptResult, InsertSavedPrompt, PromptResult, PromptTest } from "@shared/schema";
 import { z } from "zod";
+import { taskCategories, getCategoryByName } from "../client/src/data/task-categories";
 
 // Type for WebSocket events
 interface ProgressEvent {
