@@ -453,9 +453,9 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base font-medium">LLM Performance Comparison</CardTitle>
-                  <CardDescription>
+                  <p className="text-sm text-gray-500">
                     Comparison across different models using the best prompt (Version 3)
-                  </CardDescription>
+                  </p>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -633,7 +633,9 @@ export default function DashboardPage() {
                               <div className="flex items-center">
                                 <Zap className="h-3 w-3 mr-1 text-purple-500" />
                                 <span className="text-gray-600">Speed: </span>
-                                <span className="ml-1 font-medium">{(test.bestModel.time).toFixed(1)}ms</span>
+                                <span className="ml-1 font-medium">
+                                  {test.bestModel?.time !== undefined ? test.bestModel.time.toFixed(1) : "0.0"}ms
+                                </span>
                                 {parseInt(test.improvements.time) > 0 && (
                                   <span className="ml-1 text-green-600">-{test.improvements.time}%</span>
                                 )}
