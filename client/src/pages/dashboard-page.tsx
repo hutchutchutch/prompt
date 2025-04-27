@@ -20,8 +20,9 @@ interface PromptResult {
   output: string;
   qualityScore: number;
   costUsd: number;
-  totalTime: number;
-  firstTokenLatency: number;
+  totalTime?: number;
+  latencyMs?: number;
+  firstTokenLatency?: number;
   vulnerabilityStatus: string;
   createdAt: string;
 }
@@ -107,13 +108,20 @@ export default function DashboardPage() {
                 return test as EnhancedTestData;
               }
 
+              // Normalize API data - handle both latencyMs and totalTime fields
+              const normalizedResults = results.map(r => ({
+                ...r,
+                // If latencyMs exists, use it, otherwise use totalTime
+                totalTime: r.latencyMs || r.totalTime
+              }));
+
               // Calculate averages
-              const avgScore = results.reduce((sum, r) => sum + r.qualityScore, 0) / results.length;
-              const avgCost = results.reduce((sum, r) => sum + r.costUsd, 0) / results.length;
-              const avgTime = results.reduce((sum, r) => sum + r.totalTime, 0) / results.length;
+              const avgScore = normalizedResults.reduce((sum, r) => sum + r.qualityScore, 0) / normalizedResults.length;
+              const avgCost = normalizedResults.reduce((sum, r) => sum + r.costUsd, 0) / normalizedResults.length;
+              const avgTime = normalizedResults.reduce((sum, r) => sum + r.totalTime, 0) / normalizedResults.length;
 
               // Find best model (by quality score)
-              const bestResult = [...results].sort((a, b) => b.qualityScore - a.qualityScore)[0];
+              const bestResult = [...normalizedResults].sort((a, b) => b.qualityScore - a.qualityScore)[0];
               
               // Calculate improvements (percentage better than average)
               const scoreDiff = ((bestResult.qualityScore - avgScore) / avgScore * 100).toFixed(0);
@@ -348,7 +356,7 @@ export default function DashboardPage() {
                               <div className="flex items-center">
                                 <Zap className="h-3 w-3 mr-1 text-purple-500" />
                                 <span className="text-gray-600">Speed: </span>
-                                <span className="ml-1 font-medium">{(test.bestModel.time / 1000).toFixed(1)}s</span>
+                                <span className="ml-1 font-medium">{(test.bestModel.time).toFixed(1)}ms</span>
                                 {parseInt(test.improvements.time) > 0 && (
                                   <span className="ml-1 text-green-600">-{test.improvements.time}%</span>
                                 )}
