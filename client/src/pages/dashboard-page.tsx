@@ -10,6 +10,9 @@ import { formatDistanceToNow } from "date-fns";
 import { PromptTest } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { TaskCategorySelector } from "@/components/task-category-selector";
+import { CategoryTabs } from "@/components/dashboard/category-tabs";
+import { GlobalKPIBar } from "@/components/dashboard/global-kpi-bar";
+import { taskCategories } from "@/data/task-categories";
 
 // Define PromptResult interface for handling test results
 interface PromptResult {
@@ -51,6 +54,7 @@ interface EnhancedTestData extends PromptTest {
 export default function DashboardPage() {
   const { user, demoLoginMutation } = useAuth();
   const [, navigate] = useLocation();
+  const [activeCategory, setActiveCategory] = useState<string>("All");
 
   // First, let's use the demo login to authenticate automatically for testing
   useEffect(() => {

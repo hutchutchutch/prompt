@@ -310,6 +310,10 @@ export class MemStorage implements IStorage {
       .filter((result) => result.testId === testId);
   }
   
+  async getAllPromptResults(): Promise<PromptResult[]> {
+    return Array.from(this.promptResults.values());
+  }
+  
   async updatePromptResultQuality(id: number, score: number): Promise<PromptResult> {
     const result = this.promptResults.get(id);
     if (!result) {

@@ -140,6 +140,175 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   }
 
+  // ANALYTICS ROUTES
+  
+  // API endpoint for category-based KPI metrics
+  app.get('/api/kpi', async (req, res) => {
+    if (!isUserAuthorized(req)) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    const { category } = req.query;
+    
+    if (!category) {
+      return res.status(400).json({ error: 'Category parameter is required' });
+    }
+    
+    try {
+      // Get all test results for the specified category
+      const tests = await storage.getPromptTestsByCategory(category as string);
+      
+      if (!tests || tests.length === 0) {
+        return res.json({
+          category,
+          bestModel: { name: "N/A", quality: 0 },
+          averageQuality: 0,
+          averageCost: 0,
+          averageSpeed: 0,
+          deltas: { quality: 0, cost: 0, speed: 0 },
+          isEmpty: true
+        });
+      }
+      
+      // Get results for these tests
+      const testIds = tests.map(test => test.id);
+      let allResults: PromptResult[] = [];
+      
+      for (const testId of testIds) {
+        const results = await storage.getPromptResults(testId);
+        allResults = [...allResults, ...results];
+      }
+      
+      if (allResults.length === 0) {
+        return res.json({
+          category,
+          bestModel: { name: "N/A", quality: 0 },
+          averageQuality: 0,
+          averageCost: 0,
+          averageSpeed: 0,
+          deltas: { quality: 0, cost: 0, speed: 0 },
+          isEmpty: true
+        });
+      }
+      
+      // Calculate metrics
+      // Find best model by quality
+      const bestResult = [...allResults].sort((a, b) => 
+        (b.qualityScore || 0) - (a.qualityScore || 0)
+      )[0];
+      
+      // Calculate averages
+      const totalQuality = allResults.reduce((sum, r) => sum + (r.qualityScore || 0), 0);
+      const totalCost = allResults.reduce((sum, r) => sum + (r.costUsd || 0), 0);
+      const totalSpeed = allResults.reduce((sum, r) => {
+        const latency = r.totalTime || r.latencyMs || 0;
+        return sum + latency;
+      }, 0);
+      
+      const averageQuality = totalQuality / allResults.length;
+      const averageCost = totalCost / allResults.length;
+      const averageSpeed = totalSpeed / allResults.length / 1000; // Convert to seconds
+      
+      // Get all results for comparison
+      const allCategoryResults = await storage.getAllPromptResults();
+      
+      // Calculate global averages (for all categories)
+      const globalQuality = allCategoryResults.reduce((sum, r) => sum + (r.qualityScore || 0), 0) / allCategoryResults.length;
+      const globalCost = allCategoryResults.reduce((sum, r) => sum + (r.costUsd || 0), 0) / allCategoryResults.length;
+      const globalSpeed = allCategoryResults.reduce((sum, r) => {
+        const latency = r.totalTime || r.latencyMs || 0;
+        return sum + latency;
+      }, 0) / allCategoryResults.length / 1000;
+      
+      // Calculate deltas (as percentages)
+      const qualityDelta = globalQuality > 0 ? ((averageQuality - globalQuality) / globalQuality) * 100 : 0;
+      const costDelta = globalCost > 0 ? ((averageCost - globalCost) / globalCost) * 100 : 0;
+      const speedDelta = globalSpeed > 0 ? ((averageSpeed - globalSpeed) / globalSpeed) * 100 : 0;
+      
+      // Check if there's high variance
+      const qualityValues = allResults.map(r => r.qualityScore || 0);
+      const qualityMean = totalQuality / allResults.length;
+      const qualityVariance = qualityValues.reduce((sum, q) => sum + Math.pow(q - qualityMean, 2), 0) / allResults.length;
+      const qualityStdDev = Math.sqrt(qualityVariance);
+      const highVariance = (qualityStdDev / qualityMean) * 100 > 15;
+      
+      return res.json({
+        category,
+        bestModel: {
+          name: bestResult.modelId,
+          quality: bestResult.qualityScore || 0
+        },
+        averageQuality,
+        averageCost,
+        averageSpeed,
+        deltas: {
+          quality: qualityDelta,
+          cost: costDelta,
+          speed: speedDelta
+        },
+        highVariance
+      });
+    } catch (error) {
+      console.error('Error fetching KPI data:', error);
+      return res.status(500).json({ error: 'Failed to retrieve KPI data' });
+    }
+  });
+  
+  // API endpoint to get all available categories
+  app.get('/api/categories', async (req, res) => {
+    if (!isUserAuthorized(req)) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      // Categories used for classification (from the storage module)
+      const categories = [
+        'Classification',
+        'Summarization',
+        'Entity Extraction',
+        'Code Generation',
+        'Creative Writing',
+        'Data Analysis',
+        'Translation',
+        'Question Answering',
+        'Sentiment Analysis',
+        'Paraphrasing'
+      ];
+      
+      // Return the categories with additional metadata
+      const response = categories.map(category => {
+        return {
+          category,
+          description: getCategoryDescription(category),
+          isNew: Math.random() < 0.3 // Randomly mark some categories as new for demo
+        };
+      });
+      
+      return res.json(response);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      return res.status(500).json({ error: 'Failed to retrieve categories' });
+    }
+  });
+  
+  // Helper function to get category descriptions
+  function getCategoryDescription(category: string): string {
+    const descriptions: Record<string, string> = {
+      'Classification': 'Assign inputs to predefined categories or classes',
+      'Summarization': 'Create concise summaries of longer content',
+      'Entity Extraction': 'Identify and extract entities like names, dates, and locations',
+      'Code Generation': 'Generate functional code based on requirements',
+      'Creative Writing': 'Create original stories, poems, and other creative content',
+      'Data Analysis': 'Interpret data patterns and provide insights',
+      'Translation': 'Convert text from one language to another',
+      'Question Answering': 'Provide accurate answers to specific questions',
+      'Sentiment Analysis': 'Determine the emotional tone of content',
+      'Paraphrasing': 'Restate content in different words while preserving meaning',
+    };
+    
+    return descriptions[category] || 'General prompt testing category';
+  }
+  
   // PROMPT TEST ROUTES
   
   // Create new prompt test
