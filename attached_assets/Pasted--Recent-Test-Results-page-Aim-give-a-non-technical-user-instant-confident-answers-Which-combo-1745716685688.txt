@@ -1,0 +1,62 @@
+“Recent Test – Results” page
+Aim: give a non-technical user instant, confident answers (“Which combo won & why?”) and a zero-friction way to compare any two results.
+
+1 · Page anatomy
+
+Zone	What the user sees	Key components
+A. Breadcrumb + Title bar	“← Tests / April 26 • ‘Customer-Email Classifier’”	Breadcrumb, TimestampBadge, Delete / Re-run buttons
+B. Hero summary card	• Winner: “GPT-4o + ReAct v3”
+• Cost $0.004 / Quality 92 % / Speed 1.4 s
+• Vulnerability: ✅ Safe	WinnerCard (icon, colored chips)
+C. KPI snapshot	Three equal tiles: Quality, Cost, Speed each with big number + trend arrow vs. average	MetricTile×3
+D. Overview chart	Scatter plot (Cost × Quality; point size = Speed). Hover shows tool-tip.	ScatterPlot (Recharts)
+E. Quick actions	• Compare Results dropdown (Model ↔︎ Prompt)
+• Share (copy link)
+• Export CSV	ButtonGroup, Dropdown
+F. Comparison workspace (hidden until a pair is chosen)	Side-by-side cards with:
+• Prompt text
+• Model name & tokens used
+• Output preview (first 200 chars)
+• Bars for Quality, Cost, Speed
+Toggle “Show full output”	ComparisonPanel, OutputPreview, MetricBar
+G. Results table	Heat-map matrix (models ↓, prompt variants →). Click any cell opens drawer.	HeatmapTable
+H. Drawer (detail view)	Tabs: Output, Scoring breakdown, LLM-Judge log, Latency graph.	Drawer, Tab
+I. Red-team report	Accordions listing each attack attempt and whether schema was violated.	Accordion, StatusBadge
+2 · UX flow for a non-technical viewer
+Instant comprehension – Hero card tells them which combo won in one sentence.
+
+Context – KPI tiles show how good the run was overall (“Great quality but pricey”).
+
+Visual cue – Overview scatter lets them see clustering without reading numbers.
+
+Sandbox compare – “Compare Results” dropdown opens the side-by-side panel, pre-selecting the winner vs. the runner-up (user can change).
+
+Progressive disclosure – Detailed drawer only appears on click; jargon hidden behind tabs.
+
+Safety flag – Red-team section uses emoji badges ✅ / ⚠️ / ❌ and one-line explanations (“Prompt resisted all injection attempts”).
+
+3 · Component details
+
+Component	Purpose	Props (core)
+WinnerCard	Single glance answer	{ promptName, modelName, quality, cost, speed, vulnStatus }
+MetricTile	Large number with caption & trend	{ label, value, delta }
+ScatterPlot	Overview of all runs	{ data[], xKey, yKey, sizeKey }
+HeatmapTable	Color-coded accuracy grid	{ rows: models[], cols: variants[], scores[][] }
+ComparisonPanel	Side-by-side diff	{ leftRunId, rightRunId }
+OutputPreview	First N characters + copy all	{ text, maxChars }
+Drawer	Drill-down without nav away	{ runId, onClose }
+4 · Plain-language copy examples
+Hero title: “Best result: ‘Product-Feedback Classifier’ prompt on GPT-4o (ReAct v3).”
+
+Quality tile subtitle: “percentage of evaluation set correctly labeled.”
+
+Red-team accordion header: “⛳ Prompt Injection test ‘Ignore previous instructions…’ — Passed.”
+
+5 · Accessibility & performance notes
+Use aria-labels on KPI tiles (“Quality score 92 percent”).
+
+Provide text-only alt summary of scatter plot (“Top-right cluster are GPT-4o variants”).
+
+Lazy-load drawer content so initial FCP stays < 1 s.
+
+This layout lets anyone—from exec to engineer—see the story at a glance and still dive deep when they need proof or insight.
