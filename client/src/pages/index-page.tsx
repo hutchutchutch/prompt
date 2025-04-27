@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import {
   Accordion,
@@ -10,12 +10,12 @@ import {
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LlmTaskShowcase } from "@/components/llm-task-showcase";
-import { CyclingText } from "@/components/cycling-text";
 import { examplePrompts } from "@/data/example-prompts";
 import { useAuth } from "@/hooks/use-auth";
 
 export default function IndexPage() {
-  const { user, demoLoginMutation } = useAuth();
+  const { user, demoLoginMutation, isLoading } = useAuth();
+  const [, navigate] = useLocation();
   const [selectedTaskType, setSelectedTaskType] = useState<string | null>(null);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const taskTypes = [
@@ -29,6 +29,20 @@ export default function IndexPage() {
   const currentTask = selectedTaskType || taskTypes[currentTaskIndex];
   const taskData = examplePrompts[currentTask as keyof typeof examplePrompts];
   const allTaskCategories = taskTypes.map(type => examplePrompts[type as keyof typeof examplePrompts].taskCategory);
+  
+  // Auto-redirect logic to avoid initial blank state
+  useEffect(() => {
+    // Only run after auth state is determined
+    if (!isLoading) {
+      if (user) {
+        // If already logged in, go to dashboard
+        navigate('/dashboard');
+      } else {
+        // For demo mode, automatically start demo
+        demoLoginMutation.mutate();
+      }
+    }
+  }, [isLoading, user, navigate, demoLoginMutation]);
   
   useEffect(() => {
     if (selectedTaskType) return; // Don't cycle if user has selected a tab
