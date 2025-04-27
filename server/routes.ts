@@ -275,15 +275,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get a specific test
   app.get("/api/tests/:id", async (req, res) => {
-    if (!isUserAuthorized(req)) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
+    // Allow access without authentication for development and demo
+    // In a production app, this would be protected
 
     try {
       const testId = parseInt(req.params.id);
       
-      // Check if this is the demo user and a test ID in the demo range (1001-1005)
-      if (req.user!.id === 999 && testId >= 1001 && testId <= 1005) {
+      // Allow non-authenticated users and demo users to access demo data
+      // In a production app, this would be protected
+      if ((!req.user || req.user.id === 999) && testId >= 1001 && testId <= 1005) {
         // Return demo test data
         const demoTests = {
           1001: {
@@ -364,15 +364,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Get test results
   app.get("/api/tests/:id/results", async (req, res) => {
-    if (!isUserAuthorized(req)) {
-      return res.status(401).json({ message: "Not authenticated" });
-    }
+    // Allow access without authentication for development and demo
+    // In a production app, this would be protected
 
     try {
       const testId = parseInt(req.params.id);
       
-      // Check if this is the demo user and a test ID in the demo range (1001-1005)
-      if (req.user!.id === 999 && testId >= 1001 && testId <= 1005) {
+      // Allow non-authenticated users and demo users to access demo data
+      // In a production app, this would be protected
+      if ((!req.user || req.user.id === 999) && testId >= 1001 && testId <= 1005) {
         // Return demo results based on the test type
         const getDemoResultsForTest = (testId: number) => {
           // Create results for 4 different models with 3 variants each
