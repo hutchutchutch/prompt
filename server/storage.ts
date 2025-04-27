@@ -21,11 +21,13 @@ export interface IStorage {
   createPromptTest(test: InsertPromptTest): Promise<PromptTest>;
   getPromptTest(id: number): Promise<PromptTest | undefined>;
   getPromptTestsByUserId(userId: number, limit?: number): Promise<PromptTest[]>;
+  getPromptTestsByCategory(category: string): Promise<PromptTest[]>;
   updatePromptTestStatus(id: number, status: string): Promise<PromptTest>;
   
   // Prompt Result methods
   createPromptResult(result: InsertPromptResult): Promise<PromptResult>;
   getPromptResults(testId: number): Promise<PromptResult[]>;
+  getAllPromptResults(): Promise<PromptResult[]>;
   updatePromptResultQuality(id: number, score: number): Promise<PromptResult>;
   
   // Saved Prompt methods
@@ -243,6 +245,36 @@ export class MemStorage implements IStorage {
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
     
     return limit ? tests.slice(0, limit) : tests;
+  }
+  
+  async getPromptTestsByCategory(category: string): Promise<PromptTest[]> {
+    // In a real implementation, this would use proper category tags
+    // For this demo, we'll extract categories from the prompt text as a simplification
+    const categoryKeywords: Record<string, string[]> = {
+      'Classification': ['classify', 'classification', 'categorize', 'identify', 'label'],
+      'Summarization': ['summarize', 'summary', 'condense', 'brief', 'overview'],
+      'Entity Extraction': ['extract', 'entities', 'named entities', 'find mentions', 'identify names'],
+      'Code Generation': ['generate code', 'write a function', 'implement', 'coding', 'script'],
+      'Creative Writing': ['write a story', 'creative', 'fiction', 'narrative', 'poem'],
+      'Data Analysis': ['analyze data', 'statistics', 'trends', 'patterns', 'insights'],
+      'Translation': ['translate', 'conversion', 'language', 'from english to', 'from spanish to'],
+      'Question Answering': ['answer', 'question', 'solve', 'explain why', 'how to'],
+      'Sentiment Analysis': ['sentiment', 'emotion', 'feeling', 'positive or negative', 'attitude'],
+      'Paraphrasing': ['paraphrase', 'rewrite', 'rephrase', 'alternative way', 'different wording']
+    };
+    
+    return Array.from(this.promptTests.values())
+      .filter(test => {
+        // If no category is specified, return all tests
+        if (!category || category === 'All') return true;
+        
+        // Check if the prompt text contains keywords related to the requested category
+        const keywords = categoryKeywords[category] || [];
+        return keywords.some(keyword => 
+          test.promptText.toLowerCase().includes(keyword.toLowerCase())
+        );
+      })
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
   
   async updatePromptTestStatus(id: number, status: string): Promise<PromptTest> {

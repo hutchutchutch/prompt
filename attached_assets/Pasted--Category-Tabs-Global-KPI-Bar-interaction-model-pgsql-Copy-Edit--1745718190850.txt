@@ -1,0 +1,121 @@
+ Category Tabs + Global KPI Bar — interaction model
+pgsql
+Copy
+Edit
+┌───────────────────────────────────────────────────────────────┐
+│  Tabs:  Classification | Summarization | … | Creative Writing │
+└───────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────┐
+│  KPI BAR  (scoped to currently-selected tab)                  │
+│  ┌────────────┬────────────┬────────────┬──────────────────┐  │
+│  │ Best Model │ Quality ↑  │ Cost ↓     │ Speed ↓          │  │
+│  │ GPT-4o     │ 94 %       │ $0.003/run │ 1.2 s avg        │  │
+│  └────────────┴────────────┴────────────┴──────────────────┘  │
+└───────────────────────────────────────────────────────────────┘
+1 ▸ Tabs component
+
+Prop	Type	Notes
+categories	PromptTemplate[]	The array you supplied (10 categories).
+active	string	Selected category. Defaults to first with data.
+onChange	(category)=>void	Lifts state to parent dashboard.
+UX tips
+
+Overflow: on smaller screens make the tab list horizontally scrollable.
+
+Badges: show a tiny “●” if new prompts were added to that category in the last 24 h.
+
+Tool-tips: hover reveals description and businessImpact.
+
+2 ▸ Global KPI Bar component
+
+Metric tile	How to compute (SQL / ClickHouse pseudo)	Display copy
+Best Model	SELECT model, quality FROM runs WHERE category = $active ORDER BY quality DESC LIMIT 1	“Top performer: {{model}} ({{quality}} % quality)”
+Quality	AVG(quality)	“Avg quality”
+Cost	AVG(cost_usd)	“Avg cost per run”
+Speed	AVG(latency_total_ms)/1000	“Avg total latency”
+Design details
+
+Each tile is a MetricTile with value + coloured delta vs. all-category baseline (green ↑, red ↓).
+
+Best Model tile doubles as a peek link → clicking opens Model Detail drawer for that model pre-filtered to the active category.
+
+3 ▸ State flow (React/Vite + TanStack Query)
+tsx
+Copy
+Edit
+// Page state
+const [category, setCategory] = useState("Classification");
+
+const { data: kpis } = useQuery(["kpi", category], () =>
+  api.kpi.getGlobal(category)
+);
+
+// Render
+<CategoryTabs categories={taskCategories} active={category} onChange={setCategory} />
+{ kpis && <GlobalKPIBar {...kpis} /> }
+api.kpi.getGlobal hits a cached ClickHouse view so switching tabs feels instant (<100 ms).
+
+4 ▸ Database roll-up view (ClickHouse example)
+sql
+Copy
+Edit
+CREATE MATERIALIZED VIEW kpi_global
+ENGINE = AggregatingMergeTree
+PARTITION BY category
+ORDER BY category
+POPULATE AS
+SELECT
+  category,
+  argMax(model, quality)          AS best_model,   -- highest quality per category
+  maxQualityState(quality)        AS quality,
+  avgState(cost_usd)              AS cost,
+  avgState(latency_total_ms)      AS speed
+FROM runs
+GROUP BY category;
+Then your API query becomes:
+
+sql
+Copy
+Edit
+SELECT
+  best_model,
+  maxQualityMerge(quality) AS quality,
+  avgMerge(cost)           AS cost_usd,
+  avgMerge(speed)/1000     AS latency_s
+FROM kpi_global
+WHERE category = {category}
+5 ▸ Empty & edge states
+No data yet → KPI tiles show “—” with sub-text “Run your first test for this task type”.
+
+Ties for best model → show “View tie-breakers” chip that opens a side-by-side comparison.
+
+Large variance warning → if stddev_samp(quality) > 15 %, surface a yellow badge “High variability — try adding more examples”.
+
+6 ▸ Copy & visuals for non-technical users
+
+Element	Plain-language explanation
+Tile tool-tip	“Quality = percentage of evaluation samples where the model’s answer matched our expected label.”
+Delta badge	“Compared with average across all task types.”
+Tabs	“Choose what kind of job you care about and we’ll show the best model & overall stats.”
+Deliverables for your UI repo
+components/CategoryTabs.tsx – scrollable tab bar, uses shadcn Tabs.
+
+components/GlobalKPIBar.tsx – four MetricTiles + click handlers.
+
+API route /api/kpi?category=… – returns { bestModel, quality, costUsd, latencyS }.
+
+With these pieces, users can jump between Classification, Summarization, etc., and immediately see which model is winning for that slice, how good it is, and what it costs — all without drowning in numbers.
+
+
+
+
+
+
+
+
+
+
+Search
+
+
+
