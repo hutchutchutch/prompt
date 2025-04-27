@@ -1,171 +1,194 @@
-import { useState, useEffect } from "react";
-import { 
-  ScatterChart, 
-  Scatter, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  Legend
-} from "recharts";
 import { PromptResult } from "@/types";
-import { Card, CardContent } from "@/components/ui/card";
 
 interface ScatterPlotProps {
   results: PromptResult[];
-  xKey: "costUsd" | "latencyMs";
-  yKey: "qualityScore" | "costUsd" | "latencyMs";
-  xLabel?: string;
-  yLabel?: string;
+  xKey: keyof PromptResult;
+  yKey: keyof PromptResult;
+  xLabel: string;
+  yLabel: string;
 }
 
-interface FormattedDataPoint {
-  x: number;
-  y: number;
-  modelId: string;
-  variantId: string;
-  tooltip: string;
-}
-
-export function ScatterPlot({ results, xKey, yKey, xLabel, yLabel }: ScatterPlotProps) {
-  const [formattedData, setFormattedData] = useState<Record<string, FormattedDataPoint[]>>({});
-  const [models, setModels] = useState<string[]>([]);
-  
-  // Default labels based on keys
-  const defaultXLabel = xKey === "costUsd" ? "Cost (USD)" : "Latency (ms)";
-  const defaultYLabel = yKey === "qualityScore" ? "Quality Score" : 
-                       yKey === "costUsd" ? "Cost (USD)" : "Latency (ms)";
-  
-  // Colors for different models
-  const modelColors = [
-    "#3B82F6", // Blue
-    "#8B5CF6", // Purple
-    "#EC4899", // Pink
-    "#F97316", // Orange
-    "#14B8A6", // Teal
-    "#10B981", // Green
-  ];
-  
-  // Format data for scatter plot
-  useEffect(() => {
-    if (!results.length) return;
-    
-    // Get unique models
-    const uniqueModels = [...new Set(results.map(r => r.modelId))];
-    setModels(uniqueModels);
-    
-    // Group by model and format data
-    const groupedData: Record<string, FormattedDataPoint[]> = {};
-    
-    uniqueModels.forEach(modelId => {
-      // Filter results for this model
-      const modelResults = results.filter(r => r.modelId === modelId);
-      
-      // Format data points
-      const dataPoints = modelResults.map(result => {
-        // Get x value (convert micro-dollars to dollars if needed)
-        const xValue = xKey === "costUsd" && result[xKey] 
-          ? result[xKey] / 1000000 
-          : result[xKey] || 0;
-        
-        // Get y value (convert micro-dollars to dollars if needed)
-        const yValue = yKey === "costUsd" && result[yKey] 
-          ? result[yKey] / 1000000 
-          : result[yKey] || 0;
-        
-        // Create tooltip text
-        const tooltipText = `
-          ${result.modelId}, ${result.variantId}
-          ${xLabel || defaultXLabel}: ${xKey === "costUsd" ? '$' + xValue.toFixed(5) : xValue}
-          ${yLabel || defaultYLabel}: ${yKey === "costUsd" ? '$' + yValue.toFixed(5) : yValue}
-          Vulnerability: ${result.vulnerabilityStatus}
-        `;
-        
-        return {
-          x: xValue,
-          y: yValue,
-          modelId: result.modelId,
-          variantId: result.variantId,
-          tooltip: tooltipText.trim()
-        };
-      });
-      
-      groupedData[modelId] = dataPoints;
-    });
-    
-    setFormattedData(groupedData);
-  }, [results, xKey, yKey]);
-  
-  // Custom tooltip component
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <Card className="bg-white shadow p-2 border border-gray-200">
-          <CardContent className="p-2 text-xs">
-            <p className="font-bold">{data.modelId}, {data.variantId}</p>
-            <p>{xLabel || defaultXLabel}: {xKey === "costUsd" ? '$' + data.x.toFixed(5) : data.x}</p>
-            <p>{yLabel || defaultYLabel}: {yKey === "costUsd" ? '$' + data.y.toFixed(5) : data.y}</p>
-          </CardContent>
-        </Card>
-      );
-    }
-    return null;
-  };
-  
-  if (!results.length) {
+export function ScatterPlot({
+  results,
+  xKey,
+  yKey,
+  xLabel,
+  yLabel
+}: ScatterPlotProps) {
+  if (!results || results.length === 0) {
     return (
-      <div className="bg-gray-50 rounded-lg p-4 text-center text-gray-500">
-        No data available for the scatter plot
+      <div className="w-full h-48 flex items-center justify-center border border-gray-200 rounded-md">
+        <p className="text-gray-400">No data available</p>
       </div>
     );
   }
   
+  // Find min/max for both axes to set up the scale
+  const xValues = results.map(r => Number(r[xKey]) || 0);
+  const yValues = results.map(r => Number(r[yKey]) || 0);
+  
+  const minX = Math.min(...xValues);
+  const maxX = Math.max(...xValues);
+  const xRange = maxX - minX;
+  
+  const minY = Math.min(...yValues);
+  const maxY = Math.max(...yValues);
+  const yRange = maxY - minY;
+  
+  // Add padding to the ranges
+  const paddedMinX = minX - (xRange * 0.1);
+  const paddedMaxX = maxX + (xRange * 0.1);
+  const xScaleFactor = paddedMaxX - paddedMinX;
+  
+  const paddedMinY = minY - (yRange * 0.1);
+  const paddedMaxY = maxY + (yRange * 0.1);
+  const yScaleFactor = paddedMaxY - paddedMinY;
+  
+  // Plot height and width
+  const plotHeight = 300;
+  const plotWidth = 800; // This will be max-width in CSS, will scale down
+  
+  // Helper to convert data value to position
+  const getXPos = (val: number) => (
+    ((val - paddedMinX) / xScaleFactor) * plotWidth
+  );
+  
+  const getYPos = (val: number) => (
+    plotHeight - ((val - paddedMinY) / yScaleFactor) * plotHeight
+  );
+  
+  // Generate markers for a simple y-axis
+  const yAxisMarkers = Array.from({ length: 5 }, (_, i) => {
+    const value = paddedMinY + (i * (yScaleFactor / 4));
+    return {
+      value: Math.round(value * 100) / 100, // Round to 2 decimal places
+      position: getYPos(value)
+    };
+  });
+  
+  // Generate markers for a simple x-axis
+  const xAxisMarkers = Array.from({ length: 5 }, (_, i) => {
+    const value = paddedMinX + (i * (xScaleFactor / 4));
+    return {
+      value: Math.round(value * 100000) / 100000, // Format depends on the data type
+      position: getXPos(value)
+    };
+  });
+  
+  // Helper to get color based on model
+  const getColorForModel = (modelId: string) => {
+    const colors = [
+      "text-blue-500 fill-blue-500", 
+      "text-purple-500 fill-purple-500",
+      "text-pink-500 fill-pink-500", 
+      "text-orange-500 fill-orange-500",
+      "text-teal-500 fill-teal-500", 
+      "text-green-500 fill-green-500"
+    ];
+    
+    const modelIndex = [...new Set(results.map(r => r.modelId))].indexOf(modelId);
+    return colors[modelIndex % colors.length];
+  };
+  
+  // Generate tooltip text for each point
+  const getTooltipText = (result: PromptResult) => {
+    return `Model: ${result.modelId}
+Variant: ${result.variantId}
+${yLabel}: ${result[yKey]}
+${xLabel}: ${result[xKey]}
+Speed: ${result.latencyMs || 0}ms`;
+  };
+  
   return (
-    <div className="h-[350px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <ScatterChart
-          margin={{ top: 20, right: 30, bottom: 20, left: 35 }}
+    <div className="relative w-full max-w-full overflow-hidden">
+      {/* Y axis */}
+      <div className="absolute top-0 bottom-0 left-0 w-12 border-r border-gray-200">
+        {yAxisMarkers.map((marker, i) => (
+          <div 
+            key={`y-${i}`} 
+            className="absolute left-0 w-12 text-xs text-gray-500 flex items-center justify-end pr-2"
+            style={{ top: marker.position - 10 }}
+          >
+            {marker.value}
+          </div>
+        ))}
+        <div className="absolute left-0 top-1/2 -rotate-90 origin-left text-xs text-gray-500 ml-2">
+          {yLabel}
+        </div>
+      </div>
+      
+      {/* Chart container */}
+      <div className="relative ml-12 h-[300px] pl-0 pr-4">
+        {/* X axis */}
+        <div className="absolute left-0 right-0 bottom-0 h-8 border-t border-gray-200">
+          {xAxisMarkers.map((marker, i) => (
+            <div 
+              key={`x-${i}`} 
+              className="absolute bottom-0 text-xs text-gray-500 text-center -translate-x-1/2"
+              style={{ left: marker.position }}
+            >
+              {xKey === 'costUsd' ? `$${marker.value}` : marker.value}
+            </div>
+          ))}
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-xs text-gray-500 mb-[-24px]">
+            {xLabel}
+          </div>
+        </div>
+        
+        {/* Data points */}
+        <svg 
+          className="absolute top-0 left-0 w-full h-[300px]" 
+          viewBox={`0 0 ${plotWidth} ${plotHeight}`}
+          preserveAspectRatio="none"
         >
-          <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-          <XAxis 
-            type="number" 
-            dataKey="x" 
-            name={xLabel || defaultXLabel} 
-            label={{ 
-              value: xLabel || defaultXLabel, 
-              position: 'bottom',
-              style: { textAnchor: 'middle', fill: '#666' }
-            }}
-            tick={{ fontSize: 12 }}
-          />
-          <YAxis 
-            type="number" 
-            dataKey="y" 
-            name={yLabel || defaultYLabel} 
-            label={{ 
-              value: yLabel || defaultYLabel, 
-              angle: -90, 
-              position: 'left',
-              style: { textAnchor: 'middle', fill: '#666' }
-            }}
-            tick={{ fontSize: 12 }}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          
-          {/* Render a Scatter for each model */}
-          {models.map((model, index) => (
-            <Scatter 
-              key={model} 
-              name={model} 
-              data={formattedData[model] || []} 
-              fill={modelColors[index % modelColors.length]}
+          {/* Grid lines - horizontal */}
+          {yAxisMarkers.map((marker, i) => (
+            <line 
+              key={`grid-y-${i}`}
+              x1="0" 
+              y1={marker.position} 
+              x2={plotWidth} 
+              y2={marker.position}
+              stroke="#f1f1f1" 
+              strokeWidth="1"
             />
           ))}
-        </ScatterChart>
-      </ResponsiveContainer>
+          
+          {/* Grid lines - vertical */}
+          {xAxisMarkers.map((marker, i) => (
+            <line 
+              key={`grid-x-${i}`}
+              x1={marker.position} 
+              y1="0" 
+              x2={marker.position} 
+              y2={plotHeight}
+              stroke="#f1f1f1" 
+              strokeWidth="1"
+            />
+          ))}
+          
+          {/* Plot data points */}
+          {results.map((result, i) => {
+            const x = getXPos(Number(result[xKey]) || 0);
+            const y = getYPos(Number(result[yKey]) || 0);
+            const color = getColorForModel(result.modelId);
+            const size = 6 + ((result.latencyMs || 1) / 200); // Size based on latency
+            
+            return (
+              <g key={`point-${i}`}>
+                <title>{getTooltipText(result)}</title>
+                <circle 
+                  cx={x} 
+                  cy={y} 
+                  r={Math.max(5, Math.min(12, size))} 
+                  className={`${color} opacity-70 stroke-white`}
+                  strokeWidth="1"
+                />
+              </g>
+            );
+          })}
+        </svg>
+      </div>
     </div>
   );
 }

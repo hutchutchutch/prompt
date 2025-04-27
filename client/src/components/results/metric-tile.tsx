@@ -1,68 +1,75 @@
+import { TrendingUp, TrendingDown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface MetricTileProps {
-  label: string; 
-  value: number | string;
+  label: string;
+  value: string;
   unit?: string;
-  delta?: number; // Percentage change relative to average
+  delta?: number;
   description?: string;
-  formatter?: (value: number) => string;
   isHigherBetter?: boolean;
 }
 
-export function MetricTile({ 
-  label, 
-  value, 
-  unit, 
-  delta, 
+export function MetricTile({
+  label,
+  value,
+  unit = "",
+  delta = 0,
   description,
-  formatter,
-  isHigherBetter = true,
+  isHigherBetter = true
 }: MetricTileProps) {
-  // Format the value if needed
-  const formattedValue = typeof value === 'number' && formatter 
-    ? formatter(value) 
-    : value;
-
-  // Determine if the delta is positive based on whether higher is better
-  const isPositiveDelta = delta !== undefined && (
-    (isHigherBetter && delta > 0) || (!isHigherBetter && delta < 0)
-  );
   
-  // Get absolute value of delta for display
-  const absDelta = delta !== undefined ? Math.abs(delta) : undefined;
+  const showDelta = delta !== 0;
+  const isPositiveDelta = delta > 0;
+  const isGoodDelta = isHigherBetter ? isPositiveDelta : !isPositiveDelta;
+  
+  const getDeltaClass = () => {
+    if (isGoodDelta) {
+      return "text-green-700 bg-green-50";
+    } else {
+      return "text-red-700 bg-red-50";
+    }
+  };
   
   return (
-    <Card className="overflow-hidden">
-      <CardContent className="p-6">
-        <div className="flex flex-col">
-          <div className="flex items-center justify-between">
+    <Card className="overflow-hidden shadow-sm">
+      <CardContent className="p-5">
+        <div className="flex justify-between items-start">
+          <div>
             <h3 className="text-sm font-medium text-gray-500">{label}</h3>
-            {delta !== undefined && (
-              <div className={`flex items-center ${isPositiveDelta ? 'text-green-600' : 'text-red-600'}`}>
-                {isPositiveDelta 
-                  ? <ArrowUpRight className="h-4 w-4 mr-1" /> 
-                  : <ArrowDownRight className="h-4 w-4 mr-1" />
-                }
-                <span className="text-xs font-medium">{absDelta}%</span>
-              </div>
-            )}
+            <div className="mt-1 flex items-baseline">
+              <p className="text-2xl font-semibold text-gray-900">{value}</p>
+              {unit && <span className="text-sm text-gray-500 ml-1">{unit}</span>}
+            </div>
           </div>
           
-          <div className="mt-2 flex items-baseline">
-            <span className="text-3xl font-bold text-gray-900">
-              {formattedValue}
-            </span>
-            {unit && <span className="ml-1 text-sm text-gray-500">{unit}</span>}
-          </div>
-          
-          {description && (
-            <p className="mt-2 text-xs text-gray-500" aria-hidden="true">
-              {description}
-            </p>
+          {showDelta && (
+            <div className={`flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${getDeltaClass()}`}>
+              {isPositiveDelta ? (
+                <TrendingUp className="w-3 h-3 mr-1" />
+              ) : (
+                <TrendingDown className="w-3 h-3 mr-1" />
+              )}
+              {Math.abs(delta)}%
+            </div>
           )}
         </div>
+        
+        {description && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <p className="mt-4 text-xs text-gray-500 truncate cursor-help border-t border-gray-100 pt-4">
+                  {description}
+                </p>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p className="max-w-xs text-xs">{description}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </CardContent>
     </Card>
   );

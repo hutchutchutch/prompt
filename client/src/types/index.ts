@@ -1,14 +1,40 @@
-// Model Types
-export interface Model {
+export interface PromptTest {
   id: number;
-  name: string;
-  provider: string;
-  inputCost: number; // in micro-dollars per 1K tokens
-  outputCost: number; // in micro-dollars per 1K tokens
-  enabled: boolean;
+  userId: number;
+  promptText: string;
+  status: string;
+  modelIds?: string[];
+  variantIds?: string[];
+  redTeamEnabled?: boolean;
+  createdAt: string;
+  updatedAt?: string;
 }
 
-// Framework Types
+export interface PromptResult {
+  id: number;
+  testId: number;
+  modelId: string;
+  variantId: string;
+  output: string;
+  qualityScore: number;
+  costUsd: number;
+  latencyMs?: number;
+  totalTime?: number;
+  firstTokenLatency?: number;
+  vulnerabilityStatus: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface SavedPrompt {
+  id: number;
+  userId: number;
+  testId: number;
+  name: string;
+  category?: string;
+  createdAt: string;
+}
+
 export interface Framework {
   id: number;
   name: string;
@@ -16,82 +42,43 @@ export interface Framework {
   enabled: boolean;
 }
 
-// RedTeam Attack Types
 export interface RedTeamAttack {
   id: number;
   name: string;
   description: string;
-  numAttacks: number;
   enabled: boolean;
-  lastUpdated: Date;
 }
 
-// Prompt Result Types
-export interface PromptResult {
+export interface Model {
   id: number;
-  testId: number;
-  modelId: string;
-  variantId: string;
-  output: string;
-  qualityScore: number | null;
-  latencyMs: number | null;
-  costUsd: number | null; // in micro-dollars
-  vulnerabilityStatus: 'safe' | 'partial' | 'failed' | 'unknown';
-  metadata?: any;
-  createdAt: Date;
-}
-
-// Test Types
-export interface PromptTest {
-  id: number;
-  userId: number;
-  promptText: string;
-  desiredOutcome: string;
-  status: 'pending' | 'running' | 'completed' | 'failed';
-  redTeamEnabled: boolean;
-  createdAt: Date;
-  completedAt: Date | null;
-}
-
-// Saved Prompt Types
-export interface SavedPrompt {
-  id: number;
-  userId: number;
-  testId: number;
   name: string;
-  category: string | null;
-  nextScheduled: Date | null;
-  createdAt: Date;
+  provider: string;
+  enabled: boolean;
 }
 
-// Result Matrix Types
-export interface HeatMapCell {
-  modelId: string;
-  variantId: string;
-  qualityScore: number;
-  latencyMs: number;
-  costUsd: number;
-  vulnerabilityStatus: 'safe' | 'partial' | 'failed' | 'unknown';
-}
-
-// Wizard Form Types
 export interface WizardFormData {
   promptText: string;
-  desiredOutcome: string;
-  selectedModels: string[];
-  selectedFrameworks: string[];
+  modelIds: string[];
+  variantIds: string[];
   redTeamEnabled: boolean;
-  iterationBudget?: number;
 }
 
-// Scatter plot data point
-export interface ScatterDataPoint {
-  modelId: string;
-  variantId: string;
-  x: number;
-  y: number;
-  label: string;
+export interface EnhancedTestData extends PromptTest {
+  category?: string;
+  bestModel?: {
+    modelId: string;
+    score: number;
+    cost: number;
+    time: number;
+  };
+  averages?: {
+    score: number;
+    cost: number;
+    time: number;
+  };
+  improvements?: {
+    score: string;
+    cost: string;
+    time: string;
+  };
 }
-
-// Vulnerability badge status
-export type VulnerabilityStatus = 'safe' | 'partial' | 'failed' | 'unknown';

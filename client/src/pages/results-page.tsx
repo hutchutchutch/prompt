@@ -241,38 +241,66 @@ export default function ResultsPage() {
   
   // Handle comparison setup
   const handleCompareChange = (value: string) => {
-    if (!results || results.length < 2) return;
+    if (!results || results.length < 2 || !winner || value === 'default') {
+      setShowComparison(false);
+      return;
+    }
     
     const [modelOrVariant, optionValue] = value.split(':');
     
     if (modelOrVariant === 'model') {
       // Compare the best result for the selected model vs the winner
       const modelResults = results.filter(r => r.modelId === optionValue);
-      const bestModelResult = [...modelResults].sort((a, b) => b.qualityScore - a.qualityScore)[0];
-      
-      // Don't compare the same result to itself
-      if (bestModelResult.id === winner?.id) {
-        const secondBest = [...results]
-          .filter(r => r.id !== winner.id)
-          .sort((a, b) => b.qualityScore - a.qualityScore)[0];
-        setSelectedPair([winner, secondBest]);
+      if (modelResults.length > 0) {
+        const bestModelResult = [...modelResults].sort((a, b) => 
+          ((b.qualityScore || 0) - (a.qualityScore || 0)))[0];
+        
+        // Don't compare the same result to itself
+        if (bestModelResult.id === winner.id) {
+          const alternativeResults = [...results].filter(r => r.id !== winner.id);
+          if (alternativeResults.length > 0) {
+            const secondBest = [...alternativeResults].sort((a, b) => 
+              ((b.qualityScore || 0) - (a.qualityScore || 0)))[0];
+            setSelectedPair([winner, secondBest]);
+          } else {
+            setShowComparison(false);
+            return;
+          }
+        } else {
+          setSelectedPair([winner, bestModelResult]);
+        }
       } else {
-        setSelectedPair([winner, bestModelResult]);
+        setShowComparison(false);
+        return;
       }
-    } else {
+    } else if (modelOrVariant === 'variant') {
       // Compare results using the same model but different variants
       const variantResults = results.filter(r => r.variantId === optionValue);
-      const bestVariantResult = [...variantResults].sort((a, b) => b.qualityScore - a.qualityScore)[0];
-      
-      // Don't compare the same result to itself
-      if (bestVariantResult.id === winner?.id) {
-        const secondBest = [...results]
-          .filter(r => r.id !== winner.id)
-          .sort((a, b) => b.qualityScore - a.qualityScore)[0];
-        setSelectedPair([winner, secondBest]);
+      if (variantResults.length > 0) {
+        const bestVariantResult = [...variantResults].sort((a, b) => 
+          ((b.qualityScore || 0) - (a.qualityScore || 0)))[0];
+        
+        // Don't compare the same result to itself
+        if (bestVariantResult.id === winner.id) {
+          const alternativeResults = [...results].filter(r => r.id !== winner.id);
+          if (alternativeResults.length > 0) {
+            const secondBest = [...alternativeResults].sort((a, b) => 
+              ((b.qualityScore || 0) - (a.qualityScore || 0)))[0];
+            setSelectedPair([winner, secondBest]);
+          } else {
+            setShowComparison(false);
+            return;
+          }
+        } else {
+          setSelectedPair([winner, bestVariantResult]);
+        }
       } else {
-        setSelectedPair([winner, bestVariantResult]);
+        setShowComparison(false);
+        return;
       }
+    } else {
+      setShowComparison(false);
+      return;
     }
     
     setShowComparison(true);
@@ -468,7 +496,7 @@ export default function ResultsPage() {
                 <SelectValue placeholder="Compare Results" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Compare Results</SelectItem>
+                <SelectItem key="default" value="default">Compare Results</SelectItem>
                 {/* Group by Models */}
                 {models.filter(m => m !== winner?.modelId).map(model => (
                   <SelectItem key={`model:${model}`} value={`model:${model}`}>
