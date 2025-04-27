@@ -51,6 +51,32 @@ interface EnhancedTestData extends PromptTest {
   };
 }
 
+// KPI data interface
+interface KpiData {
+  category: string;
+  bestModel: {
+    name: string;
+    quality: number;
+  };
+  averageQuality: number;
+  averageCost: number;
+  averageSpeed: number;
+  deltas: {
+    quality: number;
+    cost: number;
+    speed: number;
+  };
+  highVariance: boolean;
+  isEmpty?: boolean;
+}
+
+// Category data interface for API results
+interface CategoryData {
+  category: string;
+  description: string;
+  isNew: boolean;
+}
+
 export default function DashboardPage() {
   const { user, demoLoginMutation } = useAuth();
   const [, navigate] = useLocation();
@@ -63,10 +89,30 @@ export default function DashboardPage() {
       demoLoginMutation.mutate();
     }
   }, [user, demoLoginMutation]);
+  
+  // Fetch available categories
+  const { 
+    data: categories,
+    isLoading: isLoadingCategories 
+  } = useQuery<CategoryData[]>({
+    queryKey: ["/api/categories"],
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+  
+  // Fetch KPI data for the selected category
+  const {
+    data: kpiData,
+    isLoading: isLoadingKpi
+  } = useQuery<KpiData>({
+    queryKey: ["/api/kpi", activeCategory],
+    enabled: !!user && activeCategory !== "All",
+    staleTime: 60 * 1000, // 1 minute
+  });
 
   // Fetch recent tests - only when user is authenticated
   const { data: rawRecentTests, isLoading: isLoadingTests, error: testsError } = useQuery<PromptTest[]>({
-    queryKey: ["/api/tests/recent"],
+    queryKey: ["/api/tests/recent", activeCategory],
     staleTime: 60000, // 1 minute
     enabled: !!user, // Only run this query if the user is authenticated
   });
@@ -247,12 +293,56 @@ export default function DashboardPage() {
         </Card>
       </div>
       
-      {/* Task Categories Section */}
-      <div className="mb-8">
-        <TaskCategorySelector />
+      {/* Category Navigation */}
+      <div>
+        <h2 className="text-lg font-medium text-gray-900 mb-4">Browse By Task Category</h2>
+        {isLoadingCategories ? (
+          <div className="flex justify-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <CategoryTabs 
+            categories={categories ? categories.map(c => ({ 
+              category: c.category, 
+              description: c.description,
+              template: "",
+              businessImpact: ""
+            })) : taskCategories}
+            active={activeCategory}
+            onChange={setActiveCategory}
+            newCategories={categories ? categories.filter(c => c.isNew).map(c => c.category) : []}
+          />
+        )}
+        
+        {/* Global KPI bar for the selected category */}
+        {activeCategory !== "All" && (
+          <>
+            {isLoadingKpi ? (
+              <div className="flex justify-center py-4 my-4 bg-gray-50 rounded-lg">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+              </div>
+            ) : kpiData ? (
+              <GlobalKPIBar 
+                category={activeCategory}
+                bestModel={kpiData.bestModel}
+                averageQuality={kpiData.averageQuality}
+                averageCost={kpiData.averageCost}
+                averageSpeed={kpiData.averageSpeed}
+                deltas={kpiData.deltas}
+                highVariance={kpiData.highVariance}
+                isEmpty={kpiData.isEmpty}
+                onModelClick={(model) => navigate(`/models/${model}`)}
+              />
+            ) : (
+              <div className="p-4 my-4 bg-gray-50 text-gray-500 text-sm rounded-lg">
+                No performance data available for this category
+              </div>
+            )}
+          </>
+        )}
       </div>
 
-      <div>
+      <div className="mt-8">
         <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Tests</h2>
         
         {!user ? (
