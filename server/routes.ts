@@ -154,10 +154,104 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!category) {
       return res.status(400).json({ error: 'Category parameter is required' });
     }
+
+    // Demo KPI data for different categories
+    const demoKpiData = {
+      "Classification": {
+        bestModel: { name: "GPT-4", quality: 9.4 },
+        averageQuality: 8.1,
+        averageCost: 0.07,
+        averageSpeed: 782,
+        deltas: { quality: 16, cost: -12, speed: 25 },
+        metrics: ["Accuracy / Macro-F1", "Confusion matrix", "Schema conformance"]
+      },
+      "Summarization": {
+        bestModel: { name: "Claude 3", quality: 9.1 },
+        averageQuality: 7.9,
+        averageCost: 0.05,
+        averageSpeed: 1240,
+        deltas: { quality: 15, cost: -8, speed: -15 },
+        metrics: ["ROUGE-L", "Compression ratio", "Faithfulness"]
+      },
+      "Entity Extraction": {
+        bestModel: { name: "GPT-4", quality: 9.3 },
+        averageQuality: 8.4,
+        averageCost: 0.08,
+        averageSpeed: 920,
+        deltas: { quality: 11, cost: -5, speed: 22 },
+        metrics: ["Precision / Recall", "JSON validity", "Coverage"]
+      },
+      "Content Generation": {
+        bestModel: { name: "Claude 3", quality: 9.0 },
+        averageQuality: 7.7,
+        averageCost: 0.11,
+        averageSpeed: 1850,
+        deltas: { quality: 17, cost: -20, speed: -10 },
+        metrics: ["Relevance", "Originality", "Tone adherence"]
+      },
+      "Code Generation": {
+        bestModel: { name: "Claude 3", quality: 8.9 },
+        averageQuality: 7.8,
+        averageCost: 0.09,
+        averageSpeed: 1100,
+        deltas: { quality: 14, cost: -15, speed: 8 },
+        metrics: ["Test pass rate", "Compilation success", "Complexity"]
+      },
+      "Translation": {
+        bestModel: { name: "GPT-4", quality: 9.2 },
+        averageQuality: 8.0,
+        averageCost: 0.06,
+        averageSpeed: 980,
+        deltas: { quality: 15, cost: -10, speed: 5 },
+        metrics: ["BLEU/COMET", "Terminology accuracy", "Style"]
+      },
+      "Sentiment Analysis": {
+        bestModel: { name: "GPT-4", quality: 9.5 },
+        averageQuality: 8.3,
+        averageCost: 0.04,
+        averageSpeed: 550,
+        deltas: { quality: 14, cost: -8, speed: 32 },
+        metrics: ["Correlation with human", "Balanced accuracy", "Calibration"]
+      },
+      "Question Answering": {
+        bestModel: { name: "Claude 3", quality: 9.3 },
+        averageQuality: 8.2,
+        averageCost: 0.08,
+        averageSpeed: 890,
+        deltas: { quality: 13, cost: -7, speed: 15 },
+        metrics: ["Exact match", "Token-F1", "Answerability accuracy"]
+      },
+      "Data Analysis": {
+        bestModel: { name: "Claude 3", quality: 8.8 },
+        averageQuality: 7.5,
+        averageCost: 0.12,
+        averageSpeed: 1740,
+        deltas: { quality: 17, cost: -22, speed: -12 },
+        metrics: ["Insight correctness", "Statistical error rate", "Diversity"]
+      },
+      "Creative Writing": {
+        bestModel: { name: "GPT-4", quality: 9.0 },
+        averageQuality: 7.8,
+        averageCost: 0.10,
+        averageSpeed: 1520,
+        deltas: { quality: 15, cost: -18, speed: -8 },
+        metrics: ["Creativity rating", "Coherence", "Style fidelity"]
+      }
+    };
     
     try {
-      // Get all test results for the specified category
-      const tests = await storage.getPromptTestsByCategory(category as string);
+      // For demo purposes, return pre-defined KPI data based on category
+      const categoryName = category as string;
+      if (demoKpiData[categoryName as keyof typeof demoKpiData]) {
+        return res.json({
+          category: categoryName,
+          ...demoKpiData[categoryName as keyof typeof demoKpiData],
+          highVariance: Math.random() > 0.7, // Randomly set high variance flag
+        });
+      }
+      
+      // If no predefined data for this category, use the actual DB query
+      const tests = await storage.getPromptTestsByCategory(categoryName);
       
       if (!tests || tests.length === 0) {
         return res.json({

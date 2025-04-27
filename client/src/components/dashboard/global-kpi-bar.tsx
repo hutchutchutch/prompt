@@ -18,6 +18,8 @@ interface GlobalKPIProps {
     cost: number;
     speed: number;
   };
+  // Key metrics for this category
+  metrics?: string[];
   // Optional callback when user clicks on best model
   onModelClick?: (modelName: string) => void;
   // Flag for high variance warning
@@ -33,6 +35,7 @@ export function GlobalKPIBar({
   averageCost,
   averageSpeed,
   deltas = { quality: 0, cost: 0, speed: 0 },
+  metrics = [],
   onModelClick,
   highVariance = false,
   isEmpty = false

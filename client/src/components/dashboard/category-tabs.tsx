@@ -37,7 +37,7 @@ export function CategoryTabs({
                   <TooltipTrigger asChild>
                     <TabsTrigger 
                       value={cat.category} 
-                      className="relative flex items-center gap-1 px-4"
+                      className="relative flex items-center gap-1 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                     >
                       {cat.category}
                       

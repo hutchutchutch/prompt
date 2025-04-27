@@ -1,0 +1,89 @@
+1 ▪ Classification
+Accuracy / Macro-F1 – headline quality number (handles class imbalance).
+
+Confusion-matrix hotspots – top 3 most-confused label pairs.
+
+Schema-conformance rate – % responses that are only the label (no extra text).
+
+Human-override delta – gap between LLM-judge score and human review.
+
+2 ▪ Summarization
+ROUGE-L or BERTScore – automatic overlap with gold summary.
+
+Compression ratio – output tokens ÷ input tokens (signals verbosity).
+
+Faithfulness violations – count of hallucinated facts (LLM-judge rubric).
+
+Readability index – Flesch-Kincaid grade level.
+
+3 ▪ Entity Extraction
+Precision / Recall / F1 per entity type – practical upshot: fewer false hits.
+
+Duplicate-entity rate – % entities repeated in output.
+
+JSON-schema validity – responses that parse without error.
+
+Coverage gap – entities present in ground truth but missed.
+
+4 ▪ Content Generation
+Relevance score – LLM-judge rating vs. provided brief.
+
+Originality / Plagiarism overlap – % text flagged by a similarity checker.
+
+Tone adherence – cosine similarity between generated embedding and target-style samples.
+
+Readability + SEO checks – grade level & keyword density.
+
+5 ▪ Code Generation
+Unit-test pass rate – %, or “all tests pass” boolean.
+
+Compile / lint success – build exits 0.
+
+Cyclomatic complexity – proxy for maintainability.
+
+Lines-of-code vs. spec – detects over-engineering or truncation.
+
+6 ▪ Translation
+BLEU or COMET – adequacy + fluency composite.
+
+Terminology accuracy – % glossary terms preserved.
+
+Style similarity – embedding distance to reference corpus in target language.
+
+Length variance – chars vs. source (flags over-compression).
+
+7 ▪ Sentiment Analysis
+Correlation (r) with human score – if sentiment is numeric.
+
+Balanced-accuracy – handles neutral-heavy datasets.
+
+Calibration curve – confidence vs. actual correctness.
+
+Edge-case recall – performance on sarcasm / negation subset.
+
+8 ▪ Question Answering
+Exact-match / Token-F1 – standard SQuAD-style.
+
+Answerable vs. unanswerable accuracy – did the model correctly say “not available”.
+
+Context-dependency check – % answers containing material not present in context.
+
+Conciseness score – tokens in answer ≤ threshold.
+
+9 ▪ Data Analysis
+Insight correctness – LLM-judge comparison to analyst-written key findings.
+
+Statistical error rate – incorrect means, percentages, etc.
+
+Insight diversity – unique insight count ÷ total; discourages repetition.
+
+Chartability – % insights that can be expressed as a structured metric/dimension pair.
+
+10 ▪ Creative Writing
+Creativity rating – LLM-judge rubric (originality, imagery).
+
+Coherence / plot consistency – number of logical flaws per 1 k tokens.
+
+Style fidelity – embedding similarity to requested genre/voice.
+
+Emotional impact – reader sentiment distribution from a second-pass model.
