@@ -16,14 +16,19 @@ const navItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Library",
-    href: "/library",
+    title: "New Evaluation",
+    href: "/wizard",
     icon: FileText,
   },
   {
-    title: "Documentation",
-    href: "#",
+    title: "History",
+    href: "/library",
     icon: BookOpen,
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    icon: Settings,
   },
 ];
 

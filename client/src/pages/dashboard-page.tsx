@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import DashboardLayout from "@/components/dashboard-layout";
 import { CalendarIcon, Timer, DollarSign, BarChart2, Award, Zap, TrendingUp } from "lucide-react";
@@ -37,7 +38,7 @@ interface EnhancedTestData extends PromptTest {
     modelId: string;
     score: number;
     cost: number;
-    time: number;
+    time: number | undefined;
   };
   averages?: {
     score: number;
@@ -169,7 +170,7 @@ export default function DashboardPage() {
               // Calculate averages
               const avgScore = normalizedResults.reduce((sum, r) => sum + r.qualityScore, 0) / normalizedResults.length;
               const avgCost = normalizedResults.reduce((sum, r) => sum + r.costUsd, 0) / normalizedResults.length;
-              const avgTime = normalizedResults.reduce((sum, r) => sum + r.totalTime, 0) / normalizedResults.length;
+              const avgTime = normalizedResults.reduce((sum, r) => sum + (r.totalTime || 0), 0) / normalizedResults.length;
 
               // Find best model (by quality score)
               const bestResult = [...normalizedResults].sort((a, b) => b.qualityScore - a.qualityScore)[0];
@@ -177,7 +178,7 @@ export default function DashboardPage() {
               // Calculate improvements (percentage better than average)
               const scoreDiff = ((bestResult.qualityScore - avgScore) / avgScore * 100).toFixed(0);
               const costDiff = ((avgCost - bestResult.costUsd) / avgCost * 100).toFixed(0);
-              const timeDiff = ((avgTime - bestResult.totalTime) / avgTime * 100).toFixed(0);
+              const timeDiff = ((avgTime - (bestResult.totalTime || 0)) / avgTime * 100).toFixed(0);
 
               // Return enhanced test data
               return {
@@ -235,6 +236,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardLayout>
+      {/* 1. Page Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
@@ -243,56 +245,84 @@ export default function DashboardPage() {
           </p>
         </div>
         <Button asChild>
-          <Link href="/wizard">New Test</Link>
+          <Link href="/wizard">New Evaluation</Link>
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Total Tests</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline">
-              <span className="text-3xl font-bold text-gray-900">
-                {enhancedTests?.length || 0}
-              </span>
+      {/* 2. Summary / Recommendation Area */}
+      <Card className="mb-6">
+        <CardContent className="pt-6">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-gray-900 mb-1">Evaluation Summary</h2>
+              <p className="text-sm text-gray-600 mb-3">
+                Prompt Version 3 with LLM <span className="font-medium">Claude 3</span> performed best for 
+                <span className="font-medium"> Summarization</span> based on ROUGE-L and Cost.
+              </p>
+              <p className="text-sm text-gray-500 mb-2">
+                Key justification: Highest ROUGE-L score (0.78) with moderate estimated cost ($0.05 / 1k calls).
+              </p>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Average Quality</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline">
-              <span className="text-3xl font-bold text-gray-900">8.5</span>
-              <span className="ml-1 text-sm text-gray-500">/10</span>
+            <div className="flex-shrink-0 flex flex-col md:flex-row gap-3">
+              <div className="p-3 bg-gray-50 rounded-lg text-center min-w-[100px]">
+                <p className="text-xs text-gray-500 mb-1">Quality Score</p>
+                <p className="text-xl font-semibold text-gray-900">8.7<span className="text-xs text-gray-500">/10</span></p>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg text-center min-w-[100px]">
+                <p className="text-xs text-gray-500 mb-1">Est. Cost/1k</p>
+                <p className="text-xl font-semibold text-gray-900">$0.05</p>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg text-center min-w-[100px]">
+                <p className="text-xs text-gray-500 mb-1">Latency</p>
+                <p className="text-xl font-semibold text-gray-900">1.2s</p>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Average Cost</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline">
-              <span className="text-3xl font-bold text-gray-900">$0.09</span>
-              <span className="ml-1 text-sm text-gray-500">/test</span>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* 3. Context / Input Summary Area */}
+      <Card className="mb-8">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-medium">Evaluation Context</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-1">Task Type</h3>
+              <div className="text-sm bg-blue-50 text-blue-700 py-1 px-2 rounded inline-block">Summarization</div>
+              
+              <h3 className="text-sm font-medium text-gray-700 mt-4 mb-1">Original Prompt</h3>
+              <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded border border-gray-100">
+                Summarize the following text in 2-3 sentences while preserving the key points and main message.
+              </p>
+              
+              <h3 className="text-sm font-medium text-gray-700 mt-4 mb-1">LLMs Tested</h3>
+              <div className="flex flex-wrap gap-2">
+                <div className="text-xs bg-gray-100 text-gray-700 py-1 px-2 rounded">GPT-4</div>
+                <div className="text-xs bg-gray-100 text-gray-700 py-1 px-2 rounded">Claude 3</div>
+                <div className="text-xs bg-gray-100 text-gray-700 py-1 px-2 rounded">Llama 3</div>
+                <div className="text-xs bg-gray-100 text-gray-700 py-1 px-2 rounded">Mistral</div>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">Saved Prompts</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-baseline">
-              <span className="text-3xl font-bold text-gray-900">3</span>
+            
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-1">Expected Output</h3>
+              <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded border border-gray-100 h-20 overflow-auto">
+                A concise summary that covers the main topics of the source text while maintaining accuracy and coherence.
+              </p>
+              
+              <h3 className="text-sm font-medium text-gray-700 mt-4 mb-1">Evaluation Metrics</h3>
+              <div className="flex flex-wrap gap-2">
+                <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">ROUGE-L</div>
+                <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">Compression Ratio</div>
+                <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">Faithfulness</div>
+                <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">Coherence</div>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
       
       {/* Category Navigation */}
       <div>
@@ -344,8 +374,159 @@ export default function DashboardPage() {
         )}
       </div>
 
+      {/* 4. Main Content Area (Tabbed/Segmented View) */}
       <div className="mt-8">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Tests</h2>
+        <div className="mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Detailed Comparison Results</h2>
+          
+          <Tabs defaultValue="prompts" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="prompts" className="text-sm">Prompt Comparison</TabsTrigger>
+              <TabsTrigger value="models" className="text-sm">LLM Comparison</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="prompts" className="space-y-6">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base font-medium">Prompt Versions Comparison</CardTitle>
+                  <p className="text-sm text-gray-500">
+                    Performance across different prompt variations
+                  </p>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="relative overflow-x-auto rounded-md border">
+                      <table className="w-full text-sm text-left">
+                        <thead className="text-xs bg-gray-50 text-gray-700">
+                          <tr>
+                            <th className="px-4 py-3 font-medium">Prompt Version</th>
+                            <th className="px-4 py-3 font-medium">Quality Score</th>
+                            <th className="px-4 py-3 font-medium">ROUGE-L</th>
+                            <th className="px-4 py-3 font-medium">Compression</th>
+                            <th className="px-4 py-3 font-medium">Cost ($)</th>
+                            <th className="px-4 py-3 font-medium">Latency (ms)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b hover:bg-gray-50">
+                            <td className="px-4 py-3">Original</td>
+                            <td className="px-4 py-3">7.6</td>
+                            <td className="px-4 py-3">0.65</td>
+                            <td className="px-4 py-3">24%</td>
+                            <td className="px-4 py-3">0.08</td>
+                            <td className="px-4 py-3">980</td>
+                          </tr>
+                          <tr className="border-b hover:bg-gray-50">
+                            <td className="px-4 py-3">Version 2</td>
+                            <td className="px-4 py-3">8.2</td>
+                            <td className="px-4 py-3">0.72</td>
+                            <td className="px-4 py-3">22%</td>
+                            <td className="px-4 py-3">0.06</td>
+                            <td className="px-4 py-3">850</td>
+                          </tr>
+                          <tr className="border-b bg-green-50 hover:bg-green-100">
+                            <td className="px-4 py-3 font-medium">Version 3 (Best)</td>
+                            <td className="px-4 py-3 font-medium">8.7</td>
+                            <td className="px-4 py-3 font-medium">0.78</td>
+                            <td className="px-4 py-3 font-medium">20%</td>
+                            <td className="px-4 py-3 font-medium">0.05</td>
+                            <td className="px-4 py-3 font-medium">920</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="h-64 bg-gray-50 rounded-md p-4 flex items-center justify-center">
+                        <p className="text-sm text-gray-500">ROUGE-L Score Chart</p>
+                      </div>
+                      <div className="h-64 bg-gray-50 rounded-md p-4 flex items-center justify-center">
+                        <p className="text-sm text-gray-500">Cost vs Quality Chart</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="models" className="space-y-6">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-base font-medium">LLM Performance Comparison</CardTitle>
+                  <CardDescription>
+                    Comparison across different models using the best prompt (Version 3)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="relative overflow-x-auto rounded-md border">
+                      <table className="w-full text-sm text-left">
+                        <thead className="text-xs bg-gray-50 text-gray-700">
+                          <tr>
+                            <th className="px-4 py-3 font-medium">Model</th>
+                            <th className="px-4 py-3 font-medium">Quality Score</th>
+                            <th className="px-4 py-3 font-medium">ROUGE-L</th>
+                            <th className="px-4 py-3 font-medium">Faithfulness</th>
+                            <th className="px-4 py-3 font-medium">Cost ($)</th>
+                            <th className="px-4 py-3 font-medium">Latency (ms)</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-b hover:bg-gray-50">
+                            <td className="px-4 py-3">GPT-4</td>
+                            <td className="px-4 py-3">8.5</td>
+                            <td className="px-4 py-3">0.76</td>
+                            <td className="px-4 py-3">0.89</td>
+                            <td className="px-4 py-3">0.12</td>
+                            <td className="px-4 py-3">1100</td>
+                          </tr>
+                          <tr className="border-b bg-green-50 hover:bg-green-100">
+                            <td className="px-4 py-3 font-medium">Claude 3 (Best)</td>
+                            <td className="px-4 py-3 font-medium">8.7</td>
+                            <td className="px-4 py-3 font-medium">0.78</td>
+                            <td className="px-4 py-3 font-medium">0.92</td>
+                            <td className="px-4 py-3 font-medium">0.05</td>
+                            <td className="px-4 py-3 font-medium">920</td>
+                          </tr>
+                          <tr className="border-b hover:bg-gray-50">
+                            <td className="px-4 py-3">Llama 3</td>
+                            <td className="px-4 py-3">8.1</td>
+                            <td className="px-4 py-3">0.74</td>
+                            <td className="px-4 py-3">0.86</td>
+                            <td className="px-4 py-3">0.02</td>
+                            <td className="px-4 py-3">750</td>
+                          </tr>
+                          <tr className="border-b hover:bg-gray-50">
+                            <td className="px-4 py-3">Mistral</td>
+                            <td className="px-4 py-3">7.9</td>
+                            <td className="px-4 py-3">0.71</td>
+                            <td className="px-4 py-3">0.84</td>
+                            <td className="px-4 py-3">0.01</td>
+                            <td className="px-4 py-3">680</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="h-64 bg-gray-50 rounded-md p-4 flex items-center justify-center">
+                        <p className="text-sm text-gray-500">Performance Radar Chart</p>
+                      </div>
+                      <div className="h-64 bg-gray-50 rounded-md p-4 flex items-center justify-center">
+                        <p className="text-sm text-gray-500">Latency Distribution</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+      
+      {/* 5. Recent Tests Section */}
+      <div className="mt-8">
+        <h2 className="text-lg font-medium text-gray-900 mb-4">Evaluation History</h2>
         
         {!user ? (
           <Card>
@@ -357,22 +538,22 @@ export default function DashboardPage() {
         ) : isLoading ? (
           <Card>
             <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-gray-500 mb-4">Loading test data...</p>
+              <p className="text-sm text-gray-500 mb-4">Loading evaluation data...</p>
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </CardContent>
           </Card>
         ) : error ? (
           <Card>
             <CardContent className="h-40 flex items-center justify-center">
-              <p className="text-sm text-gray-500">Error loading recent tests</p>
+              <p className="text-sm text-gray-500">Error loading evaluation history</p>
             </CardContent>
           </Card>
         ) : enhancedTests?.length === 0 ? (
           <Card>
             <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-gray-500 mb-4">You haven't run any tests yet</p>
+              <p className="text-sm text-gray-500 mb-4">You haven't run any evaluations yet</p>
               <Button asChild>
-                <Link href="/wizard">Run your first test</Link>
+                <Link href="/wizard">Run your first evaluation</Link>
               </Button>
             </CardContent>
           </Card>

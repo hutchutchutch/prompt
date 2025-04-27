@@ -110,6 +110,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </Sheet>
       </div>
 
+      {/* Desktop project selector header */}
+      <div className="hidden md:flex md:pl-64 h-16 border-b border-gray-200 bg-white">
+        <div className="flex-1 px-4 flex justify-between items-center">
+          <div className="flex-1 flex items-center">
+            <div className="max-w-xs w-64">
+              <label htmlFor="project-select" className="sr-only">Select Project</label>
+              <select 
+                id="project-select" 
+                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
+              >
+                <option>All Projects</option>
+                <option>Summarization Benchmark</option>
+                <option>Classification Model Comparison</option>
+                <option>Content Generation Tests</option>
+              </select>
+            </div>
+          </div>
+          <div className="ml-4 flex items-center md:ml-6">
+            {/* Add any additional header elements here */}
+          </div>
+        </div>
+      </div>
+
       {/* Main content */}
       <div className="md:pl-64 flex flex-col flex-1">
         <main className="flex-1">

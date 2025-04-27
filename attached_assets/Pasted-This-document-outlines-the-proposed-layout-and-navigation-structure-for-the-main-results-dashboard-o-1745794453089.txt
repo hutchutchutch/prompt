@@ -1,0 +1,49 @@
+This document outlines the proposed layout and navigation structure for the main results dashboard of the LLM prompt evaluation platform, drawing upon the established UI design principles.
+Overall Structure
+The dashboard will adopt a standard web application layout with a persistent header/navigation bar, a prominent summary section, and a main content area for detailed results.
+1. Header / Navigation Bar
+Purpose: Provides global navigation, branding, and user account access.
+Elements:
+Logo/Brand Name: Top-left corner.
+Project/Evaluation Run Selector: Allows users to switch between different evaluation projects or specific runs (e.g., a dropdown menu).
+Navigation Links/Tabs: (Could be top nav or sidebar)
+Dashboard (Current View)
+New Evaluation (To start a new test run)
+History (List of past evaluation runs)
+Settings (API keys, preferences, etc.)
+User Account Menu: Top-right corner (Profile, Logout).
+Design Principles: Simplicity, Clarity, Consistent Navigation.
+2. Summary / Recommendation Area
+Purpose: Provides an immediate, high-level overview of the evaluation results and the top recommendation, addressing the user's primary goal quickly.
+Location: Directly below the header, spanning the width of the content area.
+Elements:
+Overall Recommendation: A concise statement identifying the best-performing combination (e.g., "Prompt Version 3 with LLM 'Model-X' performed best for Summarization based on ROUGE-L and Cost.").
+Key Justification: Brief explanation for the recommendation (e.g., "Highest ROUGE-L score (0.78) with moderate estimated cost ($0.05 / 1k calls).").
+Top Metrics Snapshot: Display the critical metrics for the recommended combination (e.g., Quality Score: 8.5/10, Est. Cost/1k: $0.05, Latency: 1.2s).
+Design Principles: Information Hierarchy, Goal Orientation, Actionability, Clarity.
+3. Context / Input Summary Area
+Purpose: Reminds the user of the specific inputs used for this evaluation run.
+Location: Below the Summary Area or potentially in a collapsible sidebar.
+Elements:
+Task Type: Clearly displayed (e.g., "Task: Summarization").
+Original Prompt: Display the base prompt tested.
+Expected Output (if provided): Display the user-defined target output.
+LLMs Tested: List or show icons of the LLMs included in the evaluation.
+Evaluation Metrics Used: List the primary metrics relevant to the task type.
+Design Principles: Contextual Information, Clarity.
+4. Main Content Area (Tabbed/Segmented View)
+Purpose: Presents the detailed comparison results, allowing users to explore the data from different perspectives.
+Location: The primary area below the summary/context sections.
+Navigation within Content Area: Use clear Tabs or Segmented Controls to switch between views:
+View 1: Prompt Comparison: Focuses on comparing different prompt versions (original vs. restructured) across all selected LLMs.
+View 2: LLM Comparison: Focuses on comparing different LLMs for a specific prompt version (or averaged across prompts).
+Content (Details to be defined in subsequent steps): This area will contain the charts, tables, and detailed metric breakdowns for the selected view (Prompt vs. LLM comparison). It will include visualizations for task-specific metrics, cost estimations, latency, and allow drill-down into individual API calls and results.
+Design Principles: Effective Comparison Views, Interactivity, Drill-Down, Appropriate Visualizations, Task-Specific Views, Cost Awareness.
+Navigation Flow Summary
+User logs in / accesses the platform.
+User selects a specific evaluation run from History or is directed to the dashboard after completing a New Evaluation.
+The Dashboard loads, showing the high-level Summary/Recommendation and Context/Input Summary.
+The Main Content Area defaults to a primary view (e.g., Prompt Comparison).
+User can toggle between Prompt Comparison and LLM Comparison views using tabs/controls.
+User can interact with charts/tables within the main content area to filter, sort, and drill down into specific results (e.g., view individual LLM calls, cost breakdowns).
+User can navigate to other sections (New Evaluation, History, Settings) via the main header/navigation.
