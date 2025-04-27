@@ -295,7 +295,7 @@ export default function DashboardPage() {
       
       {/* Category Navigation */}
       <div>
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Browse By Task Category</h2>
+        <h2 className="text-lg font-medium text-gray-900 mb-4">Best Model by Category</h2>
         {isLoadingCategories ? (
           <div className="flex justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
