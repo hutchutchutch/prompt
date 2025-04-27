@@ -94,13 +94,13 @@ export function ComparisonPanel({ leftResult, rightResult }: ComparisonPanelProp
   
   // Truncate output text if not showing full output
   const maxPreviewChars = 200;
-  const leftPreviewText = !showFullOutput && leftResult.output.length > maxPreviewChars
+  const leftPreviewText = !showFullOutput && leftResult.output && leftResult.output.length > maxPreviewChars
     ? leftResult.output.substring(0, maxPreviewChars) + "..."
-    : leftResult.output;
+    : leftResult.output || "";
     
-  const rightPreviewText = !showFullOutput && rightResult.output.length > maxPreviewChars
+  const rightPreviewText = !showFullOutput && rightResult.output && rightResult.output.length > maxPreviewChars
     ? rightResult.output.substring(0, maxPreviewChars) + "..."
-    : rightResult.output;
+    : rightResult.output || "";
   
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 mb-8">
