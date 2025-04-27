@@ -154,6 +154,17 @@ export function GlobalKPIBar({
               )}
             </div>
             <p className="text-xs text-gray-600">Avg quality</p>
+            
+            {/* Display key metrics if available */}
+            {metrics && metrics.length > 0 && (
+              <div className="mt-1 flex flex-wrap gap-1">
+                {metrics.map((metric, i) => (
+                  <span key={i} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                    {metric}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
           
           {/* Cost Metric */}

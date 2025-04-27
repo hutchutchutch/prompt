@@ -66,6 +66,7 @@ interface KpiData {
     cost: number;
     speed: number;
   };
+  metrics?: string[];
   highVariance: boolean;
   isEmpty?: boolean;
 }
@@ -329,6 +330,7 @@ export default function DashboardPage() {
                 averageCost={kpiData.averageCost}
                 averageSpeed={kpiData.averageSpeed}
                 deltas={kpiData.deltas}
+                metrics={kpiData.metrics}
                 highVariance={kpiData.highVariance}
                 isEmpty={kpiData.isEmpty}
                 onModelClick={(model) => navigate(`/models/${model}`)}
