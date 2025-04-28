@@ -18,17 +18,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const isDemo = user?.role === "demo";
   
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-background">
       {/* Demo Mode Banner */}
       {isDemo && (
-        <div className="bg-primary text-white text-center py-1 px-4 text-sm font-medium flex items-center justify-center">
+        <div className="bg-primary text-primary-foreground text-center py-1 px-4 text-sm font-medium flex items-center justify-center">
           <span className="mr-2">🔍</span>
           <span>Demo Mode - Explore PromptLab features with pre-loaded data</span>
         </div>
       )}
       {/* Sidebar for desktop */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-        <div className="flex-1 flex flex-col min-h-0 bg-white border-r border-gray-200">
+        <div className="flex-1 flex flex-col min-h-0 bg-card border-r border-border">
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
               <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -40,17 +40,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <SidebarNav />
             </div>
           </div>
-          <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+          <div className="flex-shrink-0 flex border-t border-border p-4">
             <div className="flex-shrink-0 w-full group block">
               <div className="flex items-center">
-                <div className="inline-block h-9 w-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
+                <div className="inline-block h-9 w-9 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
                   {userInitial}
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                  <p className="text-sm font-medium text-card-foreground group-hover:text-foreground">
                     {user?.username}
                   </p>
-                  <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                  <p className="text-xs font-medium text-muted-foreground group-hover:text-foreground">
                     {user?.role === "admin" ? "Admin" : user?.role === "demo" ? "Demo User" : "Pro Subscriber"}
                   </p>
                 </div>
@@ -61,7 +61,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Mobile header */}
-      <div className="md:hidden bg-white border-b border-gray-200 flex items-center justify-between px-4 py-2">
+      <div className="md:hidden bg-card border-b border-border flex items-center justify-between px-4 py-2">
         <div className="flex items-center">
           <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="currentColor"/>
@@ -76,7 +76,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-0">
-            <div className="flex-1 flex flex-col min-h-0 bg-white h-full">
+            <div className="flex-1 flex flex-col min-h-0 bg-card h-full">
               <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                 <div className="flex items-center flex-shrink-0 px-4">
                   <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -88,17 +88,17 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <SidebarNav />
                 </div>
               </div>
-              <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+              <div className="flex-shrink-0 flex border-t border-border p-4">
                 <div className="flex-shrink-0 w-full group block">
                   <div className="flex items-center">
-                    <div className="inline-block h-9 w-9 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center">
+                    <div className="inline-block h-9 w-9 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
                       {userInitial}
                     </div>
                     <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                      <p className="text-sm font-medium text-card-foreground group-hover:text-foreground">
                         {user?.username}
                       </p>
-                      <p className="text-xs font-medium text-gray-500 group-hover:text-gray-700">
+                      <p className="text-xs font-medium text-muted-foreground group-hover:text-foreground">
                         {user?.role === "admin" ? "Admin" : user?.role === "demo" ? "Demo User" : "Pro Subscriber"}
                       </p>
                     </div>
@@ -111,14 +111,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Desktop project selector header */}
-      <div className="hidden md:flex md:pl-64 h-16 border-b border-gray-200 bg-white">
+      <div className="hidden md:flex md:pl-64 h-16 border-b border-border bg-card">
         <div className="flex-1 px-4 flex justify-between items-center">
           <div className="flex-1 flex items-center">
             <div className="max-w-xs w-64">
               <label htmlFor="project-select" className="sr-only">Select Project</label>
               <select 
                 id="project-select" 
-                className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
+                className="block w-full pl-3 pr-10 py-2 text-base bg-card border-border focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
               >
                 <option>All Projects</option>
                 <option>Summarization Benchmark</option>

@@ -234,8 +234,8 @@ export default function DashboardPage() {
       {/* 1. Page Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-1">
             Welcome back, {user?.username}
           </p>
         </div>
@@ -249,27 +249,27 @@ export default function DashboardPage() {
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1">
-              <h2 className="text-lg font-semibold text-gray-900 mb-1">Evaluation Summary</h2>
-              <p className="text-sm text-gray-600 mb-3">
+              <h2 className="text-lg font-semibold mb-1">Evaluation Summary</h2>
+              <p className="text-sm text-card-foreground mb-3">
                 Prompt Version 3 with LLM <span className="font-medium">Claude 3</span> performed best for 
                 <span className="font-medium"> Summarization</span> based on ROUGE-L and Cost.
               </p>
-              <p className="text-sm text-gray-500 mb-2">
+              <p className="text-sm text-muted-foreground mb-2">
                 Key justification: Highest ROUGE-L score (0.78) with moderate estimated cost ($0.05 / 1k calls).
               </p>
             </div>
             <div className="flex-shrink-0 flex flex-col md:flex-row gap-3">
-              <div className="p-3 bg-gray-50 rounded-lg text-center min-w-[100px]">
-                <p className="text-xs text-gray-500 mb-1">Quality Score</p>
-                <p className="text-xl font-semibold text-gray-900">8.7<span className="text-xs text-gray-500">/10</span></p>
+              <div className="p-3 bg-muted rounded-lg text-center min-w-[100px]">
+                <p className="text-xs text-muted-foreground mb-1">Quality Score</p>
+                <p className="text-xl font-semibold">8.7<span className="text-xs text-muted-foreground">/10</span></p>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg text-center min-w-[100px]">
-                <p className="text-xs text-gray-500 mb-1">Est. Cost/1k</p>
-                <p className="text-xl font-semibold text-gray-900">$0.05</p>
+              <div className="p-3 bg-muted rounded-lg text-center min-w-[100px]">
+                <p className="text-xs text-muted-foreground mb-1">Est. Cost/1k</p>
+                <p className="text-xl font-semibold">$0.05</p>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg text-center min-w-[100px]">
-                <p className="text-xs text-gray-500 mb-1">Latency</p>
-                <p className="text-xl font-semibold text-gray-900">1.2s</p>
+              <div className="p-3 bg-muted rounded-lg text-center min-w-[100px]">
+                <p className="text-xs text-muted-foreground mb-1">Latency</p>
+                <p className="text-xl font-semibold">1.2s</p>
               </div>
             </div>
           </div>
