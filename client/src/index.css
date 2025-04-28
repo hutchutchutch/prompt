@@ -58,36 +58,36 @@
     --background: 0 0% 7%; /* Deep charcoal black (#121212) */
     --foreground: 0 0% 88%; /* Soft white text (#E0E0E0) */
     --muted: 0 0% 14%; /* Slightly lighter charcoal (#232323) */
-    --muted-foreground: 0 0% 69%; /* Soft gray text (#B0B0B0) */
+    --muted-foreground: 0 0% 67%; /* Soft gray text (#AAAAAA) */
     
     /* UI element colors */
     --popover: 0 0% 9%; /* Popover background (#161616) */
     --popover-foreground: 0 0% 88%;
-    --card: 0 0% 9%; /* Card background (#181818) */
-    --card-foreground: 0 0% 88%;
+    --card: 0 0% 10%; /* Card background (#1A1A1A) */
+    --card-foreground: 0 0% 80%;
     --border: 0 0% 16%; /* Subtle borders (#2A2A2A) */
-    --input: 0 0% 14%; /* Input background (#232323) */
+    --input: 0 0% 12%; /* Input background (#1D1D1D) */
     
-    /* Accent colors */
-    --primary: 175 100% 50%; /* Teal/cyan accent (#00F0FF) */
+    /* Accent colors - Softer teal glow */
+    --primary: 166 100% 64%; /* Softer teal (#4FF8E5) */
     --primary-foreground: 0 0% 7%;
-    --secondary: 0 0% 14%;
-    --secondary-foreground: 0 0% 88%;
-    --accent: 166 100% 64%; /* Greenish-teal for positive trends (#4FF8E5) */
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 80%;
+    --accent: 166 90% 60%; /* Slightly less saturated (#3DE4D1) */
     --accent-foreground: 0 0% 7%;
     --destructive: 0 71% 68%; /* Red for negative trends (#FF5C5C) */
     --destructive-foreground: 0 0% 88%;
-    --ring: 175 100% 50%;
+    --ring: 166 100% 64%;
     
-    /* Shadows and glows */
-    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    --card-highlight: 0 4px 12px rgba(0, 240, 255, 0.08);
-    --element-glow: 0 0 12px rgba(0, 240, 255, 0.15);
-    --button-glow: 0 0 10px rgba(0, 240, 255, 0.3);
+    /* Shadows and glows - more subtle */
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --card-highlight: 0 2px 8px rgba(79, 248, 229, 0.1);
+    --element-glow: 0 0 8px rgba(79, 248, 229, 0.15);
+    --button-glow: 0 0 8px rgba(79, 248, 229, 0.3);
     
     /* Chart colors */
-    --chart-1: 175 100% 50%; /* Teal (#00F0FF) */
-    --chart-2: 166 100% 64%; /* Greenish-teal (#4FF8E5) */
+    --chart-1: 166 100% 64%; /* Teal (#4FF8E5) */
+    --chart-2: 180 90% 50%; /* Slightly more blue (#1AD9E4) */
     --chart-3: 262 83% 58%; /* Purple (#986AFF) */
     --chart-4: 27 98% 54%; /* Orange (#FF8B0D) */
     --chart-5: 0 71% 68%; /* Red (#FF5C5C) */
@@ -96,7 +96,12 @@
     --success: 166 100% 64%; /* Greenish-teal (#4FF8E5) */
     --warning: 39 100% 50%; /* Yellow-orange (#FFA500) */
     --error: 0 71% 68%; /* Red (#FF5C5C) */
-    --info: 175 100% 50%; /* Teal (#00F0FF) */
+    --info: 175 90% 45%; /* Muted teal (#00D4E0) */
+    
+    /* Typography variations */
+    --title: 0 0% 100%; /* Pure white for titles (#FFFFFF) */
+    --subtitle: 0 0% 80%; /* Softer gray for subtitles (#CCCCCC) */
+    --body: 0 0% 67%; /* Even softer gray for body text (#AAAAAA) */
   }
 }
 
@@ -135,21 +140,26 @@
   @apply rounded-md p-4 flex flex-col items-center justify-center cursor-pointer hover:opacity-90 transition-opacity;
 }
 
-/* Dark mode card and element styling */
+/* Dark mode card and element styling - refined for Click.AI aesthetic */
 .dark .card-glow {
-  @apply shadow-[0_4px_12px_rgba(0,240,255,0.08)] hover:shadow-[0_4px_16px_rgba(0,240,255,0.15)] transition-shadow duration-300;
+  @apply shadow-[0_4px_12px_rgba(79,248,229,0.07)] hover:shadow-[0_4px_16px_rgba(79,248,229,0.12)] transition-shadow duration-300;
+  background: linear-gradient(180deg, #1A1A1A 0%, #161616 100%);
+  border-radius: 12px;
 }
 
 .dark .dashboard-card {
-  @apply bg-card border border-border shadow-[0_4px_12px_rgba(0,0,0,0.15)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.25)] transition-shadow duration-300;
+  @apply bg-[#1A1A1A] border border-[#2A2A2A] shadow-[0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_16px_rgba(0,0,0,0.3)] transition-all duration-300;
+  border-radius: 12px;
+  padding: 24px;
 }
 
 .dark .metric-value {
-  @apply font-light text-3xl text-foreground;
+  @apply font-light text-3xl text-[#E0E0E0];
 }
 
 .dark .metric-label {
-  @apply uppercase text-xs tracking-wider text-muted-foreground font-medium;
+  @apply uppercase text-xs tracking-wider text-[#AAAAAA] font-normal;
+  letter-spacing: 0.05em;
 }
 
 .dark .positive-value {
@@ -162,30 +172,61 @@
 
 /* Dark mode floating elements */
 .dark .floating-element {
-  @apply bg-[#181818] border border-[#2A2A2A] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] transition-shadow duration-300;
+  @apply bg-[#1A1A1A] border border-[#2A2A2A] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.1)] transition-all duration-300;
+  border-radius: 12px;
 }
 
 /* Dark mode gradient accents */
 .dark .accent-gradient {
-  background: linear-gradient(135deg, rgba(0,240,255,0.2) 0%, rgba(79,248,229,0.1) 100%);
+  background: linear-gradient(135deg, rgba(79,248,229,0.15) 0%, rgba(61,228,209,0.07) 100%);
 }
 
 /* Dark mode glow effects */
 .dark .glow-accent {
-  @apply shadow-[0_0_15px_rgba(0,240,255,0.2)];
+  @apply shadow-[0_0_10px_rgba(79,248,229,0.15)];
 }
 
-/* Dark mode button styles */
+/* Dark mode button styles - refined for Click.AI look */
 .dark .accent-button {
-  @apply bg-[#00F0FF] text-[#121212] hover:bg-[#4FF8E5] border-none shadow-[0_0_10px_rgba(0,240,255,0.3)];
+  @apply bg-[#1D1D1D] text-[#4FF8E5] hover:bg-[#252525] border border-[#2A2A2A] hover:shadow-[0_0_8px_rgba(79,248,229,0.5)] transition-all duration-300;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+/* Dark mode text hierarchy */
+.dark .title-text {
+  @apply text-[#FFFFFF] font-semibold;
+}
+
+.dark .subtitle-text {
+  @apply text-[#CCCCCC] font-medium;
+}
+
+.dark .body-text {
+  @apply text-[#AAAAAA] font-normal;
 }
 
 /* Dark mode card header and footer */
 .dark .card-header, .dark .card-footer {
-  @apply border-[#2A2A2A] bg-[#181818];
+  @apply border-[#2A2A2A] bg-[#1A1A1A];
+  padding: 16px 24px;
 }
 
 /* Dark mode hover effects */
 .dark .hover-effect {
-  @apply hover:bg-[#232323] transition-colors duration-150;
+  @apply hover:bg-[#252525] transition-colors duration-200;
+}
+
+/* Dark mode progress bars */
+.dark .progress-bar-bg {
+  @apply bg-[#333333] rounded-full overflow-hidden;
+  height: 6px;
+}
+
+.dark .progress-bar-fill {
+  background: linear-gradient(90deg, #4FF8E5 0%, #3DE4D1 100%);
+  box-shadow: 0px 0px 6px rgba(79, 248, 229, 0.5);
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.5s ease;
 }

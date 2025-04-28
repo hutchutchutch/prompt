@@ -524,59 +524,59 @@ export default function DashboardPage() {
         <h2 className="text-lg font-medium mb-4 dark:text-[#E0E0E0] dark:font-light">Evaluation History</h2>
         
         {!user ? (
-          <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
-            <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0] mb-4">Authenticating with demo mode...</p>
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary dark:border-[#00F0FF]"></div>
+          <Card className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] transition-all duration-300 rounded-xl overflow-hidden">
+            <CardContent className="h-48 flex flex-col items-center justify-center p-6">
+              <p className="text-sm text-muted-foreground dark:text-[#AAAAAA] mb-6">Authenticating with demo mode...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary dark:border-[#4FF8E5] opacity-80"></div>
             </CardContent>
           </Card>
         ) : isLoading ? (
-          <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
-            <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0] mb-4">Loading evaluation data...</p>
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary dark:border-[#00F0FF]"></div>
+          <Card className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] transition-all duration-300 rounded-xl overflow-hidden">
+            <CardContent className="h-48 flex flex-col items-center justify-center p-6">
+              <p className="text-sm text-muted-foreground dark:text-[#AAAAAA] mb-6">Loading evaluation data...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary dark:border-[#4FF8E5] opacity-80"></div>
             </CardContent>
           </Card>
         ) : error ? (
-          <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
-            <CardContent className="h-40 flex items-center justify-center">
-              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">Error loading evaluation history</p>
+          <Card className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] transition-all duration-300 rounded-xl overflow-hidden">
+            <CardContent className="h-48 flex items-center justify-center p-6">
+              <p className="text-sm text-muted-foreground dark:text-[#AAAAAA]">Error loading evaluation history</p>
             </CardContent>
           </Card>
         ) : enhancedTests?.length === 0 ? (
-          <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
-            <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0] mb-4">You haven't run any evaluations yet</p>
-              <Button asChild className="dark:bg-[#00F0FF] dark:text-[#121212] dark:hover:bg-[#4FF8E5] dark:border-none dark:shadow-[0_0_10px_rgba(0,240,255,0.3)]">
+          <Card className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] transition-all duration-300 rounded-xl overflow-hidden">
+            <CardContent className="h-48 flex flex-col items-center justify-center p-6">
+              <p className="text-sm text-muted-foreground dark:text-[#AAAAAA] mb-6">You haven't run any evaluations yet</p>
+              <Button asChild className="dark:bg-[#1D1D1D] dark:text-[#4FF8E5] dark:hover:bg-[#252525] dark:border dark:border-[#2A2A2A] dark:hover:shadow-[0_0_8px_rgba(79,248,229,0.5)] dark:transition-all dark:duration-300 dark:rounded-lg">
                 <Link href="/wizard">Run your first evaluation</Link>
               </Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="bg-card dark:bg-[#181818] shadow dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] overflow-hidden sm:rounded-md dark:border dark:border-[#2A2A2A]">
+          <div className="bg-card dark:bg-[#1A1A1A] shadow dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] overflow-hidden rounded-xl dark:border dark:border-[#2A2A2A]">
             <ul className="divide-y divide-border dark:divide-[#2A2A2A]">
               {enhancedTests.map((test: EnhancedTestData) => (
                 <li key={test.id}>
-                  <div className="block hover:bg-muted/50 dark:hover:bg-[#232323] cursor-pointer transition-colors duration-150" onClick={() => 
+                  <div className="block hover:bg-muted/50 dark:hover:bg-[#252525] cursor-pointer transition-all duration-200 dark:hover:shadow-[0_0_0_1px_rgba(79,248,229,0.05)]" onClick={() => 
                     navigate(test.status === "completed" ? `/results/${test.id}` : `/wizard/progress?testId=${test.id}`)
                   }>
-                    <div className="px-4 py-4 sm:px-6">
+                    <div className="px-6 py-5 sm:px-8">
                       <div className="flex items-center justify-between">
                         <div className="truncate">
                           <div className="flex items-center">
-                            <p className="text-sm font-medium text-primary dark:text-[#00F0FF] truncate">
+                            <p className="text-sm font-medium text-primary dark:text-[#4FF8E5] truncate">
                               {test.promptText.length > 50 
                                 ? `${test.promptText.substring(0, 50)}...` 
                                 : test.promptText}
                             </p>
-                            <div className="ml-2">
+                            <div className="ml-3">
                               {getStatusBadge(test.status)}
                             </div>
                           </div>
                           {/* Task Category Tag */}
                           {test.category && (
                             <div className="mt-1 mb-2">
-                              <Badge variant="outline" className="bg-blue-950/20 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-300/30 hover:bg-blue-950/30 dark:hover:bg-blue-900/40">
+                              <Badge variant="outline" className="bg-blue-950/10 dark:bg-[#232323] text-blue-700 dark:text-[#4FF8E5] border-blue-300/20 dark:border-[#4FF8E5]/20 hover:bg-blue-950/30 dark:hover:bg-[#252525] py-1 px-3 rounded-md">
                                 {test.category}
                               </Badge>
                             </div>

@@ -1,0 +1,99 @@
+Current Style of PromptLab (what you're showing)
+Color Palette:
+
+Primary background: Dark gray (#121212-ish), which is good ✅
+
+Accent color: Bright neon cyan (~#00FFFF) — but too loud compared to Click.AI’s muted teal glow.
+
+Typography:
+
+Good clean sans-serif, but:
+
+Titles have too strong contrast (pure white vs cyan) making it feel slightly marketing-heavy, not data-heavy.
+
+Weight feels slightly heavier and more rigid than the soft, flowing text of Click.AI.
+
+Components:
+
+Bright buttons with hard edges (rectangular) — feels more like a SaaS landing page than an elegant analytics tool.
+
+Metric card looks decent but needs more breathing room, softer corners, subtler gradients.
+
+Spacing and Layout:
+
+Slightly compressed vertically; Click.AI feels airy and calm, while PromptLab feels a bit tight and aggressive.
+
+🧠 How to Refine PromptLab to Match Click.AI:
+
+Aspect	Current (PromptLab)	Target (Click.AI style)
+Accent Color	Bright neon cyan (#00FFFF)	Softer teal glow (~#4FF8E5)
+Button Shape	Hard rectangles	Slightly rounded corners (6px–10px radius)
+Button Color	Solid, loud background	Darker base + teal glow on hover or subtle inner glow
+Typography Contrast	Pure white on black, hard jumps	Softer white-gray hierarchy (#E0E0E0 for body, bright #FFFFFF only for focus text)
+Component Spacing	Tight stacks, condensed sections	More vertical padding, each card "floats"
+Card Design	Flat with harsh color divides	Slight gradient or soft shadows; seamless section blending
+Animation/Movement	Static or on-click only	Micro-interactions: hover glow on buttons, slow loading fade for charts
+Progress Bars	Bright solid teal	Teal bars with slight outer glow or faded background trail
+🎯 Specific Changes You Could Make:
+1. Tame the Accent Color
+Instead of pure neon cyan, shift to a cooler teal:
+
+Use a more muted #4FF8E5 or #3DE4D1 for highlights.
+
+Reduce saturation slightly for non-critical elements.
+
+2. Update Buttons
+Background: dark base (#1D1D1D).
+
+Hover state: teal glow or soft gradient.
+
+Add border-radius: 8px to soften edges.
+
+Example:
+
+css
+Copy
+Edit
+background: #1D1D1D;
+color: #4FF8E5;
+border-radius: 8px;
+transition: all 0.3s ease;
+box-shadow: 0px 0px 8px 0px rgba(79, 248, 229, 0.5) on hover;
+3. Refine Cards
+Add subtle drop shadows to cards.
+
+Example:
+
+css
+Copy
+Edit
+box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+background: linear-gradient(180deg, #1A1A1A 0%, #161616 100%);
+border-radius: 12px;
+Padding inside cards: at least 24px.
+
+Inner sections should feel spaced apart, not cramped.
+
+4. Typography Hierarchy
+Title (H1): Pure white (#FFFFFF)
+
+Subtitles (H2, H3): Soft gray (#CCCCCC)
+
+Body text: Even softer gray (#AAAAAA)
+
+Font-weight: Slightly lighter (~400-500) for body, bold (~600) only for headings.
+
+5. Improve Progress Bars
+Base bar: Very dark gray (#333333).
+
+Fill bar: Teal with slight blur or glow.
+
+css
+Copy
+Edit
+background: linear-gradient(90deg, #4FF8E5 0%, #3DE4D1 100%);
+box-shadow: 0px 0px 6px rgba(79, 248, 229, 0.7);
+Rounded edges.
+
+✍️ Summary Description for Your New Refined Style:
+PromptLab utilizes a minimalist dark interface with soft teal accents, subtle gradients, and micro-interactions. Each data visualization card floats with a gentle shadow, creating an airy, futuristic feel. The typography emphasizes clarity and depth with a muted white-gray hierarchy. Progress indicators and buttons glow softly against the dark background, emphasizing user actions without overwhelming the senses. The overall mood is sleek, intelligent, and designed for focused analytical work.
