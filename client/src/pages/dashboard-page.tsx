@@ -284,30 +284,30 @@ export default function DashboardPage() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h3 className="text-sm font-medium text-gray-700 mb-1">Task Type</h3>
-              <div className="text-sm bg-blue-50 text-blue-700 py-1 px-2 rounded inline-block">Summarization</div>
+              <h3 className="text-sm font-medium mb-1">Task Type</h3>
+              <div className="text-sm bg-blue-950/20 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 py-1 px-2 rounded inline-block">Summarization</div>
               
-              <h3 className="text-sm font-medium text-gray-700 mt-4 mb-1">Original Prompt</h3>
-              <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded border border-gray-100">
+              <h3 className="text-sm font-medium mt-4 mb-1">Original Prompt</h3>
+              <p className="text-sm text-card-foreground bg-muted p-2 rounded border border-border">
                 Summarize the following text in 2-3 sentences while preserving the key points and main message.
               </p>
               
-              <h3 className="text-sm font-medium text-gray-700 mt-4 mb-1">LLMs Tested</h3>
+              <h3 className="text-sm font-medium mt-4 mb-1">LLMs Tested</h3>
               <div className="flex flex-wrap gap-2">
-                <div className="text-xs bg-gray-100 text-gray-700 py-1 px-2 rounded">GPT-4</div>
-                <div className="text-xs bg-gray-100 text-gray-700 py-1 px-2 rounded">Claude 3</div>
-                <div className="text-xs bg-gray-100 text-gray-700 py-1 px-2 rounded">Llama 3</div>
-                <div className="text-xs bg-gray-100 text-gray-700 py-1 px-2 rounded">Mistral</div>
+                <div className="text-xs bg-muted text-card-foreground py-1 px-2 rounded">GPT-4</div>
+                <div className="text-xs bg-muted text-card-foreground py-1 px-2 rounded">Claude 3</div>
+                <div className="text-xs bg-muted text-card-foreground py-1 px-2 rounded">Llama 3</div>
+                <div className="text-xs bg-muted text-card-foreground py-1 px-2 rounded">Mistral</div>
               </div>
             </div>
             
             <div>
-              <h3 className="text-sm font-medium text-gray-700 mb-1">Expected Output</h3>
-              <p className="text-sm text-gray-600 bg-gray-50 p-2 rounded border border-gray-100 h-20 overflow-auto">
+              <h3 className="text-sm font-medium mb-1">Expected Output</h3>
+              <p className="text-sm text-card-foreground bg-muted p-2 rounded border border-border h-20 overflow-auto">
                 A concise summary that covers the main topics of the source text while maintaining accuracy and coherence.
               </p>
               
-              <h3 className="text-sm font-medium text-gray-700 mt-4 mb-1">Evaluation Metrics</h3>
+              <h3 className="text-sm font-medium mt-4 mb-1">Evaluation Metrics</h3>
               <div className="flex flex-wrap gap-2">
                 <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">ROUGE-L</div>
                 <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">Compression Ratio</div>
@@ -321,7 +321,7 @@ export default function DashboardPage() {
       
       {/* Category Navigation */}
       <div>
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Best Model by Category</h2>
+        <h2 className="text-lg font-medium mb-4">Best Model by Category</h2>
         {isLoadingCategories ? (
           <div className="flex justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -344,7 +344,7 @@ export default function DashboardPage() {
         {activeCategory !== "All" && (
           <>
             {isLoadingKpi ? (
-              <div className="flex justify-center py-4 my-4 bg-gray-50 rounded-lg">
+              <div className="flex justify-center py-4 my-4 bg-muted rounded-lg">
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
               </div>
             ) : kpiData ? (
@@ -361,7 +361,7 @@ export default function DashboardPage() {
                 onModelClick={(model) => navigate(`/models/${model}`)}
               />
             ) : (
-              <div className="p-4 my-4 bg-gray-50 text-gray-500 text-sm rounded-lg">
+              <div className="p-4 my-4 bg-muted text-muted-foreground text-sm rounded-lg">
                 No performance data available for this category
               </div>
             )}
@@ -372,7 +372,7 @@ export default function DashboardPage() {
       {/* 4. Main Content Area (Tabbed/Segmented View) */}
       <div className="mt-8">
         <div className="mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Detailed Comparison Results</h2>
+          <h2 className="text-lg font-semibold mb-4">Detailed Comparison Results</h2>
           
           <Tabs defaultValue="prompts" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
@@ -384,15 +384,15 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base font-medium">Prompt Versions Comparison</CardTitle>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     Performance across different prompt variations
                   </p>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="relative overflow-x-auto rounded-md border">
+                    <div className="relative overflow-x-auto rounded-md border border-border">
                       <table className="w-full text-sm text-left">
-                        <thead className="text-xs bg-gray-50 text-gray-700">
+                        <thead className="text-xs bg-muted text-card-foreground">
                           <tr>
                             <th className="px-4 py-3 font-medium">Prompt Version</th>
                             <th className="px-4 py-3 font-medium">Quality Score</th>
@@ -403,7 +403,7 @@ export default function DashboardPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b border-border hover:bg-muted/50">
                             <td className="px-4 py-3">Original</td>
                             <td className="px-4 py-3">7.6</td>
                             <td className="px-4 py-3">0.65</td>
@@ -411,7 +411,7 @@ export default function DashboardPage() {
                             <td className="px-4 py-3">0.08</td>
                             <td className="px-4 py-3">980</td>
                           </tr>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b border-border hover:bg-muted/50">
                             <td className="px-4 py-3">Version 2</td>
                             <td className="px-4 py-3">8.2</td>
                             <td className="px-4 py-3">0.72</td>
@@ -419,7 +419,7 @@ export default function DashboardPage() {
                             <td className="px-4 py-3">0.06</td>
                             <td className="px-4 py-3">850</td>
                           </tr>
-                          <tr className="border-b bg-green-50 hover:bg-green-100">
+                          <tr className="border-b border-border bg-green-950/10 dark:bg-green-900/20 hover:bg-green-950/20 dark:hover:bg-green-900/30">
                             <td className="px-4 py-3 font-medium">Version 3 (Best)</td>
                             <td className="px-4 py-3 font-medium">8.7</td>
                             <td className="px-4 py-3 font-medium">0.78</td>
@@ -432,11 +432,11 @@ export default function DashboardPage() {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="h-64 bg-gray-50 rounded-md p-4 flex items-center justify-center">
-                        <p className="text-sm text-gray-500">ROUGE-L Score Chart</p>
+                      <div className="h-64 bg-muted rounded-md p-4 flex items-center justify-center">
+                        <p className="text-sm text-muted-foreground">ROUGE-L Score Chart</p>
                       </div>
-                      <div className="h-64 bg-gray-50 rounded-md p-4 flex items-center justify-center">
-                        <p className="text-sm text-gray-500">Cost vs Quality Chart</p>
+                      <div className="h-64 bg-muted rounded-md p-4 flex items-center justify-center">
+                        <p className="text-sm text-muted-foreground">Cost vs Quality Chart</p>
                       </div>
                     </div>
                   </div>
@@ -448,15 +448,15 @@ export default function DashboardPage() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base font-medium">LLM Performance Comparison</CardTitle>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     Comparison across different models using the best prompt (Version 3)
                   </p>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="relative overflow-x-auto rounded-md border">
+                    <div className="relative overflow-x-auto rounded-md border border-border">
                       <table className="w-full text-sm text-left">
-                        <thead className="text-xs bg-gray-50 text-gray-700">
+                        <thead className="text-xs bg-muted text-card-foreground">
                           <tr>
                             <th className="px-4 py-3 font-medium">Model</th>
                             <th className="px-4 py-3 font-medium">Quality Score</th>
@@ -467,7 +467,7 @@ export default function DashboardPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b border-border hover:bg-muted/50">
                             <td className="px-4 py-3">GPT-4</td>
                             <td className="px-4 py-3">8.5</td>
                             <td className="px-4 py-3">0.76</td>
@@ -475,7 +475,7 @@ export default function DashboardPage() {
                             <td className="px-4 py-3">0.12</td>
                             <td className="px-4 py-3">1100</td>
                           </tr>
-                          <tr className="border-b bg-green-50 hover:bg-green-100">
+                          <tr className="border-b border-border bg-green-950/10 dark:bg-green-900/20 hover:bg-green-950/20 dark:hover:bg-green-900/30">
                             <td className="px-4 py-3 font-medium">Claude 3 (Best)</td>
                             <td className="px-4 py-3 font-medium">8.7</td>
                             <td className="px-4 py-3 font-medium">0.78</td>
@@ -483,7 +483,7 @@ export default function DashboardPage() {
                             <td className="px-4 py-3 font-medium">0.05</td>
                             <td className="px-4 py-3 font-medium">920</td>
                           </tr>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b border-border hover:bg-muted/50">
                             <td className="px-4 py-3">Llama 3</td>
                             <td className="px-4 py-3">8.1</td>
                             <td className="px-4 py-3">0.74</td>
@@ -491,7 +491,7 @@ export default function DashboardPage() {
                             <td className="px-4 py-3">0.02</td>
                             <td className="px-4 py-3">750</td>
                           </tr>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b border-border hover:bg-muted/50">
                             <td className="px-4 py-3">Mistral</td>
                             <td className="px-4 py-3">7.9</td>
                             <td className="px-4 py-3">0.71</td>
@@ -504,11 +504,11 @@ export default function DashboardPage() {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="h-64 bg-gray-50 rounded-md p-4 flex items-center justify-center">
-                        <p className="text-sm text-gray-500">Performance Radar Chart</p>
+                      <div className="h-64 bg-muted rounded-md p-4 flex items-center justify-center">
+                        <p className="text-sm text-muted-foreground">Performance Radar Chart</p>
                       </div>
-                      <div className="h-64 bg-gray-50 rounded-md p-4 flex items-center justify-center">
-                        <p className="text-sm text-gray-500">Latency Distribution</p>
+                      <div className="h-64 bg-muted rounded-md p-4 flex items-center justify-center">
+                        <p className="text-sm text-muted-foreground">Latency Distribution</p>
                       </div>
                     </div>
                   </div>
@@ -521,43 +521,43 @@ export default function DashboardPage() {
       
       {/* 5. Recent Tests Section */}
       <div className="mt-8">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Evaluation History</h2>
+        <h2 className="text-lg font-medium mb-4">Evaluation History</h2>
         
         {!user ? (
           <Card>
             <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-gray-500 mb-4">Authenticating with demo mode...</p>
+              <p className="text-sm text-muted-foreground mb-4">Authenticating with demo mode...</p>
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </CardContent>
           </Card>
         ) : isLoading ? (
           <Card>
             <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-gray-500 mb-4">Loading evaluation data...</p>
+              <p className="text-sm text-muted-foreground mb-4">Loading evaluation data...</p>
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </CardContent>
           </Card>
         ) : error ? (
           <Card>
             <CardContent className="h-40 flex items-center justify-center">
-              <p className="text-sm text-gray-500">Error loading evaluation history</p>
+              <p className="text-sm text-muted-foreground">Error loading evaluation history</p>
             </CardContent>
           </Card>
         ) : enhancedTests?.length === 0 ? (
           <Card>
             <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-gray-500 mb-4">You haven't run any evaluations yet</p>
+              <p className="text-sm text-muted-foreground mb-4">You haven't run any evaluations yet</p>
               <Button asChild>
                 <Link href="/wizard">Run your first evaluation</Link>
               </Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="bg-white shadow overflow-hidden sm:rounded-md">
-            <ul className="divide-y divide-gray-200">
+          <div className="bg-card shadow overflow-hidden sm:rounded-md">
+            <ul className="divide-y divide-border">
               {enhancedTests.map((test: EnhancedTestData) => (
                 <li key={test.id}>
-                  <div className="block hover:bg-gray-50 cursor-pointer" onClick={() => 
+                  <div className="block hover:bg-muted/50 cursor-pointer" onClick={() => 
                     navigate(test.status === "completed" ? `/results/${test.id}` : `/wizard/progress?testId=${test.id}`)
                   }>
                     <div className="px-4 py-4 sm:px-6">
@@ -576,7 +576,7 @@ export default function DashboardPage() {
                           {/* Task Category Tag */}
                           {test.category && (
                             <div className="mt-1 mb-2">
-                              <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100">
+                              <Badge variant="outline" className="bg-blue-950/20 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-300/30 hover:bg-blue-950/30 dark:hover:bg-blue-900/40">
                                 {test.category}
                               </Badge>
                             </div>
@@ -584,13 +584,13 @@ export default function DashboardPage() {
                           
                           {/* Date and Security Info */}
                           <div className="mt-1 flex flex-wrap">
-                            <div className="flex items-center text-sm text-gray-500 mr-4">
-                              <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                            <div className="flex items-center text-sm text-muted-foreground mr-4">
+                              <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-muted-foreground/70" />
                               <span>{formatDistanceToNow(new Date(test.createdAt), { addSuffix: true })}</span>
                             </div>
                             {test.redTeamEnabled && (
-                              <div className="flex items-center text-sm text-gray-500 mr-4">
-                                <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <div className="flex items-center text-sm text-muted-foreground mr-4">
+                                <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-muted-foreground/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                 </svg>
                                 <span>Red-team enabled</span>
@@ -599,9 +599,9 @@ export default function DashboardPage() {
                             
                             {/* Best Model Section - Only shown for completed tests with best model info */}
                             {test.status === "completed" && test.bestModel && (
-                              <div className="flex items-center text-sm text-gray-500">
+                              <div className="flex items-center text-sm text-muted-foreground">
                                 <Award className="flex-shrink-0 mr-1.5 h-5 w-5 text-yellow-500" />
-                                <span className="font-medium text-gray-700">Best: {test.bestModel.modelId}</span>
+                                <span className="font-medium">Best: {test.bestModel.modelId}</span>
                               </div>
                             )}
                           </div>
@@ -611,35 +611,35 @@ export default function DashboardPage() {
                             <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
                               <div className="flex items-center">
                                 <BarChart2 className="h-3 w-3 mr-1 text-green-500" />
-                                <span className="text-gray-600">Quality: </span>
+                                <span className="text-muted-foreground">Quality: </span>
                                 <span className="ml-1 font-medium">{test.bestModel.score.toFixed(1)}</span>
                                 {parseInt(test.improvements.score) > 0 && (
-                                  <span className="ml-1 text-green-600">+{test.improvements.score}%</span>
+                                  <span className="ml-1 text-green-600 dark:text-green-500">+{test.improvements.score}%</span>
                                 )}
                               </div>
                               <div className="flex items-center">
                                 <DollarSign className="h-3 w-3 mr-1 text-blue-500" />
-                                <span className="text-gray-600">Cost: </span>
+                                <span className="text-muted-foreground">Cost: </span>
                                 <span className="ml-1 font-medium">${test.bestModel.cost.toFixed(3)}</span>
                                 {parseInt(test.improvements.cost) > 0 && (
-                                  <span className="ml-1 text-green-600">-{test.improvements.cost}%</span>
+                                  <span className="ml-1 text-green-600 dark:text-green-500">-{test.improvements.cost}%</span>
                                 )}
                               </div>
                               <div className="flex items-center">
                                 <Zap className="h-3 w-3 mr-1 text-purple-500" />
-                                <span className="text-gray-600">Speed: </span>
+                                <span className="text-muted-foreground">Speed: </span>
                                 <span className="ml-1 font-medium">
                                   {test.bestModel?.time !== undefined ? test.bestModel.time.toFixed(1) : "0.0"}ms
                                 </span>
                                 {parseInt(test.improvements.time) > 0 && (
-                                  <span className="ml-1 text-green-600">-{test.improvements.time}%</span>
+                                  <span className="ml-1 text-green-600 dark:text-green-500">-{test.improvements.time}%</span>
                                 )}
                               </div>
                             </div>
                           )}
                         </div>
                         <div className="ml-5 flex-shrink-0">
-                          <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <svg className="h-5 w-5 text-muted-foreground/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                           </svg>
                         </div>
