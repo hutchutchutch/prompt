@@ -1,0 +1,88 @@
+1. Text Summarization
+Purpose: Condensing large texts into shorter versions while retaining key information.
+Metrics:
+Content Coverage (ROUGE-1): Measures how well the summary includes important words from the original text. Higher is better.
+Key Point Retention (ROUGE-2): Evaluates how well the summary preserves important phrases from the original text. Higher is better.
+Flow Preservation (ROUGE-L): Assesses how well the summary maintains the sequence and structure of ideas. Higher is better.
+Meaning Preservation (BERTScore): Measures how well the summary captures the semantic meaning of the original text. Higher is better.
+Factual Accuracy (Factual Consistency): Evaluates whether the summary contains any factual errors or contradictions. Higher is better.
+Relevance Score (Relevance): Measures how well the summary focuses on the most important information. Higher is better.
+Readability Score (Coherence): Assesses how logically connected and easy to read the summary is. Higher is better.
+Conciseness Rating (Conciseness): Evaluates if the summary is appropriately brief while retaining key information. Optimal value depends on use case.
+2. Information Extraction
+Purpose: Identifying and structuring specific pieces of information from unstructured text.
+Metrics:
+Extraction Accuracy (Precision): Percentage of extracted information that is correct. Higher is better.
+Extraction Completeness (Recall): Percentage of relevant information that was successfully extracted. Higher is better.
+Overall Extraction Quality (F1-Score): Balanced measure of extraction accuracy and completeness. Higher is better.
+Structured Format Compliance (Accuracy): How well the extracted information adheres to the required format. Higher is better.
+Information Coverage (Completeness): Assessment of whether all required information was extracted. Higher is better.
+3. Question Answering (QA)
+Purpose: Providing answers to questions based on given context or general knowledge.
+Metrics:
+Perfect Match Rate (Exact Match): Percentage of answers that perfectly match the reference answers. Higher is better.
+Answer Overlap (F1-Score): Measures word overlap between generated and reference answers. Higher is better.
+Meaning Similarity (Semantic Similarity): How closely the meaning of the generated answer matches the reference. Higher is better.
+Factual Correctness (Factual Accuracy): Whether the answer contains factually correct information. Higher is better.
+Question Relevance (Answer Relevance): How directly the answer addresses the question asked. Higher is better.
+Answer Thoroughness (Completeness): Whether the answer covers all aspects of the question. Higher is better.
+4. Text Classification
+Purpose: Assigning predefined categories to text.
+Metrics:
+Overall Correctness (Accuracy): Percentage of texts correctly classified across all categories. Higher is better.
+Classification Reliability (Precision): When a category is assigned, how often it is correct. Higher is better.
+Category Coverage (Recall): How well the system identifies all instances of each category. Higher is better.
+Balanced Performance (F1-Score): Harmonic mean of precision and recall. Higher is better.
+Discrimination Power (ROC-AUC): Ability to distinguish between different categories. Higher is better.
+5. Code Generation
+Purpose: Generating code snippets or entire functions based on natural language descriptions.
+Metrics:
+Test Pass Rate (Pass@k): Percentage of generated code that passes test cases. Higher is better.
+Code Correctness (Functional Correctness): Whether the code executes correctly and produces expected outputs. Higher is better.
+Code Quality Score (Code Quality): Assessment of code style, readability, and maintainability. Higher is better.
+Performance Rating (Efficiency): Evaluation of computational efficiency and resource usage. Higher is better.
+Readability Index (Readability): How easy the code is to understand by human developers. Higher is better.
+6. Code Documentation / Explanation
+Purpose: Generating comments, docstrings, or explanations for existing code.
+Metrics:
+Explanation Clarity (Clarity): How clearly the documentation explains the code. Higher is better.
+Documentation Coverage (Completeness): Whether all important aspects of the code are documented. Higher is better.
+Accuracy Score (Correctness): Whether the explanation accurately describes what the code does. Higher is better.
+Developer Utility (Usefulness): How helpful the documentation is for developers. Higher is better.
+7. Data Analysis & Insights Generation
+Purpose: Analyzing data to generate summaries, identify trends, or answer business questions.
+Metrics:
+Analysis Accuracy (Correctness): Whether the analysis and calculations are correct. Higher is better.
+Business Value (Insightfulness): How valuable and actionable the insights are. Higher is better.
+Communication Quality (Clarity): How clearly the analysis is explained. Higher is better.
+Method Transparency (Reproducibility): Whether the analysis steps are clear enough to be reproduced. Higher is better.
+8. Synthetic Data Generation
+Purpose: Creating artificial data that mimics real-world data distributions.
+Metrics:
+Realism Score (Distributional Similarity): How closely the synthetic data resembles real data patterns. Higher is better.
+Privacy Protection (Privacy Preservation): Degree to which the synthetic data protects privacy of the original data. Higher is better.
+Practical Value (Utility): How useful the synthetic data is for its intended purpose. Higher is better.
+9. Conversational AI / Chatbots
+Purpose: Automating internal support, answering employee questions, or facilitating workflows.
+Metrics:
+Goal Achievement (Task Completion Rate): Percentage of conversations where the user's goal was achieved. Higher is better.
+Response Appropriateness (Response Relevance): How well responses address the user's queries. Higher is better.
+Information Accuracy (Factual Correctness): Whether the provided information is factually correct. Higher is better.
+Conversation Flow (Coherence): How logically the conversation progresses. Higher is better.
+Response Quality (Turn-level Quality): Quality of individual responses in the conversation. Higher is better.
+User Experience (User Satisfaction): Overall user satisfaction with the conversation. Higher is better.
+10. Content Generation
+Purpose: Drafting emails, reports, documentation, or other internal content.
+Metrics:
+Message Clarity (Clarity): How clearly the content communicates its message. Higher is better.
+Brevity Score (Conciseness): Whether the content is appropriately brief and to the point. Optimal value depends on use case.
+Tone Appropriateness (Tone): How well the content's tone matches the intended audience and purpose. Higher is better.
+Language Quality (Grammar & Fluency): Correctness of grammar and natural flow of language. Higher is better.
+Information Accuracy (Factual Accuracy): Whether the content contains factually correct information. Higher is better.
+Practical Value (Usefulness): How useful the content is for its intended purpose. Higher is better.
+General Metrics (Applicable to most tasks)
+Response Time (Latency): How quickly the system generates a response. Lower is better.
+Cost Efficiency (Cost per 1k tokens): Monetary cost of generating responses. Lower is better.
+Processing Capacity (Throughput): Number of requests the system can handle per unit time. Higher is better.
+Consistency Rating (Robustness): How consistently the system performs across different inputs. Higher is better.
+Safety Index (Safety/Bias): Measures of harmful content, bias, or inappropriate responses. Higher is better for safety, lower is better for bias.
