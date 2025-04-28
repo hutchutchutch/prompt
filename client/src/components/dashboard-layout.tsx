@@ -28,29 +28,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       )}
       {/* Sidebar for desktop */}
       <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-        <div className="flex-1 flex flex-col min-h-0 bg-card border-r border-border">
+        <div className="flex-1 flex flex-col min-h-0 bg-card dark:bg-[hsl(var(--sidebar-dark-background))] border-r border-border dark:border-[hsl(var(--sidebar-dark-border))]">
           <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
-              <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="h-8 w-8 text-primary dark:text-[hsl(var(--sidebar-dark-primary))]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="currentColor"/>
               </svg>
-              <span className="ml-2 text-xl font-bold">PromptLab</span>
+              <span className="ml-2 text-xl font-bold text-card-foreground dark:text-[hsl(var(--sidebar-dark-foreground))]">PromptLab</span>
             </div>
             <div className="mt-5 flex-1 px-2">
               <SidebarNav />
             </div>
           </div>
-          <div className="flex-shrink-0 flex border-t border-border p-4">
+          <div className="flex-shrink-0 flex border-t border-border dark:border-[hsl(var(--sidebar-dark-border))] p-4">
             <div className="flex-shrink-0 w-full group block">
               <div className="flex items-center">
-                <div className="inline-block h-9 w-9 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
+                <div className="inline-block h-9 w-9 rounded-full bg-muted dark:bg-[hsl(var(--sidebar-dark-accent))] text-muted-foreground dark:text-[hsl(var(--sidebar-dark-accent-foreground))] flex items-center justify-center">
                   {userInitial}
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm font-medium text-card-foreground group-hover:text-foreground">
+                  <p className="text-sm font-medium text-card-foreground dark:text-[hsl(var(--sidebar-dark-foreground))] group-hover:text-foreground">
                     {user?.username}
                   </p>
-                  <p className="text-xs font-medium text-muted-foreground group-hover:text-foreground">
+                  <p className="text-xs font-medium text-muted-foreground group-hover:text-foreground dark:text-[hsl(var(--sidebar-dark-foreground))]/80">
                     {user?.role === "admin" ? "Admin" : user?.role === "demo" ? "Demo User" : "Pro Subscriber"}
                   </p>
                 </div>
@@ -63,7 +63,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Mobile header */}
       <div className="md:hidden bg-card border-b border-border flex items-center justify-between px-4 py-2">
         <div className="flex items-center">
-          <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="h-8 w-8 text-primary dark:text-[hsl(var(--sidebar-dark-primary))]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="currentColor"/>
           </svg>
           <span className="ml-2 text-xl font-bold">PromptLab</span>
@@ -76,29 +76,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-0">
-            <div className="flex-1 flex flex-col min-h-0 bg-card h-full">
+            <div className="flex-1 flex flex-col min-h-0 bg-card dark:bg-[hsl(var(--sidebar-dark-background))] h-full">
               <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                 <div className="flex items-center flex-shrink-0 px-4">
-                  <svg className="h-8 w-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="h-8 w-8 text-primary dark:text-[hsl(var(--sidebar-dark-primary))]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="currentColor"/>
                   </svg>
-                  <span className="ml-2 text-xl font-bold">PromptLab</span>
+                  <span className="ml-2 text-xl font-bold text-card-foreground dark:text-[hsl(var(--sidebar-dark-foreground))]">PromptLab</span>
                 </div>
                 <div className="mt-5 flex-1 px-2">
                   <SidebarNav />
                 </div>
               </div>
-              <div className="flex-shrink-0 flex border-t border-border p-4">
+              <div className="flex-shrink-0 flex border-t border-border dark:border-[hsl(var(--sidebar-dark-border))] p-4">
                 <div className="flex-shrink-0 w-full group block">
                   <div className="flex items-center">
-                    <div className="inline-block h-9 w-9 rounded-full bg-muted text-muted-foreground flex items-center justify-center">
+                    <div className="inline-block h-9 w-9 rounded-full bg-muted dark:bg-[hsl(var(--sidebar-dark-accent))] text-muted-foreground dark:text-[hsl(var(--sidebar-dark-accent-foreground))] flex items-center justify-center">
                       {userInitial}
                     </div>
                     <div className="ml-3">
-                      <p className="text-sm font-medium text-card-foreground group-hover:text-foreground">
+                      <p className="text-sm font-medium text-card-foreground dark:text-[hsl(var(--sidebar-dark-foreground))] group-hover:text-foreground">
                         {user?.username}
                       </p>
-                      <p className="text-xs font-medium text-muted-foreground group-hover:text-foreground">
+                      <p className="text-xs font-medium text-muted-foreground group-hover:text-foreground dark:text-[hsl(var(--sidebar-dark-foreground))]/80">
                         {user?.role === "admin" ? "Admin" : user?.role === "demo" ? "Demo User" : "Pro Subscriber"}
                       </p>
                     </div>
