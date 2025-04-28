@@ -30,19 +30,15 @@ export default function IndexPage() {
   const taskData = examplePrompts[currentTask as keyof typeof examplePrompts];
   const allTaskCategories = taskTypes.map(type => examplePrompts[type as keyof typeof examplePrompts].taskCategory);
   
-  // Auto-redirect logic to avoid initial blank state
+  // Only redirect if user is already authenticated
   useEffect(() => {
     // Only run after auth state is determined
-    if (!isLoading) {
-      if (user) {
-        // If already logged in, go to dashboard
-        navigate('/dashboard');
-      } else {
-        // For demo mode, automatically start demo
-        demoLoginMutation.mutate();
-      }
+    if (!isLoading && user) {
+      // If already logged in, go to dashboard
+      navigate('/dashboard');
     }
-  }, [isLoading, user, navigate, demoLoginMutation]);
+    // No automatic demo login - let users explore the landing page first
+  }, [isLoading, user, navigate]);
   
   useEffect(() => {
     if (selectedTaskType) return; // Don't cycle if user has selected a tab

@@ -84,13 +84,8 @@ export default function DashboardPage() {
   const [, navigate] = useLocation();
   const [activeCategory, setActiveCategory] = useState<string>("All");
 
-  // First, let's use the demo login to authenticate automatically for testing
-  useEffect(() => {
-    if (!user) {
-      // Use the demo login mode to see test data
-      demoLoginMutation.mutate();
-    }
-  }, [user, demoLoginMutation]);
+  // Dashboard already uses ProtectedRoute, so we don't need to handle 
+  // redirection or automatic login here - protected route will do that
   
   // Fetch available categories
   const { 
