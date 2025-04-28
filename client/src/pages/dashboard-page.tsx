@@ -219,13 +219,13 @@ export default function DashboardPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "completed":
-        return <Badge className="bg-green-100 text-green-800 border-green-200">Completed</Badge>;
+        return <Badge className="bg-green-100 text-green-800 border-green-200 dark:bg-[rgba(79,248,229,0.1)] dark:text-[#4FF8E5] dark:border-[#4FF8E5]/20 dark:px-3 dark:py-1 dark:rounded-md">Completed</Badge>;
       case "running":
-        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">Running</Badge>;
+        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-[rgba(255,193,7,0.1)] dark:text-[#FFC107] dark:border-[#FFC107]/20 dark:px-3 dark:py-1 dark:rounded-md">Running</Badge>;
       case "failed":
-        return <Badge variant="destructive">Failed</Badge>;
+        return <Badge className="dark:bg-[rgba(255,92,92,0.1)] dark:text-[#FF5C5C] dark:border-[#FF5C5C]/20 dark:px-3 dark:py-1 dark:rounded-md">Failed</Badge>;
       default:
-        return <Badge variant="outline">Pending</Badge>;
+        return <Badge className="dark:bg-[#232323] dark:text-[#AAAAAA] dark:border-[#2A2A2A] dark:px-3 dark:py-1 dark:rounded-md">Pending</Badge>;
     }
   };
 
@@ -239,13 +239,13 @@ export default function DashboardPage() {
             Welcome back, {user?.username}
           </p>
         </div>
-        <Button asChild className="dark:bg-[#00F0FF] dark:text-[#121212] dark:hover:bg-[#4FF8E5] dark:border-none dark:shadow-[0_0_10px_rgba(0,240,255,0.3)]">
+        <Button asChild className="dark:bg-[#1D1D1D] dark:text-[#4FF8E5] dark:hover:bg-[#252525] dark:border dark:border-[#2A2A2A] dark:hover:shadow-[0_0_8px_rgba(79,248,229,0.5)] dark:transition-all dark:duration-300 dark:rounded-lg">
           <Link href="/wizard">New Evaluation</Link>
         </Button>
       </div>
 
       {/* 2. Summary / Recommendation Area */}
-      <Card className="mb-6 dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
+      <Card className="mb-6 dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300 dark:rounded-xl dark:overflow-hidden">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1">
@@ -259,17 +259,17 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="flex-shrink-0 flex flex-col md:flex-row gap-3">
-              <div className="p-3 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-lg text-center min-w-[100px] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
-                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-1">Quality Score</p>
-                <p className="text-xl font-semibold dark:text-[#E0E0E0] dark:font-light metric-value">8.7<span className="text-xs text-muted-foreground dark:text-[#B0B0B0]">/10</span></p>
+              <div className="p-4 bg-muted dark:bg-[#1D1D1D] dark:border dark:border-[#2A2A2A] rounded-xl text-center min-w-[110px] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300">
+                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-2">Quality Score</p>
+                <p className="text-2xl font-semibold dark:text-[#4FF8E5] dark:font-light metric-value">8.7<span className="text-xs text-muted-foreground dark:text-[#B0B0B0] ml-1">/10</span></p>
               </div>
-              <div className="p-3 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-lg text-center min-w-[100px] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
-                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-1">Est. Cost/1k</p>
-                <p className="text-xl font-semibold dark:text-[#E0E0E0] dark:font-light metric-value">$0.05</p>
+              <div className="p-4 bg-muted dark:bg-[#1D1D1D] dark:border dark:border-[#2A2A2A] rounded-xl text-center min-w-[110px] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300">
+                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-2">Est. Cost/1k</p>
+                <p className="text-2xl font-semibold dark:text-[#4FF8E5] dark:font-light metric-value">$0.05</p>
               </div>
-              <div className="p-3 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-lg text-center min-w-[100px] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
-                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-1">Latency</p>
-                <p className="text-xl font-semibold dark:text-[#E0E0E0] dark:font-light metric-value">1.2s</p>
+              <div className="p-4 bg-muted dark:bg-[#1D1D1D] dark:border dark:border-[#2A2A2A] rounded-xl text-center min-w-[110px] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300">
+                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-2">Latency</p>
+                <p className="text-2xl font-semibold dark:text-[#4FF8E5] dark:font-light metric-value">1.2s</p>
               </div>
             </div>
           </div>
@@ -277,7 +277,7 @@ export default function DashboardPage() {
       </Card>
 
       {/* 3. Context / Input Summary Area */}
-      <Card className="mb-8 dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
+      <Card className="mb-8 dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300 dark:rounded-xl dark:overflow-hidden">
         <CardHeader className="pb-2 dark:border-b dark:border-[#2A2A2A]">
           <CardTitle className="text-base font-medium dark:text-[#E0E0E0] dark:font-light">Evaluation Context</CardTitle>
         </CardHeader>
@@ -375,13 +375,25 @@ export default function DashboardPage() {
           <h2 className="text-lg font-semibold mb-4 dark:text-[#E0E0E0] dark:font-light">Detailed Comparison Results</h2>
           
           <Tabs defaultValue="prompts" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 dark:bg-[#181818] dark:border dark:border-[#2A2A2A]">
-              <TabsTrigger value="prompts" className="text-sm data-[state=active]:dark:bg-[#00F0FF] data-[state=active]:dark:text-[#121212] dark:text-[#E0E0E0] dark:hover:bg-[#232323] dark:data-[state=active]:shadow-[0_0_10px_rgba(0,240,255,0.2)]">Prompt Comparison</TabsTrigger>
-              <TabsTrigger value="models" className="text-sm data-[state=active]:dark:bg-[#00F0FF] data-[state=active]:dark:text-[#121212] dark:text-[#E0E0E0] dark:hover:bg-[#232323] dark:data-[state=active]:shadow-[0_0_10px_rgba(0,240,255,0.2)]">LLM Comparison</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6 dark:bg-[#1A1A1A] dark:border dark:border-[#2A2A2A] p-1 rounded-lg">
+              <TabsTrigger 
+                value="prompts" 
+                className="text-sm dark:text-[#CCCCCC] dark:hover:bg-[#232323] transition-all duration-200 rounded-md
+                  data-[state=active]:dark:bg-[#252525] data-[state=active]:dark:text-[#4FF8E5] data-[state=active]:dark:border data-[state=active]:dark:border-[#4FF8E5]/20 data-[state=active]:dark:shadow-[0_0_6px_rgba(79,248,229,0.2)]"
+              >
+                Prompt Comparison
+              </TabsTrigger>
+              <TabsTrigger 
+                value="models" 
+                className="text-sm dark:text-[#CCCCCC] dark:hover:bg-[#232323] transition-all duration-200 rounded-md
+                  data-[state=active]:dark:bg-[#252525] data-[state=active]:dark:text-[#4FF8E5] data-[state=active]:dark:border data-[state=active]:dark:border-[#4FF8E5]/20 data-[state=active]:dark:shadow-[0_0_6px_rgba(79,248,229,0.2)]"
+              >
+                LLM Comparison
+              </TabsTrigger>
             </TabsList>
             
             <TabsContent value="prompts" className="space-y-6">
-              <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
+              <Card className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300 dark:rounded-xl dark:overflow-hidden">
                 <CardHeader className="pb-3 dark:border-b dark:border-[#2A2A2A]">
                   <CardTitle className="text-base font-medium dark:text-[#E0E0E0] dark:font-light">Prompt Versions Comparison</CardTitle>
                   <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">
@@ -432,11 +444,25 @@ export default function DashboardPage() {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="h-64 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-md p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-                        <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">ROUGE-L Score Chart</p>
+                      <div className="h-64 bg-muted dark:bg-[#1D1D1D] dark:border dark:border-[#2A2A2A] rounded-lg p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300">
+                        <div className="text-center">
+                          <p className="text-sm text-muted-foreground dark:text-[#AAAAAA] dark:uppercase dark:tracking-wider dark:font-medium mb-2">ROUGE-L Score Chart</p>
+                          <div className="h-36 flex items-center justify-center">
+                            <div className="w-full h-full bg-[#232323] rounded-md flex items-center justify-center">
+                              <span className="text-xs text-[#B0B0B0]">Chart rendering...</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="h-64 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-md p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-                        <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">Cost vs Quality Chart</p>
+                      <div className="h-64 bg-muted dark:bg-[#1D1D1D] dark:border dark:border-[#2A2A2A] rounded-lg p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300">
+                        <div className="text-center">
+                          <p className="text-sm text-muted-foreground dark:text-[#AAAAAA] dark:uppercase dark:tracking-wider dark:font-medium mb-2">Cost vs Quality Chart</p>
+                          <div className="h-36 flex items-center justify-center">
+                            <div className="w-full h-full bg-[#232323] rounded-md flex items-center justify-center">
+                              <span className="text-xs text-[#B0B0B0]">Chart rendering...</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -445,7 +471,7 @@ export default function DashboardPage() {
             </TabsContent>
             
             <TabsContent value="models" className="space-y-6">
-              <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
+              <Card className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300 dark:rounded-xl dark:overflow-hidden">
                 <CardHeader className="pb-3 dark:border-b dark:border-[#2A2A2A]">
                   <CardTitle className="text-base font-medium dark:text-[#E0E0E0] dark:font-light">LLM Performance Comparison</CardTitle>
                   <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">
