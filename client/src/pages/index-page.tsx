@@ -147,7 +147,7 @@ export default function IndexPage() {
   return (
     <main className="min-h-screen">
       {/* Navigation */}
-      <nav className="border-b bg-white">
+      <nav className="border-b bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center">
@@ -169,19 +169,18 @@ export default function IndexPage() {
             <div className="flex items-center space-x-4">
               <Link
                 href="#pricing"
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium"
               >
                 Pricing
               </Link>
               <Link
                 href="#"
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                className="text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium"
               >
                 Docs
               </Link>
               <Button 
                 variant="outline" 
-                className="text-blue-600 border-blue-300 hover:bg-blue-50"
                 onClick={() => demoLoginMutation.mutate()}
                 disabled={demoLoginMutation.isPending}
               >
@@ -235,14 +234,14 @@ export default function IndexPage() {
           {/* Right column: Animated model performance card */}
           <div className="h-full flex items-center justify-center">
             <div 
-              className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-md transform transition-all duration-500 ease-in-out hover:shadow-lg"
+              className="bg-card rounded-lg shadow-md overflow-hidden w-full max-w-md transform transition-all duration-500 ease-in-out hover:shadow-lg border border-border"
             >
-              <div className="bg-primary text-white px-6 py-4">
+              <div className="bg-primary text-primary-foreground px-6 py-4">
                 <h3 className="text-lg font-semibold flex items-center justify-between">
                   <span key={modelPerformanceData[currentCategoryIndex].category} className="animate-fadeIn">
                     {modelPerformanceData[currentCategoryIndex].category}
                   </span>
-                  <Badge variant="outline" className="bg-white bg-opacity-20 text-white border-white border-opacity-30">
+                  <Badge variant="outline" className="bg-primary-foreground bg-opacity-20 text-primary-foreground border-primary-foreground border-opacity-30">
                     Best Model
                   </Badge>
                 </h3>
@@ -267,14 +266,14 @@ export default function IndexPage() {
               <div className="p-6">
                 <div className="mb-6">
                   <div className="flex justify-between items-center mb-2">
-                    <span key={modelPerformanceData[currentCategoryIndex].bestModel} className="text-2xl font-bold text-gray-800 animate-fadeIn">
+                    <span key={modelPerformanceData[currentCategoryIndex].bestModel} className="text-2xl font-bold text-card-foreground animate-fadeIn">
                       {modelPerformanceData[currentCategoryIndex].bestModel}
                     </span>
-                    <span key={modelPerformanceData[currentCategoryIndex].provider} className="text-sm text-gray-500 animate-fadeIn">
+                    <span key={modelPerformanceData[currentCategoryIndex].provider} className="text-sm text-muted-foreground animate-fadeIn">
                       {modelPerformanceData[currentCategoryIndex].provider}
                     </span>
                   </div>
-                  <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-primary rounded-full transition-all duration-1000" 
                       style={{ 
@@ -284,7 +283,7 @@ export default function IndexPage() {
                     ></div>
                   </div>
                   <div className="flex justify-between mt-1">
-                    <span className="text-xs text-gray-500">Performance Score</span>
+                    <span className="text-xs text-muted-foreground">Performance Score</span>
                     <div className="flex items-center">
                       <AnimatedNumber 
                         value={92} 
@@ -297,19 +296,19 @@ export default function IndexPage() {
                 </div>
                 
                 <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-gray-700">Evaluation Metrics</h4>
+                  <h4 className="text-sm font-medium text-card-foreground">Evaluation Metrics</h4>
                   {modelPerformanceData[currentCategoryIndex].metrics.map((metric, i) => (
                     <div key={`${currentCategoryIndex}-${i}`} className="space-y-1 animate-fadeIn" style={{ animationDelay: `${i * 100}ms` }}>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-600">{metric.name}</span>
+                        <span className="text-sm text-muted-foreground">{metric.name}</span>
                         <AnimatedNumber 
                           value={metric.score} 
-                          className="text-sm font-medium text-gray-900"
+                          className="text-sm font-medium text-card-foreground"
                           formatOptions={{ decimals: 2 }}
                           duration={1500}
                         />
                       </div>
-                      <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                      <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-primary rounded-full" 
                           style={{ 
@@ -322,7 +321,7 @@ export default function IndexPage() {
                   ))}
                 </div>
                 
-                <div className="mt-6 pt-4 border-t border-gray-100">
+                <div className="mt-6 pt-4 border-t border-border">
                   <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
                     <Link href={user ? "/wizard" : "/auth"}>
                       Try with your prompt →
@@ -349,8 +348,8 @@ export default function IndexPage() {
                   onClick={() => handleTaskSelect(taskType)}
                   className={`px-4 py-2 rounded-t-lg whitespace-nowrap transition-colors ${
                     isActive 
-                      ? "bg-primary text-white font-medium"
-                      : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                      ? "bg-primary text-primary-foreground font-medium"
+                      : "bg-card hover:bg-muted text-card-foreground"
                   } ${
                     currentTaskIndex === index && !selectedTaskType
                       ? "ring-2 ring-primary ring-opacity-50"
@@ -374,13 +373,13 @@ export default function IndexPage() {
         </div>
         
         {/* Prompt of the Day */}
-        <div className="my-16 bg-white rounded-lg shadow-md overflow-hidden max-w-4xl mx-auto">
-          <CardHeader className="px-6 py-4 bg-primary text-white">
+        <div className="my-16 bg-card rounded-lg shadow-md overflow-hidden max-w-4xl mx-auto border border-border">
+          <CardHeader className="px-6 py-4 bg-primary text-primary-foreground">
             <CardTitle className="text-xl font-semibold">Prompt of the Day: {taskData.taskCategory}</CardTitle>
           </CardHeader>
           
           <CardContent className="px-6 py-4">
-            <div className="prompt-font text-sm bg-gray-50 p-4 rounded border border-gray-200 mb-4">
+            <div className="prompt-font text-sm bg-muted p-4 rounded border border-border mb-4">
               {taskData.promptText}
             </div>
             
@@ -391,20 +390,20 @@ export default function IndexPage() {
               </div>
               
               <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
-                <Badge variant="outline" className="bg-green-100 text-green-800 hover:bg-green-100">
+                <Badge variant="secondary" className="text-green-600 dark:text-green-400">
                   Quality: {taskData.bestQuality.score.toFixed(1)}/10
                 </Badge>
-                <Badge variant="outline" className="bg-blue-100 text-blue-800 hover:bg-blue-100">
+                <Badge variant="secondary" className="text-blue-600 dark:text-blue-400">
                   Speed: {taskData.bestQuality.time}ms
                 </Badge>
-                <Badge variant="outline" className="bg-purple-100 text-purple-800 hover:bg-purple-100">
+                <Badge variant="secondary" className="text-purple-600 dark:text-purple-400">
                   Cost: ${taskData.bestQuality.cost.toFixed(5)}
                 </Badge>
               </div>
             </div>
           </CardContent>
           
-          <CardFooter className="px-6 py-3 bg-gray-50 border-t border-gray-200 flex justify-between">
+          <CardFooter className="px-6 py-3 bg-muted border-t border-border flex justify-between">
             {user ? (
               <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
                 <Link href="/wizard">
@@ -437,32 +436,32 @@ export default function IndexPage() {
             How PromptLab Works
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <div className="w-12 h-12 bg-blue-100 text-primary rounded-full flex items-center justify-center mb-4">
+            <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
+              <div className="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-4">
                 <span className="text-xl font-bold">1</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Input your prompt</h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 Enter your prompt and desired outcome criteria. We'll test
                 multiple variations to find the best one.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <div className="w-12 h-12 bg-blue-100 text-primary rounded-full flex items-center justify-center mb-4">
+            <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
+              <div className="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-4">
                 <span className="text-xl font-bold">2</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Select models</h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 Choose from popular models across providers (OpenAI, Anthropic,
                 Google, etc.) to test in parallel.
               </p>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-              <div className="w-12 h-12 bg-blue-100 text-primary rounded-full flex items-center justify-center mb-4">
+            <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
+              <div className="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-4">
                 <span className="text-xl font-bold">3</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Analyze results</h3>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 View performance metrics across cost, speed, and quality.
                 Identify vulnerabilities with red-team testing.
               </p>
@@ -476,18 +475,18 @@ export default function IndexPage() {
             Simple, Transparent Pricing
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div className="bg-card p-6 rounded-lg shadow-sm border border-border">
               <div className="mb-4">
                 <h3 className="text-lg font-semibold">Free Trial</h3>
                 <div className="mt-2">
                   <span className="text-3xl font-bold">$0</span>
-                  <span className="text-gray-500">/mo</span>
+                  <span className="text-muted-foreground">/mo</span>
                 </div>
               </div>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-start">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-500 dark:text-green-400 mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -501,7 +500,7 @@ export default function IndexPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-500 dark:text-green-400 mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -515,7 +514,7 @@ export default function IndexPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-500 dark:text-green-400 mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -527,9 +526,9 @@ export default function IndexPage() {
                   </svg>
                   <span>Basic quality metrics</span>
                 </li>
-                <li className="flex items-start text-gray-500">
+                <li className="flex items-start text-muted-foreground">
                   <svg
-                    className="h-5 w-5 text-gray-400 mr-2"
+                    className="h-5 w-5 text-muted-foreground mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -546,21 +545,21 @@ export default function IndexPage() {
                 Start free
               </Button>
             </div>
-            <div className="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-200 relative">
-              <div className="absolute top-0 right-0 bg-primary text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
+            <div className="bg-primary/10 p-6 rounded-lg shadow-sm border border-primary/30 relative">
+              <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
                 POPULAR
               </div>
               <div className="mb-4">
                 <h3 className="text-lg font-semibold">Pro</h3>
                 <div className="mt-2">
                   <span className="text-3xl font-bold">$29</span>
-                  <span className="text-gray-500">/mo</span>
+                  <span className="text-muted-foreground">/mo</span>
                 </div>
               </div>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-start">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-500 dark:text-green-400 mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -574,7 +573,7 @@ export default function IndexPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-500 dark:text-green-400 mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -588,7 +587,7 @@ export default function IndexPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-500 dark:text-green-400 mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -602,7 +601,7 @@ export default function IndexPage() {
                 </li>
                 <li className="flex items-start">
                   <svg
-                    className="h-5 w-5 text-green-500 mr-2"
+                    className="h-5 w-5 text-green-500 dark:text-green-400 mr-2"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -628,13 +627,13 @@ export default function IndexPage() {
           <Accordion type="single" collapsible className="space-y-4">
             <AccordionItem
               value="item-1"
-              className="border border-gray-200 rounded-md"
+              className="border border-border rounded-md"
             >
-              <AccordionTrigger className="px-4 py-3 bg-white hover:bg-gray-50 font-medium text-left">
+              <AccordionTrigger className="px-4 py-3 bg-card hover:bg-muted font-medium text-left">
                 What models does PromptLab support?
               </AccordionTrigger>
-              <AccordionContent className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-                <p className="text-gray-700">
+              <AccordionContent className="px-4 py-3 bg-muted border-t border-border">
+                <p className="text-card-foreground">
                   PromptLab supports all major models from OpenAI (GPT-3.5,
                   GPT-4), Anthropic (Claude), Google (Gemini), Cohere, and more.
                   We add new models as they become available.
@@ -643,13 +642,13 @@ export default function IndexPage() {
             </AccordionItem>
             <AccordionItem
               value="item-2"
-              className="border border-gray-200 rounded-md"
+              className="border border-border rounded-md"
             >
-              <AccordionTrigger className="px-4 py-3 bg-white hover:bg-gray-50 font-medium text-left">
+              <AccordionTrigger className="px-4 py-3 bg-card hover:bg-muted font-medium text-left">
                 What is red-team testing?
               </AccordionTrigger>
-              <AccordionContent className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-                <p className="text-gray-700">
+              <AccordionContent className="px-4 py-3 bg-muted border-t border-border">
+                <p className="text-card-foreground">
                   Red-team testing checks if your prompt is vulnerable to common
                   attacks like prompt injection, jailbreaking, or data leakage.
                   We run a series of tests to ensure your prompt is robust and
@@ -659,13 +658,13 @@ export default function IndexPage() {
             </AccordionItem>
             <AccordionItem
               value="item-3"
-              className="border border-gray-200 rounded-md"
+              className="border border-border rounded-md"
             >
-              <AccordionTrigger className="px-4 py-3 bg-white hover:bg-gray-50 font-medium text-left">
+              <AccordionTrigger className="px-4 py-3 bg-card hover:bg-muted font-medium text-left">
                 How does the pricing work?
               </AccordionTrigger>
-              <AccordionContent className="px-4 py-3 bg-gray-50 border-t border-gray-200">
-                <p className="text-gray-700">
+              <AccordionContent className="px-4 py-3 bg-muted border-t border-border">
+                <p className="text-card-foreground">
                   You pay a flat monthly subscription fee that covers all
                   testing. The only additional costs are the actual API calls to
                   the model providers, which are passed through at cost with no
@@ -678,31 +677,31 @@ export default function IndexPage() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white">
+      <footer className="bg-primary-foreground dark:bg-slate-900 text-primary dark:text-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-lg font-semibold mb-4">PromptLab</h3>
-              <p className="text-gray-400 text-sm">
+              <p className="text-muted-foreground text-sm">
                 The all-in-one platform for benchmarking and securing your AI
                 prompts.
               </p>
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400 text-sm">
+              <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     Features
                   </a>
                 </li>
                 <li>
-                  <a href="#pricing" className="hover:text-white">
+                  <a href="#pricing" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     Pricing
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     Security
                   </a>
                 </li>
@@ -710,19 +709,19 @@ export default function IndexPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Resources</h3>
-              <ul className="space-y-2 text-gray-400 text-sm">
+              <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     Documentation
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     API Reference
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     Blog
                   </a>
                 </li>
@@ -730,26 +729,26 @@ export default function IndexPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400 text-sm">
+              <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     About
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     Contact
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-white">
+                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
                     Privacy
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
+          <div className="mt-8 pt-8 border-t border-border text-center text-muted-foreground text-sm">
             &copy; {new Date().getFullYear()} PromptLab. All rights reserved.
           </div>
         </div>
