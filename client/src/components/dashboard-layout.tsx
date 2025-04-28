@@ -18,10 +18,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const isDemo = user?.role === "demo";
   
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background dark:bg-[#121212]">
       {/* Demo Mode Banner */}
       {isDemo && (
-        <div className="bg-primary text-primary-foreground text-center py-1 px-4 text-sm font-medium flex items-center justify-center">
+        <div className="bg-primary dark:bg-[#121212] dark:border-b dark:border-[#2A2A2A] text-primary-foreground dark:text-[#00F0FF] text-center py-1 px-4 text-sm font-medium flex items-center justify-center">
           <span className="mr-2">🔍</span>
           <span>Demo Mode - Explore PromptLab features with pre-loaded data</span>
         </div>
@@ -61,28 +61,28 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Mobile header */}
-      <div className="md:hidden bg-card border-b border-border flex items-center justify-between px-4 py-2">
+      <div className="md:hidden bg-card dark:bg-[#161616] border-b border-border dark:border-[#2A2A2A] flex items-center justify-between px-4 py-3">
         <div className="flex items-center">
-          <svg className="h-8 w-8 text-primary dark:text-[hsl(var(--sidebar-dark-primary))]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg className="h-7 w-7 text-primary dark:text-[#00F0FF]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="currentColor"/>
           </svg>
-          <span className="ml-2 text-xl font-bold">PromptLab</span>
+          <span className="ml-2 text-xl font-bold text-foreground dark:text-[#E0E0E0]">PromptLab</span>
         </div>
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="dark:hover:bg-[#232323] dark:text-[#E0E0E0]">
               <Menu className="h-6 w-6" />
               <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-64 p-0">
-            <div className="flex-1 flex flex-col min-h-0 bg-card dark:bg-[hsl(var(--sidebar-dark-background))] h-full">
+          <SheetContent side="left" className="w-64 p-0 dark:bg-[#161616] dark:border-[#2A2A2A]">
+            <div className="flex-1 flex flex-col min-h-0 bg-card dark:bg-[#161616] h-full">
               <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                 <div className="flex items-center flex-shrink-0 px-4">
-                  <svg className="h-8 w-8 text-primary dark:text-[hsl(var(--sidebar-dark-primary))]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg className="h-8 w-8 text-primary dark:text-[#00F0FF]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="currentColor"/>
                   </svg>
-                  <span className="ml-2 text-xl font-bold text-card-foreground dark:text-[hsl(var(--sidebar-dark-foreground))]">PromptLab</span>
+                  <span className="ml-2 text-xl font-bold text-card-foreground dark:text-[#E0E0E0]">PromptLab</span>
                 </div>
                 <div className="mt-5 flex-1 px-2">
                   <SidebarNav />
@@ -111,14 +111,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
 
       {/* Desktop project selector header */}
-      <div className="hidden md:flex md:pl-64 h-16 border-b border-border bg-card">
+      <div className="hidden md:flex md:pl-64 h-16 border-b border-border dark:border-[#2A2A2A] bg-card dark:bg-[#161616]">
         <div className="flex-1 px-4 flex justify-between items-center">
           <div className="flex-1 flex items-center">
             <div className="max-w-xs w-64">
               <label htmlFor="project-select" className="sr-only">Select Project</label>
               <select 
                 id="project-select" 
-                className="block w-full pl-3 pr-10 py-2 text-base bg-card border-border focus:outline-none focus:ring-primary focus:border-primary sm:text-sm rounded-md"
+                className="block w-full pl-3 pr-10 py-2 text-base bg-card dark:bg-[#232323] border-border dark:border-[#2A2A2A] focus:outline-none focus:ring-primary dark:focus:ring-[#00F0FF] focus:border-primary dark:focus:border-[#00F0FF] sm:text-sm rounded-md"
               >
                 <option>All Projects</option>
                 <option>Summarization Benchmark</option>
