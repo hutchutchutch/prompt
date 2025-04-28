@@ -49,39 +49,39 @@ export function GlobalKPIBar({
   
   // Classes for delta color
   const getDeltaClass = (value: number, isHigherBetter: boolean) => {
-    if (value === 0) return "text-gray-500";
+    if (value === 0) return "text-gray-500 dark:text-gray-400";
     
     const isPositive = value > 0;
     const isGood = isHigherBetter ? isPositive : !isPositive;
     
-    return isGood ? "text-green-600" : "text-red-600";
+    return isGood ? "text-green-600 dark:text-[#4FF8E5]" : "text-red-600 dark:text-[#FF5C5C]";
   };
   
   // Display elements for empty state
   if (isEmpty) {
     return (
-      <Card className="shadow-sm mb-6">
+      <Card className="shadow-sm mb-6 dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dashboard-card">
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="p-3">
-              <p className="text-sm font-medium text-gray-600">Best Model</p>
-              <p className="text-lg text-gray-400">—</p>
-              <p className="text-xs text-gray-500">Run your first test for this task type</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Best Model</p>
+              <p className="text-lg text-gray-400 dark:text-[#2A2A2A]">—</p>
+              <p className="text-xs text-gray-500 dark:text-[#505050]">Run your first test for this task type</p>
             </div>
             <div className="p-3">
-              <p className="text-sm font-medium text-gray-600">Quality</p>
-              <p className="text-lg text-gray-400">—</p>
-              <p className="text-xs text-gray-500">No data available</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Quality</p>
+              <p className="text-lg text-gray-400 dark:text-[#2A2A2A]">—</p>
+              <p className="text-xs text-gray-500 dark:text-[#505050]">No data available</p>
             </div>
             <div className="p-3">
-              <p className="text-sm font-medium text-gray-600">Cost</p>
-              <p className="text-lg text-gray-400">—</p>
-              <p className="text-xs text-gray-500">No data available</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Cost</p>
+              <p className="text-lg text-gray-400 dark:text-[#2A2A2A]">—</p>
+              <p className="text-xs text-gray-500 dark:text-[#505050]">No data available</p>
             </div>
             <div className="p-3">
-              <p className="text-sm font-medium text-gray-600">Speed</p>
-              <p className="text-lg text-gray-400">—</p>
-              <p className="text-xs text-gray-500">No data available</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Speed</p>
+              <p className="text-lg text-gray-400 dark:text-[#2A2A2A]">—</p>
+              <p className="text-xs text-gray-500 dark:text-[#505050]">No data available</p>
             </div>
           </div>
         </CardContent>
@@ -90,23 +90,23 @@ export function GlobalKPIBar({
   }
   
   return (
-    <Card className="shadow-sm mb-6">
+    <Card className="shadow-sm mb-6 dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dashboard-card">
       <CardContent className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Best Model Tile */}
           <div 
-            className={`p-3 relative ${onModelClick ? "cursor-pointer hover:bg-gray-50 rounded-md transition-colors" : ""}`}
+            className={`p-3 relative ${onModelClick ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-[#232323] rounded-md transition-colors" : ""}`}
             onClick={() => onModelClick && onModelClick(bestModel.name)}
           >
-            <p className="text-sm font-medium text-gray-600">Best Model</p>
+            <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Best Model</p>
             <div className="flex items-baseline">
-              <p className="text-lg font-semibold text-gray-900">{bestModel.name}</p>
+              <p className="text-lg font-semibold text-gray-900 dark:text-[#E0E0E0] dark:font-light metric-value">{bestModel.name}</p>
               
               {onModelClick && (
-                <ExternalLink className="ml-1 h-3.5 w-3.5 text-gray-400" />
+                <ExternalLink className="ml-1 h-3.5 w-3.5 text-gray-400 dark:text-[#00F0FF]/70" />
               )}
             </div>
-            <p className="text-xs text-gray-600">{bestModel.quality}% quality</p>
+            <p className="text-xs text-gray-600 dark:text-[#00F0FF]">{bestModel.quality}% quality</p>
             
             {/* High variance warning */}
             {highVariance && (
@@ -114,11 +114,11 @@ export function GlobalKPIBar({
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="absolute top-2 right-2">
-                      <BadgeHelp className="h-4 w-4 text-amber-500" />
+                      <BadgeHelp className="h-4 w-4 text-amber-500 dark:text-amber-400" />
                     </div>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p className="text-xs max-w-xs">
+                  <TooltipContent side="bottom" className="dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
+                    <p className="text-xs max-w-xs dark:text-[#B0B0B0]">
                       High variability — try adding more examples to get more consistent results
                     </p>
                   </TooltipContent>
@@ -129,9 +129,9 @@ export function GlobalKPIBar({
           
           {/* Quality Metric */}
           <div className="p-3">
-            <p className="text-sm font-medium text-gray-600">Quality</p>
+            <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Quality</p>
             <div className="flex items-baseline">
-              <p className="text-lg font-semibold text-gray-900">{averageQuality.toFixed(0)}%</p>
+              <p className="text-lg font-semibold text-gray-900 dark:text-[#E0E0E0] dark:font-light metric-value">{averageQuality.toFixed(0)}%</p>
               
               {deltas.quality !== 0 && (
                 <TooltipProvider>
@@ -146,20 +146,20 @@ export function GlobalKPIBar({
                         {formatDelta(deltas.quality)}
                       </div>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p className="text-xs">Compared with average across all task types</p>
+                    <TooltipContent side="bottom" className="dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
+                      <p className="text-xs dark:text-[#B0B0B0]">Compared with average across all task types</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               )}
             </div>
-            <p className="text-xs text-gray-600">Avg quality</p>
+            <p className="text-xs text-gray-600 dark:text-[#B0B0B0]">Avg quality</p>
             
             {/* Display key metrics if available */}
             {metrics && metrics.length > 0 && (
               <div className="mt-1 flex flex-wrap gap-1">
                 {metrics.map((metric, i) => (
-                  <span key={i} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                  <span key={i} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-[rgba(0,240,255,0.1)] dark:text-[#00F0FF] dark:border dark:border-[#00F0FF]/20">
                     {metric}
                   </span>
                 ))}
