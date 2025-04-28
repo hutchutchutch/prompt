@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { LlmTaskShowcase } from "@/components/llm-task-showcase";
 import { examplePrompts } from "@/data/example-prompts";
 import { useAuth } from "@/hooks/use-auth";
+import { AnimatedNumber } from "@/components/ui/animated-number";
 
 export default function IndexPage() {
   const { user, demoLoginMutation, isLoading } = useAuth();
@@ -293,7 +294,17 @@ export default function IndexPage() {
                   </div>
                   <div className="flex justify-between mt-1">
                     <span className="text-xs text-gray-500">Performance Score</span>
-                    <span className="text-xs font-medium">92/100</span>
+                    <div className="flex items-center">
+                      <AnimatedNumber 
+                        value={92} 
+                        className="text-xs font-medium"
+                        springOptions={{
+                          bounce: 0.25,
+                          duration: 1500,
+                        }}
+                      />
+                      <span className="text-xs font-medium">/100</span>
+                    </div>
                   </div>
                 </div>
                 
@@ -303,7 +314,15 @@ export default function IndexPage() {
                     <div key={`${currentCategoryIndex}-${i}`} className="space-y-1 animate-fadeIn" style={{ animationDelay: `${i * 100}ms` }}>
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600">{metric.name}</span>
-                        <span className="text-sm font-medium text-gray-900">{metric.score.toFixed(2)}</span>
+                        <AnimatedNumber 
+                          value={metric.score} 
+                          className="text-sm font-medium text-gray-900"
+                          formatOptions={{ decimals: 2 }}
+                          springOptions={{
+                            bounce: 0,
+                            duration: 1000,
+                          }}
+                        />
                       </div>
                       <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                         <div 
