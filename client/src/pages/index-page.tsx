@@ -18,12 +18,85 @@ export default function IndexPage() {
   const [, navigate] = useLocation();
   const [selectedTaskType, setSelectedTaskType] = useState<string | null>(null);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
+  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
+  
+  // For LLM showcase examples
   const taskTypes = [
     "classification",
     "entityExtraction",
     "summarization",
     "documentation",
     "explanation"
+  ];
+  
+  // Model performance data for each category
+  const modelPerformanceData = [
+    {
+      category: "Text Summarization",
+      bestModel: "Claude 3 Opus",
+      provider: "Anthropic",
+      metrics: [
+        { name: "Content Coverage (ROUGE-1)", score: 0.87 },
+        { name: "Key Point Retention (ROUGE-2)", score: 0.79 },
+        { name: "Flow Preservation (ROUGE-L)", score: 0.83 },
+        { name: "Factual Accuracy", score: 0.96 }
+      ]
+    },
+    {
+      category: "Information Extraction",
+      bestModel: "GPT-4",
+      provider: "OpenAI",
+      metrics: [
+        { name: "Extraction Accuracy (Precision)", score: 0.92 },
+        { name: "Extraction Completeness (Recall)", score: 0.88 },
+        { name: "Overall Extraction Quality (F1-Score)", score: 0.90 },
+        { name: "Structured Format Compliance", score: 0.95 }
+      ]
+    },
+    {
+      category: "Question Answering",
+      bestModel: "Claude 3 Sonnet",
+      provider: "Anthropic",
+      metrics: [
+        { name: "Perfect Match Rate (Exact Match)", score: 0.81 },
+        { name: "Answer Overlap (F1-Score)", score: 0.89 },
+        { name: "Factual Correctness", score: 0.94 },
+        { name: "Question Relevance", score: 0.92 }
+      ]
+    },
+    {
+      category: "Text Classification",
+      bestModel: "GPT-4",
+      provider: "OpenAI",
+      metrics: [
+        { name: "Overall Correctness (Accuracy)", score: 0.95 },
+        { name: "Classification Reliability (Precision)", score: 0.92 },
+        { name: "Category Coverage (Recall)", score: 0.89 },
+        { name: "Balanced Performance (F1-Score)", score: 0.91 }
+      ]
+    },
+    {
+      category: "Code Generation",
+      bestModel: "Claude 3 Opus",
+      provider: "Anthropic",
+      metrics: [
+        { name: "Test Pass Rate (Pass@k)", score: 0.91 },
+        { name: "Code Correctness", score: 0.88 },
+        { name: "Code Quality Score", score: 0.86 },
+        { name: "Readability Index", score: 0.93 }
+      ]
+    },
+    {
+      category: "Conversational AI",
+      bestModel: "Claude 3 Haiku",
+      provider: "Anthropic",
+      metrics: [
+        { name: "Goal Achievement", score: 0.87 },
+        { name: "Response Appropriateness", score: 0.92 },
+        { name: "Information Accuracy", score: 0.90 },
+        { name: "User Experience", score: 0.94 }
+      ]
+    }
   ];
   
   const currentTask = selectedTaskType || taskTypes[currentTaskIndex];
@@ -49,6 +122,15 @@ export default function IndexPage() {
     
     return () => clearInterval(interval);
   }, [selectedTaskType]);
+  
+  // Cycle through categories for the hero animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentCategoryIndex((current) => (current + 1) % modelPerformanceData.length);
+    }, 5000); // 5 seconds per category
+    
+    return () => clearInterval(interval);
+  }, []);
   
   // Handle tab selection to pause animation
   const handleTaskSelect = (taskType: string) => {
@@ -120,30 +202,131 @@ export default function IndexPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
-            <span className="block">Test Your</span>
-            <span className="block text-primary">AI Prompts</span>
-            <span className="block">Across All Models</span>
-          </h1>
-          <p className="mt-4 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-            Find the best model and prompt combination for your use case.
-          </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg">
-              <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
-            </Button>
-            <Button 
-              variant="secondary" 
-              size="lg"
-              onClick={() => demoLoginMutation.mutate()}
-              disabled={demoLoginMutation.isPending}
+        <div className="mb-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          {/* Left column: Heading and CTAs */}
+          <div className="text-left">
+            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+              <span className="block">Test Your</span>
+              <span className="block text-primary">AI Prompts</span>
+              <span className="block">Across All Models</span>
+            </h1>
+            <p className="mt-4 text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl max-w-xl">
+              Find the best model and prompt combination for your specific use case. Compare performance, cost, and accuracy in one place.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Button asChild size="lg">
+                <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
+              </Button>
+              <Button 
+                variant="secondary" 
+                size="lg"
+                onClick={() => demoLoginMutation.mutate()}
+                disabled={demoLoginMutation.isPending}
+              >
+                {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <Link href="#how-it-works">Learn more</Link>
+              </Button>
+            </div>
+          </div>
+          
+          {/* Right column: Animated model performance card */}
+          <div className="h-full flex items-center justify-center">
+            <div 
+              className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-md transform transition-all duration-500 ease-in-out hover:shadow-lg"
+              style={{ 
+                animation: 'pulse 2s infinite ease-in-out',
+              }}
             >
-              {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <Link href="#how-it-works">Learn more</Link>
-            </Button>
+              <div className="bg-primary text-white px-6 py-4">
+                <h3 className="text-lg font-semibold flex items-center justify-between">
+                  <span key={modelPerformanceData[currentCategoryIndex].category} className="animate-fadeIn">
+                    {modelPerformanceData[currentCategoryIndex].category}
+                  </span>
+                  <Badge variant="outline" className="bg-white bg-opacity-20 text-white border-white border-opacity-30">
+                    Best Model
+                  </Badge>
+                </h3>
+              </div>
+              
+              <style dangerouslySetInnerHTML={{ __html: `
+                @keyframes pulse {
+                  0% { transform: scale(1); }
+                  50% { transform: scale(1.02); }
+                  100% { transform: scale(1); }
+                }
+                
+                @keyframes fadeIn {
+                  0% { opacity: 0; }
+                  100% { opacity: 1; }
+                }
+                
+                @keyframes growWidth {
+                  0% { width: 0%; }
+                  100% { width: 100%; }
+                }
+                
+                .animate-fadeIn {
+                  animation: fadeIn 0.5s ease-out;
+                }
+              `}} />
+              
+              <div className="p-6">
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span key={modelPerformanceData[currentCategoryIndex].bestModel} className="text-2xl font-bold text-gray-800 animate-fadeIn">
+                      {modelPerformanceData[currentCategoryIndex].bestModel}
+                    </span>
+                    <span key={modelPerformanceData[currentCategoryIndex].provider} className="text-sm text-gray-500 animate-fadeIn">
+                      {modelPerformanceData[currentCategoryIndex].provider}
+                    </span>
+                  </div>
+                  <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-primary rounded-full transition-all duration-1000" 
+                      style={{ 
+                        width: '92%',
+                        animation: 'growWidth 1s ease-out'
+                      }}
+                    ></div>
+                  </div>
+                  <div className="flex justify-between mt-1">
+                    <span className="text-xs text-gray-500">Performance Score</span>
+                    <span className="text-xs font-medium">92/100</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h4 className="text-sm font-medium text-gray-700">Evaluation Metrics</h4>
+                  {modelPerformanceData[currentCategoryIndex].metrics.map((metric, i) => (
+                    <div key={`${currentCategoryIndex}-${i}`} className="space-y-1 animate-fadeIn" style={{ animationDelay: `${i * 100}ms` }}>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">{metric.name}</span>
+                        <span className="text-sm font-medium text-gray-900">{metric.score.toFixed(2)}</span>
+                      </div>
+                      <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-primary rounded-full" 
+                          style={{ 
+                            width: `${metric.score * 100}%`,
+                            animation: `growWidth 1s ease-out ${i * 100 + 300}ms`
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="mt-6 pt-4 border-t border-gray-100">
+                  <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
+                    <Link href={user ? "/wizard" : "/auth"}>
+                      Try with your prompt →
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
