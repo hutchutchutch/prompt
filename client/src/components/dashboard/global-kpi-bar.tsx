@@ -60,7 +60,7 @@ export function GlobalKPIBar({
   // Display elements for empty state
   if (isEmpty) {
     return (
-      <Card className="shadow-sm mb-6 dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dashboard-card">
+      <Card className="shadow-sm mb-6 dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300 dark:rounded-xl dark:overflow-hidden">
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="p-3">
@@ -90,7 +90,7 @@ export function GlobalKPIBar({
   }
   
   return (
-    <Card className="shadow-sm mb-6 dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dashboard-card">
+    <Card className="shadow-sm mb-6 dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300 dark:rounded-xl dark:overflow-hidden">
       <CardContent className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Best Model Tile */}
@@ -117,8 +117,8 @@ export function GlobalKPIBar({
                       <BadgeHelp className="h-4 w-4 text-amber-500 dark:text-amber-400" />
                     </div>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" className="dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
-                    <p className="text-xs max-w-xs dark:text-[#B0B0B0]">
+                  <TooltipContent side="bottom" className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(79,248,229,0.08)]">
+                    <p className="text-xs max-w-xs dark:text-[#E0E0E0]">
                       High variability — try adding more examples to get more consistent results
                     </p>
                   </TooltipContent>

@@ -37,7 +37,13 @@ export function CategoryTabs({
                   <TooltipTrigger asChild>
                     <TabsTrigger 
                       value={cat.category} 
-                      className="relative flex items-center gap-1 px-4 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground dark:data-[state=active]:bg-[#00F0FF] dark:data-[state=active]:text-[#121212] dark:hover:border-[#00F0FF]/30 dark:hover:bg-[#181818] dark:text-[#E0E0E0] dark:transition-all dark:duration-150"
+                      className="relative flex items-center gap-1 px-4 
+                        data-[state=active]:bg-primary data-[state=active]:text-primary-foreground 
+                        dark:data-[state=active]:bg-[#252525] dark:data-[state=active]:text-[#4FF8E5] 
+                        dark:data-[state=active]:border dark:data-[state=active]:border-[#4FF8E5]/20
+                        dark:data-[state=active]:shadow-[0_0_6px_rgba(79,248,229,0.2)]
+                        dark:hover:border-[#4FF8E5]/20 dark:hover:bg-[#232323] 
+                        dark:text-[#CCCCCC] dark:transition-all dark:duration-150 rounded-md py-2"
                     >
                       {cat.category}
                       

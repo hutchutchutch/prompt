@@ -530,11 +530,25 @@ export default function DashboardPage() {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="h-64 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-md p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-                        <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">Performance Radar Chart</p>
+                      <div className="h-64 bg-muted dark:bg-[#1D1D1D] dark:border dark:border-[#2A2A2A] rounded-lg p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300">
+                        <div className="text-center">
+                          <p className="text-sm text-muted-foreground dark:text-[#AAAAAA] dark:uppercase dark:tracking-wider dark:font-medium mb-2">Performance Radar Chart</p>
+                          <div className="h-36 flex items-center justify-center">
+                            <div className="w-full h-full bg-[#232323] rounded-md flex items-center justify-center">
+                              <span className="text-xs text-[#B0B0B0]">Chart rendering...</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="h-64 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-md p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
-                        <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">Latency Distribution</p>
+                      <div className="h-64 bg-muted dark:bg-[#1D1D1D] dark:border dark:border-[#2A2A2A] rounded-lg p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] dark:hover:shadow-[0_6px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300">
+                        <div className="text-center">
+                          <p className="text-sm text-muted-foreground dark:text-[#AAAAAA] dark:uppercase dark:tracking-wider dark:font-medium mb-2">Latency Distribution</p>
+                          <div className="h-36 flex items-center justify-center">
+                            <div className="w-full h-full bg-[#232323] rounded-md flex items-center justify-center">
+                              <span className="text-xs text-[#B0B0B0]">Chart rendering...</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
