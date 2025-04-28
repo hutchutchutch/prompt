@@ -54,7 +54,7 @@ export function GlobalKPIBar({
     const isPositive = value > 0;
     const isGood = isHigherBetter ? isPositive : !isPositive;
     
-    return isGood ? "text-green-600 dark:text-[#4FF8E5]" : "text-red-600 dark:text-[#FF5C5C]";
+    return isGood ? "text-green-600 dark:text-[#4FF8E5] dark:font-medium" : "text-red-600 dark:text-[#FF5C5C] dark:font-medium";
   };
   
   // Display elements for empty state
@@ -95,7 +95,7 @@ export function GlobalKPIBar({
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Best Model Tile */}
           <div 
-            className={`p-3 relative ${onModelClick ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-[#232323] rounded-md transition-colors" : ""}`}
+            className={`p-3 relative ${onModelClick ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-[#252525] dark:hover:border dark:hover:border-[#4FF8E5]/20 rounded-md transition-all" : ""}`}
             onClick={() => onModelClick && onModelClick(bestModel.name)}
           >
             <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Best Model</p>
@@ -103,10 +103,10 @@ export function GlobalKPIBar({
               <p className="text-lg font-semibold text-gray-900 dark:text-[#E0E0E0] dark:font-light metric-value">{bestModel.name}</p>
               
               {onModelClick && (
-                <ExternalLink className="ml-1 h-3.5 w-3.5 text-gray-400 dark:text-[#00F0FF]/70" />
+                <ExternalLink className="ml-1 h-3.5 w-3.5 text-gray-400 dark:text-[#4FF8E5]/70" />
               )}
             </div>
-            <p className="text-xs text-gray-600 dark:text-[#00F0FF]">{bestModel.quality}% quality</p>
+            <p className="text-xs text-gray-600 dark:text-[#4FF8E5]">{bestModel.quality}% quality</p>
             
             {/* High variance warning */}
             {highVariance && (
@@ -146,8 +146,8 @@ export function GlobalKPIBar({
                         {formatDelta(deltas.quality)}
                       </div>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" className="dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
-                      <p className="text-xs dark:text-[#B0B0B0]">Compared with average across all task types</p>
+                    <TooltipContent side="bottom" className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(79,248,229,0.08)]">
+                      <p className="text-xs dark:text-[#E0E0E0]">Compared with average across all task types</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -159,7 +159,7 @@ export function GlobalKPIBar({
             {metrics && metrics.length > 0 && (
               <div className="mt-1 flex flex-wrap gap-1">
                 {metrics.map((metric, i) => (
-                  <span key={i} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-[rgba(0,240,255,0.1)] dark:text-[#00F0FF] dark:border dark:border-[#00F0FF]/20">
+                  <span key={i} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-[rgba(79,248,229,0.08)] dark:text-[#4FF8E5] dark:border dark:border-[#4FF8E5]/20 dark:shadow-[0_0_4px_rgba(79,248,229,0.1)]">
                     {metric}
                   </span>
                 ))}
@@ -186,8 +186,8 @@ export function GlobalKPIBar({
                         {formatDelta(deltas.cost)}
                       </div>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" className="dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
-                      <p className="text-xs dark:text-[#B0B0B0]">Compared with average across all task types</p>
+                    <TooltipContent side="bottom" className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(79,248,229,0.08)]">
+                      <p className="text-xs dark:text-[#E0E0E0]">Compared with average across all task types</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -215,8 +215,8 @@ export function GlobalKPIBar({
                         {formatDelta(deltas.speed)}
                       </div>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom" className="dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
-                      <p className="text-xs dark:text-[#B0B0B0]">Compared with average across all task types</p>
+                    <TooltipContent side="bottom" className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(79,248,229,0.08)]">
+                      <p className="text-xs dark:text-[#E0E0E0]">Compared with average across all task types</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

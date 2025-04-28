@@ -53,13 +53,13 @@ export function CategoryTabs({
                       )}
                     </TabsTrigger>
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-sm p-4 dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
+                  <TooltipContent className="max-w-sm p-4 dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(79,248,229,0.08)]">
                     <div className="space-y-2">
                       <p className="font-medium dark:text-[#E0E0E0]">{cat.category}</p>
                       <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">{cat.description}</p>
                       {cat.businessImpact && (
                         <div className="mt-2">
-                          <Badge variant="secondary" className="mb-1 dark:bg-[#232323] dark:text-[#E0E0E0] dark:border-[#2A2A2A]">Business Impact</Badge>
+                          <Badge variant="secondary" className="mb-1 dark:bg-[#252525] dark:text-[#4FF8E5] dark:border dark:border-[#4FF8E5]/20 dark:shadow-[0_0_6px_rgba(79,248,229,0.1)]">Business Impact</Badge>
                           <p className="text-xs text-muted-foreground dark:text-[#B0B0B0]">{cat.businessImpact}</p>
                         </div>
                       )}
