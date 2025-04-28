@@ -524,47 +524,47 @@ export default function DashboardPage() {
         <h2 className="text-lg font-medium mb-4 dark:text-[#E0E0E0] dark:font-light">Evaluation History</h2>
         
         {!user ? (
-          <Card>
+          <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
             <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-muted-foreground mb-4">Authenticating with demo mode...</p>
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0] mb-4">Authenticating with demo mode...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary dark:border-[#00F0FF]"></div>
             </CardContent>
           </Card>
         ) : isLoading ? (
-          <Card>
+          <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
             <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-muted-foreground mb-4">Loading evaluation data...</p>
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0] mb-4">Loading evaluation data...</p>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary dark:border-[#00F0FF]"></div>
             </CardContent>
           </Card>
         ) : error ? (
-          <Card>
+          <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
             <CardContent className="h-40 flex items-center justify-center">
-              <p className="text-sm text-muted-foreground">Error loading evaluation history</p>
+              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">Error loading evaluation history</p>
             </CardContent>
           </Card>
         ) : enhancedTests?.length === 0 ? (
-          <Card>
+          <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
             <CardContent className="h-40 flex flex-col items-center justify-center">
-              <p className="text-sm text-muted-foreground mb-4">You haven't run any evaluations yet</p>
-              <Button asChild>
+              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0] mb-4">You haven't run any evaluations yet</p>
+              <Button asChild className="dark:bg-[#00F0FF] dark:text-[#121212] dark:hover:bg-[#4FF8E5] dark:border-none dark:shadow-[0_0_10px_rgba(0,240,255,0.3)]">
                 <Link href="/wizard">Run your first evaluation</Link>
               </Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="bg-card shadow overflow-hidden sm:rounded-md">
-            <ul className="divide-y divide-border">
+          <div className="bg-card dark:bg-[#181818] shadow dark:shadow-[0_4px_12px_rgba(0,0,0,0.2)] overflow-hidden sm:rounded-md dark:border dark:border-[#2A2A2A]">
+            <ul className="divide-y divide-border dark:divide-[#2A2A2A]">
               {enhancedTests.map((test: EnhancedTestData) => (
                 <li key={test.id}>
-                  <div className="block hover:bg-muted/50 cursor-pointer" onClick={() => 
+                  <div className="block hover:bg-muted/50 dark:hover:bg-[#232323] cursor-pointer transition-colors duration-150" onClick={() => 
                     navigate(test.status === "completed" ? `/results/${test.id}` : `/wizard/progress?testId=${test.id}`)
                   }>
                     <div className="px-4 py-4 sm:px-6">
                       <div className="flex items-center justify-between">
                         <div className="truncate">
                           <div className="flex items-center">
-                            <p className="text-sm font-medium text-primary truncate">
+                            <p className="text-sm font-medium text-primary dark:text-[#00F0FF] truncate">
                               {test.promptText.length > 50 
                                 ? `${test.promptText.substring(0, 50)}...` 
                                 : test.promptText}
@@ -584,13 +584,13 @@ export default function DashboardPage() {
                           
                           {/* Date and Security Info */}
                           <div className="mt-1 flex flex-wrap">
-                            <div className="flex items-center text-sm text-muted-foreground mr-4">
-                              <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-muted-foreground/70" />
+                            <div className="flex items-center text-sm text-muted-foreground dark:text-[#B0B0B0] mr-4">
+                              <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-muted-foreground/70 dark:text-[#B0B0B0]/70" />
                               <span>{formatDistanceToNow(new Date(test.createdAt), { addSuffix: true })}</span>
                             </div>
                             {test.redTeamEnabled && (
-                              <div className="flex items-center text-sm text-muted-foreground mr-4">
-                                <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-muted-foreground/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <div className="flex items-center text-sm text-muted-foreground dark:text-[#B0B0B0] mr-4">
+                                <svg className="flex-shrink-0 mr-1.5 h-5 w-5 text-muted-foreground/70 dark:text-[#B0B0B0]/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                 </svg>
                                 <span>Red-team enabled</span>
@@ -599,9 +599,9 @@ export default function DashboardPage() {
                             
                             {/* Best Model Section - Only shown for completed tests with best model info */}
                             {test.status === "completed" && test.bestModel && (
-                              <div className="flex items-center text-sm text-muted-foreground">
-                                <Award className="flex-shrink-0 mr-1.5 h-5 w-5 text-yellow-500" />
-                                <span className="font-medium">Best: {test.bestModel.modelId}</span>
+                              <div className="flex items-center text-sm text-muted-foreground dark:text-[#B0B0B0]">
+                                <Award className="flex-shrink-0 mr-1.5 h-5 w-5 text-yellow-500 dark:text-yellow-400" />
+                                <span className="font-medium dark:text-[#00F0FF]">Best: {test.bestModel.modelId}</span>
                               </div>
                             )}
                           </div>
@@ -610,36 +610,36 @@ export default function DashboardPage() {
                           {test.status === "completed" && test.bestModel && test.improvements && (
                             <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
                               <div className="flex items-center">
-                                <BarChart2 className="h-3 w-3 mr-1 text-green-500" />
-                                <span className="text-muted-foreground">Quality: </span>
-                                <span className="ml-1 font-medium">{test.bestModel.score.toFixed(1)}</span>
+                                <BarChart2 className="h-3 w-3 mr-1 text-green-500 dark:text-[#4FF8E5]" />
+                                <span className="text-muted-foreground dark:text-[#B0B0B0]">Quality: </span>
+                                <span className="ml-1 font-medium dark:text-[#E0E0E0]">{test.bestModel.score.toFixed(1)}</span>
                                 {parseInt(test.improvements.score) > 0 && (
-                                  <span className="ml-1 text-green-600 dark:text-green-500">+{test.improvements.score}%</span>
+                                  <span className="ml-1 text-green-600 dark:text-[#4FF8E5]">+{test.improvements.score}%</span>
                                 )}
                               </div>
                               <div className="flex items-center">
-                                <DollarSign className="h-3 w-3 mr-1 text-blue-500" />
-                                <span className="text-muted-foreground">Cost: </span>
-                                <span className="ml-1 font-medium">${test.bestModel.cost.toFixed(3)}</span>
+                                <DollarSign className="h-3 w-3 mr-1 text-blue-500 dark:text-blue-400" />
+                                <span className="text-muted-foreground dark:text-[#B0B0B0]">Cost: </span>
+                                <span className="ml-1 font-medium dark:text-[#E0E0E0]">${test.bestModel.cost.toFixed(3)}</span>
                                 {parseInt(test.improvements.cost) > 0 && (
-                                  <span className="ml-1 text-green-600 dark:text-green-500">-{test.improvements.cost}%</span>
+                                  <span className="ml-1 text-green-600 dark:text-[#4FF8E5]">-{test.improvements.cost}%</span>
                                 )}
                               </div>
                               <div className="flex items-center">
-                                <Zap className="h-3 w-3 mr-1 text-purple-500" />
-                                <span className="text-muted-foreground">Speed: </span>
-                                <span className="ml-1 font-medium">
+                                <Zap className="h-3 w-3 mr-1 text-purple-500 dark:text-purple-400" />
+                                <span className="text-muted-foreground dark:text-[#B0B0B0]">Speed: </span>
+                                <span className="ml-1 font-medium dark:text-[#E0E0E0]">
                                   {test.bestModel?.time !== undefined ? test.bestModel.time.toFixed(1) : "0.0"}ms
                                 </span>
                                 {parseInt(test.improvements.time) > 0 && (
-                                  <span className="ml-1 text-green-600 dark:text-green-500">-{test.improvements.time}%</span>
+                                  <span className="ml-1 text-green-600 dark:text-[#4FF8E5]">-{test.improvements.time}%</span>
                                 )}
                               </div>
                             </div>
                           )}
                         </div>
                         <div className="ml-5 flex-shrink-0">
-                          <svg className="h-5 w-5 text-muted-foreground/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <svg className="h-5 w-5 text-muted-foreground/70 dark:text-[#B0B0B0]/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                           </svg>
                         </div>

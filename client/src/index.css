@@ -54,29 +54,49 @@
   }
 
   .dark {
-    --background: 0 0% 10%; /* Deep charcoal black (#181818) */
+    /* Base colors */
+    --background: 0 0% 7%; /* Deep charcoal black (#121212) */
     --foreground: 0 0% 88%; /* Soft white text (#E0E0E0) */
-    --muted: 0 0% 15%; /* Slightly lighter charcoal */
+    --muted: 0 0% 14%; /* Slightly lighter charcoal (#232323) */
     --muted-foreground: 0 0% 69%; /* Soft gray text (#B0B0B0) */
-    --popover: 0 0% 10%;
+    
+    /* UI element colors */
+    --popover: 0 0% 9%; /* Popover background (#161616) */
     --popover-foreground: 0 0% 88%;
-    --card: 0 0% 12%; /* Card background (#1E1E1E) */
+    --card: 0 0% 9%; /* Card background (#181818) */
     --card-foreground: 0 0% 88%;
-    --border: 0 0% 18%; /* Subtle borders */
-    --input: 0 0% 15%;
+    --border: 0 0% 16%; /* Subtle borders (#2A2A2A) */
+    --input: 0 0% 14%; /* Input background (#232323) */
+    
+    /* Accent colors */
     --primary: 175 100% 50%; /* Teal/cyan accent (#00F0FF) */
-    --primary-foreground: 0 0% 10%;
-    --secondary: 0 0% 15%;
+    --primary-foreground: 0 0% 7%;
+    --secondary: 0 0% 14%;
     --secondary-foreground: 0 0% 88%;
     --accent: 166 100% 64%; /* Greenish-teal for positive trends (#4FF8E5) */
-    --accent-foreground: 0 0% 10%;
+    --accent-foreground: 0 0% 7%;
     --destructive: 0 71% 68%; /* Red for negative trends (#FF5C5C) */
     --destructive-foreground: 0 0% 88%;
     --ring: 175 100% 50%;
     
     /* Shadows and glows */
-    --card-shadow: 0 4px 12px rgba(0, 240, 255, 0.08);
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    --card-highlight: 0 4px 12px rgba(0, 240, 255, 0.08);
     --element-glow: 0 0 12px rgba(0, 240, 255, 0.15);
+    --button-glow: 0 0 10px rgba(0, 240, 255, 0.3);
+    
+    /* Chart colors */
+    --chart-1: 175 100% 50%; /* Teal (#00F0FF) */
+    --chart-2: 166 100% 64%; /* Greenish-teal (#4FF8E5) */
+    --chart-3: 262 83% 58%; /* Purple (#986AFF) */
+    --chart-4: 27 98% 54%; /* Orange (#FF8B0D) */
+    --chart-5: 0 71% 68%; /* Red (#FF5C5C) */
+    
+    /* Status colors */
+    --success: 166 100% 64%; /* Greenish-teal (#4FF8E5) */
+    --warning: 39 100% 50%; /* Yellow-orange (#FFA500) */
+    --error: 0 71% 68%; /* Red (#FF5C5C) */
+    --info: 175 100% 50%; /* Teal (#00F0FF) */
   }
 }
 
@@ -138,4 +158,34 @@
 
 .dark .negative-value {
   @apply text-[#FF5C5C];
+}
+
+/* Dark mode floating elements */
+.dark .floating-element {
+  @apply bg-[#181818] border border-[#2A2A2A] shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.4)] transition-shadow duration-300;
+}
+
+/* Dark mode gradient accents */
+.dark .accent-gradient {
+  background: linear-gradient(135deg, rgba(0,240,255,0.2) 0%, rgba(79,248,229,0.1) 100%);
+}
+
+/* Dark mode glow effects */
+.dark .glow-accent {
+  @apply shadow-[0_0_15px_rgba(0,240,255,0.2)];
+}
+
+/* Dark mode button styles */
+.dark .accent-button {
+  @apply bg-[#00F0FF] text-[#121212] hover:bg-[#4FF8E5] border-none shadow-[0_0_10px_rgba(0,240,255,0.3)];
+}
+
+/* Dark mode card header and footer */
+.dark .card-header, .dark .card-footer {
+  @apply border-[#2A2A2A] bg-[#181818];
+}
+
+/* Dark mode hover effects */
+.dark .hover-effect {
+  @apply hover:bg-[#232323] transition-colors duration-150;
 }
