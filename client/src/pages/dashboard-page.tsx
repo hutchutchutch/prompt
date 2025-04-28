@@ -234,42 +234,42 @@ export default function DashboardPage() {
       {/* 1. Page Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-semibold">Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h1 className="text-2xl font-semibold dark:text-[#E0E0E0] dark:font-light">Dashboard</h1>
+          <p className="text-sm text-muted-foreground dark:text-[#B0B0B0] mt-1">
             Welcome back, {user?.username}
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="dark:bg-[#00F0FF] dark:text-[#121212] dark:hover:bg-[#4FF8E5] dark:border-none dark:shadow-[0_0_10px_rgba(0,240,255,0.3)]">
           <Link href="/wizard">New Evaluation</Link>
         </Button>
       </div>
 
       {/* 2. Summary / Recommendation Area */}
-      <Card className="mb-6">
+      <Card className="mb-6 dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1">
-              <h2 className="text-lg font-semibold mb-1">Evaluation Summary</h2>
-              <p className="text-sm text-card-foreground mb-3">
-                Prompt Version 3 with LLM <span className="font-medium">Claude 3</span> performed best for 
-                <span className="font-medium"> Summarization</span> based on ROUGE-L and Cost.
+              <h2 className="text-lg font-semibold mb-1 dark:text-[#E0E0E0] dark:font-light">Evaluation Summary</h2>
+              <p className="text-sm text-card-foreground dark:text-[#E0E0E0] mb-3">
+                Prompt Version 3 with LLM <span className="font-medium dark:text-[#00F0FF]">Claude 3</span> performed best for 
+                <span className="font-medium dark:text-[#00F0FF]"> Summarization</span> based on ROUGE-L and Cost.
               </p>
-              <p className="text-sm text-muted-foreground mb-2">
+              <p className="text-sm text-muted-foreground dark:text-[#B0B0B0] mb-2">
                 Key justification: Highest ROUGE-L score (0.78) with moderate estimated cost ($0.05 / 1k calls).
               </p>
             </div>
             <div className="flex-shrink-0 flex flex-col md:flex-row gap-3">
-              <div className="p-3 bg-muted rounded-lg text-center min-w-[100px]">
-                <p className="text-xs text-muted-foreground mb-1">Quality Score</p>
-                <p className="text-xl font-semibold">8.7<span className="text-xs text-muted-foreground">/10</span></p>
+              <div className="p-3 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-lg text-center min-w-[100px] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-1">Quality Score</p>
+                <p className="text-xl font-semibold dark:text-[#E0E0E0] dark:font-light metric-value">8.7<span className="text-xs text-muted-foreground dark:text-[#B0B0B0]">/10</span></p>
               </div>
-              <div className="p-3 bg-muted rounded-lg text-center min-w-[100px]">
-                <p className="text-xs text-muted-foreground mb-1">Est. Cost/1k</p>
-                <p className="text-xl font-semibold">$0.05</p>
+              <div className="p-3 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-lg text-center min-w-[100px] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-1">Est. Cost/1k</p>
+                <p className="text-xl font-semibold dark:text-[#E0E0E0] dark:font-light metric-value">$0.05</p>
               </div>
-              <div className="p-3 bg-muted rounded-lg text-center min-w-[100px]">
-                <p className="text-xs text-muted-foreground mb-1">Latency</p>
-                <p className="text-xl font-semibold">1.2s</p>
+              <div className="p-3 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-lg text-center min-w-[100px] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2)]">
+                <p className="text-xs text-muted-foreground dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:font-medium metric-label mb-1">Latency</p>
+                <p className="text-xl font-semibold dark:text-[#E0E0E0] dark:font-light metric-value">1.2s</p>
               </div>
             </div>
           </div>
@@ -277,42 +277,42 @@ export default function DashboardPage() {
       </Card>
 
       {/* 3. Context / Input Summary Area */}
-      <Card className="mb-8">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base font-medium">Evaluation Context</CardTitle>
+      <Card className="mb-8 dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
+        <CardHeader className="pb-2 dark:border-b dark:border-[#2A2A2A]">
+          <CardTitle className="text-base font-medium dark:text-[#E0E0E0] dark:font-light">Evaluation Context</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <h3 className="text-sm font-medium mb-1">Task Type</h3>
-              <div className="text-sm bg-blue-950/20 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 py-1 px-2 rounded inline-block">Summarization</div>
+              <h3 className="text-sm font-medium mb-1 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Task Type</h3>
+              <div className="text-sm bg-blue-950/20 dark:bg-[rgba(0,240,255,0.08)] text-blue-700 dark:text-[#00F0FF] py-1 px-2 rounded inline-block">Summarization</div>
               
-              <h3 className="text-sm font-medium mt-4 mb-1">Original Prompt</h3>
-              <p className="text-sm text-card-foreground bg-muted p-2 rounded border border-border">
+              <h3 className="text-sm font-medium mt-4 mb-1 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Original Prompt</h3>
+              <p className="text-sm text-card-foreground dark:text-[#E0E0E0] bg-muted dark:bg-[#232323] p-2 rounded border border-border dark:border-[#2A2A2A]">
                 Summarize the following text in 2-3 sentences while preserving the key points and main message.
               </p>
               
-              <h3 className="text-sm font-medium mt-4 mb-1">LLMs Tested</h3>
+              <h3 className="text-sm font-medium mt-4 mb-1 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">LLMs Tested</h3>
               <div className="flex flex-wrap gap-2">
-                <div className="text-xs bg-muted text-card-foreground py-1 px-2 rounded">GPT-4</div>
-                <div className="text-xs bg-muted text-card-foreground py-1 px-2 rounded">Claude 3</div>
-                <div className="text-xs bg-muted text-card-foreground py-1 px-2 rounded">Llama 3</div>
-                <div className="text-xs bg-muted text-card-foreground py-1 px-2 rounded">Mistral</div>
+                <div className="text-xs bg-muted dark:bg-[#232323] text-card-foreground dark:text-[#E0E0E0] py-1 px-2 rounded border dark:border-[#2A2A2A]">GPT-4</div>
+                <div className="text-xs bg-muted dark:bg-[#232323] text-card-foreground dark:text-[#E0E0E0] py-1 px-2 rounded border dark:border-[#2A2A2A]">Claude 3</div>
+                <div className="text-xs bg-muted dark:bg-[#232323] text-card-foreground dark:text-[#E0E0E0] py-1 px-2 rounded border dark:border-[#2A2A2A]">Llama 3</div>
+                <div className="text-xs bg-muted dark:bg-[#232323] text-card-foreground dark:text-[#E0E0E0] py-1 px-2 rounded border dark:border-[#2A2A2A]">Mistral</div>
               </div>
             </div>
             
             <div>
-              <h3 className="text-sm font-medium mb-1">Expected Output</h3>
-              <p className="text-sm text-card-foreground bg-muted p-2 rounded border border-border h-20 overflow-auto">
+              <h3 className="text-sm font-medium mb-1 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Expected Output</h3>
+              <p className="text-sm text-card-foreground dark:text-[#E0E0E0] bg-muted dark:bg-[#232323] p-2 rounded border border-border dark:border-[#2A2A2A] h-20 overflow-auto">
                 A concise summary that covers the main topics of the source text while maintaining accuracy and coherence.
               </p>
               
-              <h3 className="text-sm font-medium mt-4 mb-1">Evaluation Metrics</h3>
+              <h3 className="text-sm font-medium mt-4 mb-1 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Evaluation Metrics</h3>
               <div className="flex flex-wrap gap-2">
-                <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">ROUGE-L</div>
-                <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">Compression Ratio</div>
-                <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">Faithfulness</div>
-                <div className="text-xs bg-primary/10 text-primary py-1 px-2 rounded">Coherence</div>
+                <div className="text-xs bg-primary/10 dark:bg-[rgba(0,240,255,0.1)] text-primary dark:text-[#00F0FF] py-1 px-2 rounded dark:border dark:border-[#00F0FF]/20">ROUGE-L</div>
+                <div className="text-xs bg-primary/10 dark:bg-[rgba(0,240,255,0.1)] text-primary dark:text-[#00F0FF] py-1 px-2 rounded dark:border dark:border-[#00F0FF]/20">Compression Ratio</div>
+                <div className="text-xs bg-primary/10 dark:bg-[rgba(0,240,255,0.1)] text-primary dark:text-[#00F0FF] py-1 px-2 rounded dark:border dark:border-[#00F0FF]/20">Faithfulness</div>
+                <div className="text-xs bg-primary/10 dark:bg-[rgba(0,240,255,0.1)] text-primary dark:text-[#00F0FF] py-1 px-2 rounded dark:border dark:border-[#00F0FF]/20">Coherence</div>
               </div>
             </div>
           </div>
@@ -321,10 +321,10 @@ export default function DashboardPage() {
       
       {/* Category Navigation */}
       <div>
-        <h2 className="text-lg font-medium mb-4">Best Model by Category</h2>
+        <h2 className="text-lg font-medium mb-4 dark:text-[#E0E0E0] dark:font-light">Best Model by Category</h2>
         {isLoadingCategories ? (
           <div className="flex justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary dark:border-[#00F0FF]"></div>
           </div>
         ) : (
           <CategoryTabs 
@@ -372,38 +372,38 @@ export default function DashboardPage() {
       {/* 4. Main Content Area (Tabbed/Segmented View) */}
       <div className="mt-8">
         <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-4">Detailed Comparison Results</h2>
+          <h2 className="text-lg font-semibold mb-4 dark:text-[#E0E0E0] dark:font-light">Detailed Comparison Results</h2>
           
           <Tabs defaultValue="prompts" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="prompts" className="text-sm">Prompt Comparison</TabsTrigger>
-              <TabsTrigger value="models" className="text-sm">LLM Comparison</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-6 dark:bg-[#181818] dark:border dark:border-[#2A2A2A]">
+              <TabsTrigger value="prompts" className="text-sm data-[state=active]:dark:bg-[#00F0FF] data-[state=active]:dark:text-[#121212] dark:text-[#E0E0E0] dark:hover:bg-[#232323] dark:data-[state=active]:shadow-[0_0_10px_rgba(0,240,255,0.2)]">Prompt Comparison</TabsTrigger>
+              <TabsTrigger value="models" className="text-sm data-[state=active]:dark:bg-[#00F0FF] data-[state=active]:dark:text-[#121212] dark:text-[#E0E0E0] dark:hover:bg-[#232323] dark:data-[state=active]:shadow-[0_0_10px_rgba(0,240,255,0.2)]">LLM Comparison</TabsTrigger>
             </TabsList>
             
             <TabsContent value="prompts" className="space-y-6">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base font-medium">Prompt Versions Comparison</CardTitle>
-                  <p className="text-sm text-muted-foreground">
+              <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
+                <CardHeader className="pb-3 dark:border-b dark:border-[#2A2A2A]">
+                  <CardTitle className="text-base font-medium dark:text-[#E0E0E0] dark:font-light">Prompt Versions Comparison</CardTitle>
+                  <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">
                     Performance across different prompt variations
                   </p>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="relative overflow-x-auto rounded-md border border-border">
-                      <table className="w-full text-sm text-left">
-                        <thead className="text-xs bg-muted text-card-foreground">
+                    <div className="relative overflow-x-auto rounded-md border border-border dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                      <table className="w-full text-sm text-left dark:text-[#E0E0E0]">
+                        <thead className="text-xs bg-muted dark:bg-[#232323] text-card-foreground dark:text-[#B0B0B0]">
                           <tr>
-                            <th className="px-4 py-3 font-medium">Prompt Version</th>
-                            <th className="px-4 py-3 font-medium">Quality Score</th>
-                            <th className="px-4 py-3 font-medium">ROUGE-L</th>
-                            <th className="px-4 py-3 font-medium">Compression</th>
-                            <th className="px-4 py-3 font-medium">Cost ($)</th>
-                            <th className="px-4 py-3 font-medium">Latency (ms)</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Prompt Version</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Quality Score</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">ROUGE-L</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Compression</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Cost ($)</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Latency (ms)</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-border hover:bg-muted/50">
+                          <tr className="border-b border-border dark:border-[#2A2A2A] hover:bg-muted/50 dark:hover:bg-[#232323]">
                             <td className="px-4 py-3">Original</td>
                             <td className="px-4 py-3">7.6</td>
                             <td className="px-4 py-3">0.65</td>
@@ -411,7 +411,7 @@ export default function DashboardPage() {
                             <td className="px-4 py-3">0.08</td>
                             <td className="px-4 py-3">980</td>
                           </tr>
-                          <tr className="border-b border-border hover:bg-muted/50">
+                          <tr className="border-b border-border dark:border-[#2A2A2A] hover:bg-muted/50 dark:hover:bg-[#232323]">
                             <td className="px-4 py-3">Version 2</td>
                             <td className="px-4 py-3">8.2</td>
                             <td className="px-4 py-3">0.72</td>
@@ -419,24 +419,24 @@ export default function DashboardPage() {
                             <td className="px-4 py-3">0.06</td>
                             <td className="px-4 py-3">850</td>
                           </tr>
-                          <tr className="border-b border-border bg-green-950/10 dark:bg-green-900/20 hover:bg-green-950/20 dark:hover:bg-green-900/30">
-                            <td className="px-4 py-3 font-medium">Version 3 (Best)</td>
-                            <td className="px-4 py-3 font-medium">8.7</td>
-                            <td className="px-4 py-3 font-medium">0.78</td>
-                            <td className="px-4 py-3 font-medium">20%</td>
-                            <td className="px-4 py-3 font-medium">0.05</td>
-                            <td className="px-4 py-3 font-medium">920</td>
+                          <tr className="border-b border-border dark:border-[#2A2A2A] bg-green-950/10 dark:bg-[rgba(0,240,255,0.05)] hover:bg-green-950/20 dark:hover:bg-[rgba(0,240,255,0.08)]">
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">Version 3 (Best)</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">8.7</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">0.78</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">20%</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">0.05</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">920</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="h-64 bg-muted rounded-md p-4 flex items-center justify-center">
-                        <p className="text-sm text-muted-foreground">ROUGE-L Score Chart</p>
+                      <div className="h-64 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-md p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                        <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">ROUGE-L Score Chart</p>
                       </div>
-                      <div className="h-64 bg-muted rounded-md p-4 flex items-center justify-center">
-                        <p className="text-sm text-muted-foreground">Cost vs Quality Chart</p>
+                      <div className="h-64 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-md p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                        <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">Cost vs Quality Chart</p>
                       </div>
                     </div>
                   </div>
@@ -445,29 +445,29 @@ export default function DashboardPage() {
             </TabsContent>
             
             <TabsContent value="models" className="space-y-6">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base font-medium">LLM Performance Comparison</CardTitle>
-                  <p className="text-sm text-muted-foreground">
+              <Card className="dark:bg-[#181818] dark:border-[#2A2A2A] dashboard-card">
+                <CardHeader className="pb-3 dark:border-b dark:border-[#2A2A2A]">
+                  <CardTitle className="text-base font-medium dark:text-[#E0E0E0] dark:font-light">LLM Performance Comparison</CardTitle>
+                  <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">
                     Comparison across different models using the best prompt (Version 3)
                   </p>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="relative overflow-x-auto rounded-md border border-border">
-                      <table className="w-full text-sm text-left">
-                        <thead className="text-xs bg-muted text-card-foreground">
+                    <div className="relative overflow-x-auto rounded-md border border-border dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                      <table className="w-full text-sm text-left dark:text-[#E0E0E0]">
+                        <thead className="text-xs bg-muted dark:bg-[#232323] text-card-foreground dark:text-[#B0B0B0]">
                           <tr>
-                            <th className="px-4 py-3 font-medium">Model</th>
-                            <th className="px-4 py-3 font-medium">Quality Score</th>
-                            <th className="px-4 py-3 font-medium">ROUGE-L</th>
-                            <th className="px-4 py-3 font-medium">Faithfulness</th>
-                            <th className="px-4 py-3 font-medium">Cost ($)</th>
-                            <th className="px-4 py-3 font-medium">Latency (ms)</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Model</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Quality Score</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">ROUGE-L</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Faithfulness</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Cost ($)</th>
+                            <th className="px-4 py-3 font-medium dark:uppercase dark:tracking-wider dark:text-xs">Latency (ms)</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="border-b border-border hover:bg-muted/50">
+                          <tr className="border-b border-border dark:border-[#2A2A2A] hover:bg-muted/50 dark:hover:bg-[#232323]">
                             <td className="px-4 py-3">GPT-4</td>
                             <td className="px-4 py-3">8.5</td>
                             <td className="px-4 py-3">0.76</td>
@@ -475,15 +475,15 @@ export default function DashboardPage() {
                             <td className="px-4 py-3">0.12</td>
                             <td className="px-4 py-3">1100</td>
                           </tr>
-                          <tr className="border-b border-border bg-green-950/10 dark:bg-green-900/20 hover:bg-green-950/20 dark:hover:bg-green-900/30">
-                            <td className="px-4 py-3 font-medium">Claude 3 (Best)</td>
-                            <td className="px-4 py-3 font-medium">8.7</td>
-                            <td className="px-4 py-3 font-medium">0.78</td>
-                            <td className="px-4 py-3 font-medium">0.92</td>
-                            <td className="px-4 py-3 font-medium">0.05</td>
-                            <td className="px-4 py-3 font-medium">920</td>
+                          <tr className="border-b border-border dark:border-[#2A2A2A] bg-green-950/10 dark:bg-[rgba(0,240,255,0.05)] hover:bg-green-950/20 dark:hover:bg-[rgba(0,240,255,0.08)]">
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">Claude 3 (Best)</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">8.7</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">0.78</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">0.92</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">0.05</td>
+                            <td className="px-4 py-3 font-medium dark:text-[#00F0FF]">920</td>
                           </tr>
-                          <tr className="border-b border-border hover:bg-muted/50">
+                          <tr className="border-b border-border dark:border-[#2A2A2A] hover:bg-muted/50 dark:hover:bg-[#232323]">
                             <td className="px-4 py-3">Llama 3</td>
                             <td className="px-4 py-3">8.1</td>
                             <td className="px-4 py-3">0.74</td>
@@ -491,7 +491,7 @@ export default function DashboardPage() {
                             <td className="px-4 py-3">0.02</td>
                             <td className="px-4 py-3">750</td>
                           </tr>
-                          <tr className="border-b border-border hover:bg-muted/50">
+                          <tr className="border-b border-border dark:border-[#2A2A2A] hover:bg-muted/50 dark:hover:bg-[#232323]">
                             <td className="px-4 py-3">Mistral</td>
                             <td className="px-4 py-3">7.9</td>
                             <td className="px-4 py-3">0.71</td>
@@ -504,11 +504,11 @@ export default function DashboardPage() {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="h-64 bg-muted rounded-md p-4 flex items-center justify-center">
-                        <p className="text-sm text-muted-foreground">Performance Radar Chart</p>
+                      <div className="h-64 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-md p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                        <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">Performance Radar Chart</p>
                       </div>
-                      <div className="h-64 bg-muted rounded-md p-4 flex items-center justify-center">
-                        <p className="text-sm text-muted-foreground">Latency Distribution</p>
+                      <div className="h-64 bg-muted dark:bg-[#232323] dark:border dark:border-[#2A2A2A] rounded-md p-4 flex items-center justify-center dark:shadow-[0_4px_12px_rgba(0,0,0,0.1)]">
+                        <p className="text-sm text-muted-foreground dark:text-[#B0B0B0]">Latency Distribution</p>
                       </div>
                     </div>
                   </div>
@@ -521,7 +521,7 @@ export default function DashboardPage() {
       
       {/* 5. Recent Tests Section */}
       <div className="mt-8">
-        <h2 className="text-lg font-medium mb-4">Evaluation History</h2>
+        <h2 className="text-lg font-medium mb-4 dark:text-[#E0E0E0] dark:font-light">Evaluation History</h2>
         
         {!user ? (
           <Card>

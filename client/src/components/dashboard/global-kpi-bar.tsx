@@ -169,9 +169,9 @@ export function GlobalKPIBar({
           
           {/* Cost Metric */}
           <div className="p-3">
-            <p className="text-sm font-medium text-gray-600">Cost</p>
+            <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Cost</p>
             <div className="flex items-baseline">
-              <p className="text-lg font-semibold text-gray-900">${averageCost.toFixed(5)}</p>
+              <p className="text-lg font-semibold text-gray-900 dark:text-[#E0E0E0] dark:font-light metric-value">${averageCost.toFixed(5)}</p>
               
               {deltas.cost !== 0 && (
                 <TooltipProvider>
@@ -186,21 +186,21 @@ export function GlobalKPIBar({
                         {formatDelta(deltas.cost)}
                       </div>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p className="text-xs">Compared with average across all task types</p>
+                    <TooltipContent side="bottom" className="dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
+                      <p className="text-xs dark:text-[#B0B0B0]">Compared with average across all task types</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               )}
             </div>
-            <p className="text-xs text-gray-600">Avg cost per run</p>
+            <p className="text-xs text-gray-600 dark:text-[#B0B0B0]">Avg cost per run</p>
           </div>
           
           {/* Speed Metric */}
           <div className="p-3">
-            <p className="text-sm font-medium text-gray-600">Speed</p>
+            <p className="text-sm font-medium text-gray-600 dark:text-[#B0B0B0] dark:uppercase dark:tracking-wider dark:text-xs dark:font-medium metric-label">Speed</p>
             <div className="flex items-baseline">
-              <p className="text-lg font-semibold text-gray-900">{averageSpeed.toFixed(1)} s</p>
+              <p className="text-lg font-semibold text-gray-900 dark:text-[#E0E0E0] dark:font-light metric-value">{averageSpeed.toFixed(1)} s</p>
               
               {deltas.speed !== 0 && (
                 <TooltipProvider>
@@ -215,14 +215,14 @@ export function GlobalKPIBar({
                         {formatDelta(deltas.speed)}
                       </div>
                     </TooltipTrigger>
-                    <TooltipContent side="bottom">
-                      <p className="text-xs">Compared with average across all task types</p>
+                    <TooltipContent side="bottom" className="dark:bg-[#181818] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,240,255,0.08)]">
+                      <p className="text-xs dark:text-[#B0B0B0]">Compared with average across all task types</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               )}
             </div>
-            <p className="text-xs text-gray-600">Avg total latency</p>
+            <p className="text-xs text-gray-600 dark:text-[#B0B0B0]">Avg total latency</p>
           </div>
         </div>
       </CardContent>
