@@ -236,9 +236,6 @@ export default function IndexPage() {
           <div className="h-full flex items-center justify-center">
             <div 
               className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-md transform transition-all duration-500 ease-in-out hover:shadow-lg"
-              style={{ 
-                animation: 'pulse 2s infinite ease-in-out',
-              }}
             >
               <div className="bg-primary text-white px-6 py-4">
                 <h3 className="text-lg font-semibold flex items-center justify-between">
@@ -251,13 +248,7 @@ export default function IndexPage() {
                 </h3>
               </div>
               
-              <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes pulse {
-                  0% { transform: scale(1); }
-                  50% { transform: scale(1.02); }
-                  100% { transform: scale(1); }
-                }
-                
+              <style dangerouslySetInnerHTML={{ __html: `                
                 @keyframes fadeIn {
                   0% { opacity: 0; }
                   100% { opacity: 1; }
