@@ -298,10 +298,7 @@ export default function IndexPage() {
                       <AnimatedNumber 
                         value={92} 
                         className="text-xs font-medium"
-                        springOptions={{
-                          bounce: 0.25,
-                          duration: 1500,
-                        }}
+                        duration={1500}
                       />
                       <span className="text-xs font-medium">/100</span>
                     </div>
@@ -318,10 +315,7 @@ export default function IndexPage() {
                           value={metric.score} 
                           className="text-sm font-medium text-gray-900"
                           formatOptions={{ decimals: 2 }}
-                          springOptions={{
-                            bounce: 0,
-                            duration: 1000,
-                          }}
+                          duration={1500}
                         />
                       </div>
                       <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
