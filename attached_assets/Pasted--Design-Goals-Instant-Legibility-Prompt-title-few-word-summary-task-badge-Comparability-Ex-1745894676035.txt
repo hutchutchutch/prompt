@@ -1,0 +1,109 @@
+🎯 Design Goals
+Instant Legibility → Prompt title, few-word summary, task badge.
+
+Comparability → Expose the key “decision” attributes inside the card face.
+
+Predictive Peeks → Side cards give enough info to tease next choice.
+
+Motion With Meaning → Animations should reinforce state change, not distract.
+
+🛠️ Concrete Recommendations
+1. Card Canvas & Shape
+
+Property	Prompt Card	Model Card
+Aspect	4 : 3 (e.g. 260 × 195 px)	16 : 9 mini-landscape (320 × 180 px)
+Radius	12 px	12 px
+Elevation	shadow-card default; shadow-card-xl for active	Same
+Active Scale	1.0	1.0
+Side-Peek Scale	0.93	0.93
+Inactive	0.85 scale, 0 opacity	0.85 scale, 0 opacity
+Why a wider model card? Outputs are paragraphs—landscape lets you show two lines + fade mask.
+
+2. Information Layout
+Prompt Card (front face)
+scss
+Copy
+Edit
+[TaskBadge]    ⋮
+Title (1–2 lines, 600 weight)
+————————————————————
+2-line synopsis (clamp)
+Meta row:
+   🏷 Token Count    ⏰ Estimated Cost
+Clamp body text with CSS line-clamp-2 + gradient fade bottom.
+
+TaskBadge color-coded: Explanation (teal), Summarization (purple), etc.
+
+Model Card (front face)
+pgsql
+Copy
+Edit
+[Provider Chip]     ⋮
+Model Name (bold)
+————————————————————
+Cost / 1k tokens   |  Speed  |  Context size
+1-line sample output (fade)
+3. Side-Peek Reveal
+
+State	X-offset	Visible %	Interaction
+Prev	–40 %	~60 % of card	Tap / click brings to front
+Next	+40 %	same	—
+Give peeks cursor pointer or tap-to-select; drop 3-D rotation (Y-axis) and shadows—simpler, crisper.
+
+4. Animation Sequence (Framer-Motion)
+ts
+Copy
+Edit
+transition = { duration: 0.45, ease: [0.45, 0, 0.2, 1] } // custom cubic
+Carousel shift (x spring + opacity fade).
+
+onAnimationComplete → fire store.fetchMetrics.
+
+Evaluation card skeleton → odometer roll.
+
+Glow backdrop springs from scale: .4 → 1, opacity: 0 → 0.6.
+
+Chain with Framer’s useAnimationControls or variants + delays, ensuring motion order is deterministic.
+
+5. Visual Feedback on Sync
+Top-Right of Evaluation Card: mini “computing ⚙️” spinner while fetching.
+
+Slide-In Pill bottom-left:
+“Evaluating Chain of Thought › Claude 3 Opus”.
+Auto-dismiss after 1 s.
+
+6. Accessibility & Readability
+
+Change	Rationale
+Min body text 14 px → 16 px	WCAG AA on dark bg.
+Increase card text contrast: text-zinc-100 vs #121212	Easier scanning.
+Add aria-live="polite" to Evaluation metrics region	Announces updates for screen readers.
+7. Responsive Behaviour
+≥1024 px: Two columns (carousels left, evaluation right).
+
+768-1023 px: Carousels 100 % width top, evaluation below; side-peeks shrink to 20 % visible.
+
+≤767 px: Switch to horizontal scroll (snap-x) list with swipe; evaluation collapses into accordion triggered by active card.
+
+8. Extra Data Fields Worth Adding
+
+Field	Type	Shown on	Benefit
+tokenEstimate	number	Prompt card	Sets expectation for cost.
+bestModelId	string	Prompt card	Auto-highlights strongest combo later.
+latencyAvg	ms	Model card	Direct speed cue.
+gradeLetter	A/B/C	Eval card	Immediate gestalt score.
+📊 Visual Mock (ASCII quick)
+pgsql
+Copy
+Edit
+┌─────────────────────────────┐      ┌──────────────────────────────┐
+│ [Explanation]        ⋮      │      │ Performance Evaluation   ⋮   │
+│ Chain of Thought           │      │ ★4.2 / 5   Glow ⬤⬤⬤⬤▫️      │
+│─────────────────────────────│      │ Token In   124   ($0.0006)   │
+│ Explain the concept of …   │      │ Token Out  432   ($0.0086)   │
+│─────────────────────────────│      │ Latency    320 ms / 4.3 s    │
+│ 🏷 128 tok   ⏰ $0.009      │      │ Cost       $0.0092           │
+└─────────────────────────────┘      └──────────────────────────────┘
+🔑 Key Takeaway
+Simplify the 3-D gimmick, widen cards for breathing room, surface comparison data directly on each card, and choreograph the motion so every change teaches the user what happened.
+Those tweaks turn the carousel from eye-candy into a decision dashboard that embodies the Click.AI polish.
