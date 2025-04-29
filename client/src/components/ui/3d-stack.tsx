@@ -50,35 +50,61 @@ interface CuboidProps {
 const Cuboid: React.FC<CuboidProps> = ({ depth, height, children, className = '', style = {} }) => (
   <div
     className={`absolute left-1/2 -translate-x-1/2 preserve-3d ${className}`}
-    style={{ height, ...style }}
+    style={{ height, width: '100%', ...style }}
   >
     {/* Front face */}
-    <div className="absolute inset-0 bg-card/90 rounded-lg shadow-card backdrop-blur-sm border border-white/10">
+    <div className="absolute inset-0 bg-card/95 rounded-lg shadow-card backdrop-blur-sm border border-white/10 preserve-3d">
       {children}
     </div>
 
-    {/* Top face */}
+    {/* Back face */}
     <div
-      className="absolute inset-x-0 -top-[1px] h-[1px] bg-gradient-to-b from-white/20 to-transparent rounded-t-lg"
-      style={{ transform: `translateZ(${depth / 2}px) rotateX(90deg)` }}
+      className="absolute inset-0 bg-card/40 rounded-lg border border-white/5"
+      style={{ transform: `translateZ(-${depth}px) rotateY(180deg)` }}
     />
 
-    {/* Right side face */}
+    {/* Top face */}
     <div
-      className="absolute -right-[1px] inset-y-0 w-[1px] bg-gradient-to-l from-white/10 to-transparent rounded-r-lg"
-      style={{ transform: `translateZ(${depth / 2}px) rotateY(-90deg)` }}
+      className="absolute inset-x-0 -top-[2px] h-[2px] bg-primary/20 rounded-t-lg"
+      style={{ transform: `translateZ(0px) rotateX(90deg) translateZ(${depth/2}px)` }}
+    />
+
+    {/* Bottom face */}
+    <div
+      className="absolute inset-x-0 -bottom-[2px] h-[2px] bg-primary/10 rounded-b-lg"
+      style={{ transform: `translateZ(0px) rotateX(-90deg) translateZ(${depth/2}px)` }}
+    />
+
+    {/* Right face */}
+    <div
+      className="absolute top-0 bottom-0 -right-[2px] bg-card/60 border-r border-white/5"
+      style={{ 
+        transform: `translateX(${depth/2}px) rotateY(90deg)`,
+        width: `${depth}px`,
+        transformOrigin: 'right center'
+      }}
     />
     
-    {/* Left side face */}
+    {/* Left face */}
     <div
-      className="absolute -left-[1px] inset-y-0 w-[1px] bg-gradient-to-r from-white/10 to-transparent rounded-l-lg"
-      style={{ transform: `translateZ(${depth / 2}px) rotateY(90deg)` }}
+      className="absolute top-0 bottom-0 -left-[2px] bg-card/60 border-l border-white/5"
+      style={{ 
+        transform: `translateX(-${depth/2}px) rotateY(-90deg)`,
+        width: `${depth}px`,
+        transformOrigin: 'left center'
+      }}
     />
     
-    {/* Bottom edge glow - for the top block */}
+    {/* Top edge glow */}
     <div
-      className="absolute inset-x-0 -bottom-[2px] h-[2px] bg-primary/30 rounded-b-lg blur-[1px]"
-      style={{ transform: `translateZ(${depth / 2}px)` }}
+      className="absolute inset-x-[20%] -top-[1px] h-[2px] bg-primary/40 rounded-full blur-[1px]"
+      style={{ transform: `translateZ(${depth/2}px)` }}
+    />
+    
+    {/* Bottom edge glow */}
+    <div
+      className="absolute inset-x-[20%] -bottom-[1px] h-[2px] bg-primary/30 rounded-full blur-[2px]"
+      style={{ transform: `translateZ(${depth/2}px)` }}
     />
   </div>
 );
@@ -93,19 +119,24 @@ const getProvider = (id: string) => {
   return 'Other';
 };
 
-// Animation variants for content
+// Animation variants for content - horizontal spinning cube effect
 const contentVariants = {
-  enter: { opacity: 0, y: 20, rotateX: -6 },
+  enter: { 
+    opacity: 0, 
+    rotateY: -90,
+    x: -20,
+    transition: { duration: 0, ease: 'easeOut' }
+  },
   center: { 
     opacity: 1, 
-    y: 0, 
-    rotateX: 0, 
-    transition: { duration: 0.35, ease: 'easeOut' } 
+    rotateY: 0,
+    x: 0, 
+    transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1.0] } 
   },
   exit: { 
     opacity: 0, 
-    y: -20, 
-    rotateX: 6,
+    rotateY: 90,
+    x: 20,
     transition: { duration: 0.25, ease: 'easeIn' } 
   },
 };
@@ -264,16 +295,44 @@ const ModelBlock: React.FC<{ depth: number, topOffset: number }> = ({ depth, top
  * Complete 3D stack with both blocks
  */
 export const ThreeDStack: React.FC = () => {
+  // Auto-animate the entire stack for a subtle floating effect
   return (
     <div className="relative w-[320px] mx-auto perspective-800 z-10">
       <motion.div 
-        className="relative preserve-3d rotate-x-8 rotate-y-5"
-        whileHover={{ y: -8 }}
-        transition={{ type: 'spring', stiffness: 120, damping: 12 }}
+        className="relative preserve-3d"
+        animate={{ 
+          rotateX: [-8, -6, -8], 
+          rotateY: [5, 7, 5],
+          y: [0, -5, 0]
+        }}
+        transition={{ 
+          duration: 6, 
+          ease: "easeInOut", 
+          repeat: Infinity,
+          times: [0, 0.5, 1]
+        }}
+        whileHover={{ 
+          scale: 1.03, 
+          rotateX: -10, 
+          rotateY: 8,
+          transition: { duration: 0.3, ease: "easeOut" } 
+        }}
       >
+        {/* Add subtle background glow to emphasize 3D effect */}
+        <div 
+          className="absolute -inset-10 bg-primary/5 rounded-full blur-2xl opacity-50 -z-10"
+          style={{ transform: 'translateZ(-50px)' }}
+        />
+        
         <PromptBlock depth={40} />
         <ModelBlock depth={40} topOffset={180} />
       </motion.div>
+      
+      {/* Add subtle reflection effect */}
+      <div 
+        className="absolute w-full h-10 -bottom-10 bg-primary/10 blur-xl opacity-30 rounded-full scale-x-75"
+        style={{ transform: 'rotateX(70deg) translateY(20px)' }}
+      />
     </div>
   );
 };
