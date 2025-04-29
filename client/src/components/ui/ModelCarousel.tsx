@@ -145,8 +145,19 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
   const provider = getProvider(model.id);
   
   return (
-    <Card className={`h-full overflow-hidden transition-all duration-200 ${isSelected ? 'shadow-lg animate-float' : 'shadow'}`}>
-      <CardContent className="p-5 flex flex-col h-full">
+    <motion.div 
+      className={`h-full overflow-hidden rounded-lg border transition-all duration-300 ${
+        isSelected 
+          ? 'bg-card text-card-foreground shadow-lg border-primary/30' 
+          : 'bg-background/80 text-muted-foreground shadow border-border/50'
+      }`}
+      animate={isSelected ? { y: [0, -5, 0], boxShadow: "0 10px 25px rgba(79, 248, 229, 0.2)" } : {}}
+      transition={isSelected ? { 
+        y: { repeat: Infinity, duration: 6, ease: "easeInOut" },
+        boxShadow: { repeat: Infinity, duration: 3, ease: "easeInOut" }
+      } : {}}
+    >
+      <div className="p-5 flex flex-col h-full">
         <div className="flex justify-between items-start mb-3">
           <h3 className="font-bold text-lg truncate">{model.title}</h3>
           <div className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
@@ -161,8 +172,8 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
         <div className="mt-3 pt-3 border-t border-border/40 flex justify-between items-center text-xs text-muted-foreground">
           <div>ID: {model.id}</div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </motion.div>
   );
 };
 

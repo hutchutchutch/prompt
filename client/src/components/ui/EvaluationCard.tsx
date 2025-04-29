@@ -81,6 +81,8 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
 
   // Setup a timer to trigger the animation after the odometer animation should be complete
   useEffect(() => {
+    if (!metrics) return;
+    
     const timer = setTimeout(() => {
       setAnimationComplete(true);
       if (onAnimationComplete) {
@@ -94,15 +96,19 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
   }, [metrics, onAnimationComplete]);
   
   return (
-    <Card className="h-full flex flex-col mx-auto relative overflow-hidden">
+    <Card className="h-full flex flex-col mx-auto relative overflow-hidden shadow-lg">
       {/* Glow background effect - animated based on score */}
-      <motion.div
-        className="absolute inset-0 rounded-lg bg-teal-400/50 blur-2xl"
-        variants={glowVariants}
-        initial="hidden"
-        animate={animationComplete ? "visible" : "hidden"}
-        custom={metrics.score}
-      />
+      {metrics && (
+        <motion.div
+          className="absolute inset-0 rounded-lg bg-primary/30 blur-2xl"
+          initial={{ opacity: 0, scale: 0.2 }}
+          animate={{ 
+            opacity: 0.4 * (metrics.score / 5), 
+            scale: 0.5 + (metrics.score / 10),
+          }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
+      )}
       
       <CardHeader className="bg-primary text-primary-foreground rounded-t-lg relative z-10">
         <CardTitle className="text-xl font-semibold">Performance Evaluation</CardTitle>
