@@ -98,37 +98,17 @@ export const PromptCarousel: React.FC = () => {
       <div className="relative flex flex-col py-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold text-foreground">Choose your prompt:</h2>
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={prevPrompt}
-              className="h-8 px-2 hover:bg-primary/10 hover:text-primary"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={nextPrompt}
-              className="h-8 px-2 hover:bg-primary/10 hover:text-primary"
-            >
-              Next
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 px-3 bg-primary/10 hover:bg-primary/20 text-primary"
-            >
-              Create New
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-8 px-3 bg-primary/10 hover:bg-primary/20 text-primary"
+          >
+            Create New
+          </Button>
         </div>
         
         {/* Task filter tags */}
-        <div className="flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-2">
           {formats.map(format => (
             <button
               key={format}
@@ -145,11 +125,37 @@ export const PromptCarousel: React.FC = () => {
             </button>
           ))}
         </div>
+        {/* Navigation buttons below tags */}
+        <div className="flex space-x-2 mb-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={prevPrompt}
+            className="h-8 px-2 hover:bg-primary/10 hover:text-primary"
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={nextPrompt}
+            className="h-8 px-2 hover:bg-primary/10 hover:text-primary"
+          >
+            Next
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
+        </div>
         
         <div
-          className="relative w-full h-[280px] flex items-center justify-center"
+          className="relative w-full h-[280px] flex items-center justify-center overflow-hidden px-[14px]"
           aria-live="polite"
+          style={{
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
+            maskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)"
+          }}
         >
+          {/* Fade cards at edges using CSS mask-image */}
           {/* Previous Prompt Card */}
           <div
             className="absolute left-0 top-0 z-10"
@@ -244,7 +250,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, isSelected, isPrevious,
   // Use a consistent dark badge style for all categories
   return (
     <motion.div
-      className={`overflow-hidden rounded-xl border aspect-[3/4] w-full max-w-[200px] transition-all duration-300 cursor-pointer ${
+      className={`overflow-hidden rounded-xl border aspect-[3/4] w-full max-w-[400px] max-h-[280px] h-full transition-all duration-300 cursor-pointer ${
         isSelected
           ? 'bg-card text-card-foreground shadow-xl border-primary/30'
           : 'bg-background/80 text-muted-foreground shadow border-border/50'
@@ -253,7 +259,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, isSelected, isPrevious,
       animate={isSelected
         ? { scale: 1, opacity: 1, y: 0 }
         : (isPrevious || isNext)
-          ? { scale: 0.93, opacity: 0.9, x: isPrevious ? '-15%' : '15%' }
+          ? { scale: 0.93, opacity: 0.9, x: isPrevious ? -220 : 220 }
           : { scale: 0.85, opacity: 0 }
       }
       transition={{

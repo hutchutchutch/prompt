@@ -50,7 +50,17 @@ export const ModelCarousel: React.FC = () => {
   return (
     <div className="relative flex flex-col py-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-foreground">Model Comparison</h2>
+        <h2 className="text-2xl font-bold text-foreground">
+          Model chosen: {models[modelIdx].title} from {(() => {
+            const id = models[modelIdx].id;
+            if (id.includes('claude')) return 'Anthropic';
+            if (id.includes('gpt')) return 'OpenAI';
+            if (id.includes('gemini')) return 'Google';
+            if (id.includes('llama')) return 'Meta';
+            if (id.includes('mixtral')) return 'Mistral';
+            return 'Other';
+          })()}
+        </h2>
         <div className="flex space-x-2">
           <Button 
             variant="outline" 
@@ -73,10 +83,15 @@ export const ModelCarousel: React.FC = () => {
         </div>
       </div>
       
-      <div 
-        className="relative w-full h-[200px] flex items-center justify-center"
+      <div
+        className="relative w-full h-[200px] flex items-center justify-center overflow-hidden px-[14px]"
         aria-live="polite"
+        style={{
+          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
+          maskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)"
+        }}
       >
+        {/* Fade cards at edges using CSS mask-image */}
         {/* Previous Model Card */}
         <div 
           className="absolute left-0 top-0 z-10"
@@ -192,21 +207,21 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
   const stats = ModelStats[model.id] || { cost: "?", speed: "?", context: "?" };
   
   return (
-    <motion.div 
-      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[240px] transition-all duration-300 cursor-pointer ${
-        isSelected 
-          ? 'bg-card text-card-foreground shadow-xl border-primary/30' 
+    <motion.div
+      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[480px] max-h-[200px] h-full transition-all duration-300 cursor-pointer ${
+        isSelected
+          ? 'bg-card text-card-foreground shadow-xl border-primary/30'
           : 'bg-background/80 text-muted-foreground shadow border-border/50'
       }`}
       initial={false}
-      animate={isSelected 
-        ? { scale: 1, opacity: 1, y: 0 } 
-        : (isPrevious || isNext) 
-          ? { scale: 0.93, opacity: 0.9, x: isPrevious ? '-15%' : '15%' } 
+      animate={isSelected
+        ? { scale: 1, opacity: 1, y: 0 }
+        : (isPrevious || isNext)
+          ? { scale: 0.93, opacity: 0.9, x: isPrevious ? -254 : 254 }
           : { scale: 0.85, opacity: 0 }
       }
-      transition={{ 
-        duration: 0.45, 
+      transition={{
+        duration: 0.45,
         ease: [0.45, 0, 0.2, 1],
       }}
       role="button"
@@ -214,44 +229,29 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
       tabIndex={isSelected ? 0 : -1}
     >
       <div className="p-5 flex flex-col h-full">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="font-semibold text-base sm:text-lg text-zinc-100 truncate max-w-[65%]">
-            {model.title}
-          </h3>
+        <h3 className="font-semibold text-base sm:text-lg text-zinc-100 mb-2">Output</h3>
+        <div className="flex-grow overflow-auto text-sm text-zinc-300 mb-2">
+          {model.content}
+        </div>
+        <div className="h-px w-full bg-border/40 my-2"></div>
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex gap-4">
+            <div>
+              <span className="text-muted-foreground">Cost: </span>
+              <span className="font-medium text-zinc-300">{stats.cost}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Speed: </span>
+              <span className="font-medium text-zinc-300">{stats.speed}</span>
+            </div>
+            <div>
+              <span className="text-muted-foreground">Context: </span>
+              <span className="font-medium text-zinc-300">{stats.context}</span>
+            </div>
+          </div>
           <div className={`text-xs px-2.5 py-1 rounded-full border ${providerColor}`}>
             {provider}
           </div>
-        </div>
-        
-        <div className="h-px w-full bg-border/40 mb-3"></div>
-        
-        <div className="grid grid-cols-3 gap-2 text-xs mb-3">
-          <div className="flex flex-col">
-            <span className="text-muted-foreground mb-1">Cost</span>
-            <span className="font-medium text-zinc-300">{stats.cost}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-muted-foreground mb-1">Speed</span>
-            <span className="font-medium text-zinc-300">{stats.speed}</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-muted-foreground mb-1">Context</span>
-            <span className="font-medium text-zinc-300">{stats.context}</span>
-          </div>
-        </div>
-        
-        <div className="flex-grow overflow-hidden text-sm text-zinc-300 line-clamp-1 relative">
-          {model.content}
-          <div className="absolute bottom-0 right-0 w-20 h-full bg-gradient-to-l from-card to-transparent"></div>
-        </div>
-        
-        <div className="mt-3 pt-3 border-t border-border/40 flex items-center text-xs text-muted-foreground justify-between">
-          <div className="flex items-center gap-1.5">
-            <span>{model.id}</span>
-          </div>
-          {isSelected && (
-            <div className="text-primary text-xs font-medium">Selected</div>
-          )}
         </div>
       </div>
     </motion.div>
