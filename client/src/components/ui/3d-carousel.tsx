@@ -51,15 +51,15 @@ export function ThreeDPhotoCarousel({
           <ChevronLeft className="h-6 w-6" />
         </button>
         
-        <div className="relative h-[200px] w-full max-w-4xl mx-auto perspective-1000">
+        <div className="relative h-[200px] w-full max-w-[250px] mx-auto perspective-1000">
           {items.map((item, index) => (
             <Card
               key={index}
               className={cn(
-                "absolute top-0 left-0 right-0 mx-auto transition-all duration-500 ease-in-out shadow-lg",
-                getPosition(index) === "active" && "z-20 translate-z-0 opacity-100 w-full md:w-[70%] scale-100",
-                getPosition(index) === "prev" && "z-10 -translate-x-[30%] translate-z-[-80px] opacity-80 w-[60%] md:w-[50%] rotate-y-15 scale-90",
-                getPosition(index) === "next" && "z-10 translate-x-[30%] translate-z-[-80px] opacity-80 w-[60%] md:w-[50%] -rotate-y-15 scale-90",
+                "absolute top-0 left-0 right-0 mx-auto transition-all duration-500 ease-in-out shadow-lg max-w-[250px]",
+                getPosition(index) === "active" && "z-20 translate-z-0 opacity-100 w-full scale-100",
+                getPosition(index) === "prev" && "z-10 -translate-x-[30%] translate-z-[-80px] opacity-80 w-[90%] rotate-y-15 scale-90",
+                getPosition(index) === "next" && "z-10 translate-x-[30%] translate-z-[-80px] opacity-80 w-[90%] -rotate-y-15 scale-90",
                 getPosition(index) === "inactive" && "opacity-0 scale-75 translate-z-[-120px]"
               )}
               onClick={getPosition(index) === "prev" ? handlePrev : getPosition(index) === "next" ? handleNext : undefined}

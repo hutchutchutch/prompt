@@ -225,10 +225,12 @@ export default function IndexPage() {
             </h1>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="col-span-1 lg:col-span-2">
-              <ThreeDPhotoCarousel items={promptTechniques} label="Prompts" />
-              <ThreeDPhotoCarousel items={modelOutputs} label="Models" />
+          <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
+            <div className="lg:w-1/2 flex flex-col items-center">
+              <div className="w-full max-w-xs">
+                <ThreeDPhotoCarousel items={promptTechniques} label="Prompts" />
+                <ThreeDPhotoCarousel items={modelOutputs} label="Models" />
+              </div>
               
               <div className="flex gap-4 mt-6 justify-center">
                 <Button asChild size="lg">
@@ -245,7 +247,7 @@ export default function IndexPage() {
               </div>
             </div>
             
-            <div className="col-span-1 flex items-start">
+            <div className="lg:w-1/2">
               <EvaluationCard 
                 overallScore={evaluationData.overallScore}
                 inputTokens={evaluationData.inputTokens}
