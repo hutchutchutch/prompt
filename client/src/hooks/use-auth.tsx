@@ -66,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         
         // Otherwise try the API
         const res = await fetch("/api/user");
+        console.log("[useAuth] /api/user response status:", res.status);
         if (!res.ok) {
           if (res.status === 401) {
             return null;

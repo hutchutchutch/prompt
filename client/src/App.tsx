@@ -1,7 +1,8 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
+import { AnimatePresence } from "framer-motion";
 import NotFound from "@/pages/not-found";
 import IndexPage from "@/pages/index-page";
 import AuthPage from "@/pages/auth-page";
@@ -13,17 +14,21 @@ import AdminPage from "@/pages/admin-page";
 import { ProtectedRoute } from "@/lib/protected-route";
 
 function Router() {
+  const [location] = useLocation();
+  
   return (
-    <Switch>
-      <Route path="/" component={IndexPage} />
-      <Route path="/auth" component={AuthPage} />
-      <ProtectedRoute path="/dashboard" component={DashboardPage} />
-      <ProtectedRoute path="/wizard/:step?" component={WizardPage} />
-      <ProtectedRoute path="/results/:id" component={ResultsPage} />
-      <ProtectedRoute path="/library" component={LibraryPage} />
-      <ProtectedRoute path="/admin" component={AdminPage} />
-      <Route component={NotFound} />
-    </Switch>
+    <AnimatePresence mode="wait">
+      <Switch key={location}>
+        <Route path="/" component={IndexPage} />
+        <Route path="/auth" component={AuthPage} />
+        <ProtectedRoute path="/dashboard" component={DashboardPage} />
+        <ProtectedRoute path="/wizard/:step?" component={WizardPage} />
+        <ProtectedRoute path="/results/:id" component={ResultsPage} />
+        <ProtectedRoute path="/library" component={LibraryPage} />
+        <ProtectedRoute path="/admin" component={AdminPage} />
+        <Route component={NotFound} />
+      </Switch>
+    </AnimatePresence>
   );
 }
 

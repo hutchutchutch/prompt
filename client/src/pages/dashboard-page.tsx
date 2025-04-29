@@ -10,7 +10,6 @@ import { CalendarIcon, Timer, DollarSign, BarChart2, Award, Zap, TrendingUp } fr
 import { formatDistanceToNow } from "date-fns";
 import { PromptTest } from "@/types";
 import { Badge } from "@/components/ui/badge";
-import { TaskCategorySelector } from "@/components/task-category-selector";
 import { CategoryTabs } from "@/components/dashboard/category-tabs";
 import { GlobalKPIBar } from "@/components/dashboard/global-kpi-bar";
 import { taskCategories } from "@/data/task-categories";
@@ -239,8 +238,14 @@ export default function DashboardPage() {
             Welcome back, {user?.username}
           </p>
         </div>
-        <Button asChild className="dark:bg-[#1D1D1D] dark:text-[#4FF8E5] dark:hover:bg-[#252525] dark:border dark:border-[#2A2A2A] dark:hover:shadow-[0_0_8px_rgba(79,248,229,0.5)] dark:transition-all dark:duration-300 dark:rounded-lg">
-          <Link href="/wizard">New Evaluation</Link>
+        <Button 
+          className="dark:bg-[#1D1D1D] dark:text-[#4FF8E5] dark:hover:bg-[#252525] dark:border dark:border-[#2A2A2A] dark:hover:shadow-[0_0_8px_rgba(79,248,229,0.5)] dark:transition-all dark:duration-300 dark:rounded-lg"
+          onClick={() => {
+            console.log('Navigating to /wizard');
+            navigate('/wizard');
+          }}
+        >
+          New Evaluation
         </Button>
       </div>
 
@@ -587,8 +592,14 @@ export default function DashboardPage() {
           <Card className="dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] transition-all duration-300 rounded-xl overflow-hidden">
             <CardContent className="h-48 flex flex-col items-center justify-center p-6">
               <p className="text-sm text-muted-foreground dark:text-[#AAAAAA] mb-6">You haven't run any evaluations yet</p>
-              <Button asChild className="dark:bg-[#1D1D1D] dark:text-[#4FF8E5] dark:hover:bg-[#252525] dark:border dark:border-[#2A2A2A] dark:hover:shadow-[0_0_8px_rgba(79,248,229,0.5)] dark:transition-all dark:duration-300 dark:rounded-lg">
-                <Link href="/wizard">Run your first evaluation</Link>
+              <Button 
+                className="dark:bg-[#1D1D1D] dark:text-[#4FF8E5] dark:hover:bg-[#252525] dark:border dark:border-[#2A2A2A] dark:hover:shadow-[0_0_8px_rgba(79,248,229,0.5)] dark:transition-all dark:duration-300 dark:rounded-lg"
+                onClick={() => {
+                  console.log('Navigating to /wizard from empty state');
+                  navigate('/wizard');
+                }}
+              >
+                Run your first evaluation
               </Button>
             </CardContent>
           </Card>

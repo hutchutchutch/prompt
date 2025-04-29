@@ -193,7 +193,7 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
   
   return (
     <motion.div 
-      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[320px] transition-all duration-300 cursor-pointer ${
+      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[240px] transition-all duration-300 cursor-pointer ${
         isSelected 
           ? 'bg-card text-card-foreground shadow-xl border-primary/30' 
           : 'bg-background/80 text-muted-foreground shadow border-border/50'
@@ -202,7 +202,7 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
       animate={isSelected 
         ? { scale: 1, opacity: 1, y: 0 } 
         : (isPrevious || isNext) 
-          ? { scale: 0.93, opacity: 0.9, x: isPrevious ? '-40%' : '40%' } 
+          ? { scale: 0.93, opacity: 0.9, x: isPrevious ? '-15%' : '15%' } 
           : { scale: 0.85, opacity: 0 }
       }
       transition={{ 
@@ -257,5 +257,3 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
     </motion.div>
   );
 };
-
-export default ModelCarousel;

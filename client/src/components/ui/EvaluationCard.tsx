@@ -58,8 +58,6 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
   const { metrics } = usePromptStore();
   const [animationComplete, setAnimationComplete] = useState(false);
   
-  if (!metrics) return null;
-  
   // Round to single decimal place for display
   const displayScore = Math.round(metrics.score * 10) / 10;
   
