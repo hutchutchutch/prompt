@@ -226,18 +226,18 @@ export default function IndexPage() {
             </h1>
           </div>
           
-          <div className="flex flex-col lg:flex-row gap-12 lg:items-center justify-between max-w-5xl mx-auto">
-            <div className="lg:w-5/12 flex flex-col items-center">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-center justify-between max-w-6xl mx-auto">
+            <div className="md:w-1/2 flex flex-col items-center">
               <div className="w-full flex justify-center">
                 <ThreeDStack />
               </div>
-              <p className="text-sm text-muted-foreground mt-6 text-center max-w-[280px]">
+              <p className="text-sm text-muted-foreground mt-4 text-center max-w-[280px] hidden md:block">
                 Prompt and model cards rotating to demonstrate different combinations
               </p>
             </div>
             
-            <div className="lg:w-7/12 flex flex-col items-center">
-              <div className="w-full min-w-[300px] max-w-[450px]">
+            <div className="md:w-1/2 flex flex-col items-center">
+              <div className="w-full max-w-[380px] md:max-w-[360px] lg:max-w-[400px]">
                 <EvaluationCard 
                   overallScore={evaluationData.overallScore}
                   inputTokens={evaluationData.inputTokens}

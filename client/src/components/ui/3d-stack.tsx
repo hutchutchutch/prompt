@@ -297,7 +297,7 @@ const ModelBlock: React.FC<{ depth: number, topOffset: number }> = ({ depth, top
 export const ThreeDStack: React.FC = () => {
   // Auto-animate the entire stack for a subtle floating effect
   return (
-    <div className="relative w-[320px] mx-auto perspective-800 z-10">
+    <div className="relative w-full max-w-[300px] sm:max-w-[320px] mx-auto perspective-800 z-10">
       <motion.div 
         className="relative preserve-3d"
         animate={{ 

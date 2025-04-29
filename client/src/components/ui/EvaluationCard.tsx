@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Star, Clock, CreditCard, FileText } from 'lucide-react';
 import { usePromptStore } from '@/store/promptStore';
 import Odometer from 'react-odometerjs';
 import 'odometer/themes/odometer-theme-minimal.css';
+import { cn } from '@/lib/utils';
 
 // Import Odometer CSS
 import 'odometer/themes/odometer-theme-minimal.css';
@@ -110,32 +112,38 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
         />
       )}
       
-      <CardHeader className="bg-primary text-primary-foreground rounded-t-lg relative z-10">
-        <CardTitle className="text-xl font-semibold">Performance Evaluation</CardTitle>
+      <CardHeader className="bg-primary text-primary-foreground rounded-t-lg relative z-10 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg font-semibold">Structured Output</CardTitle>
+          <Badge variant="outline" className="bg-amber-900/60 text-amber-300 whitespace-nowrap text-xs py-1">
+            OpenAI
+          </Badge>
+        </div>
       </CardHeader>
       
-      <CardContent className="flex-1 p-6 flex flex-col space-y-6 relative z-10">
-        {/* Overall Score with Stars */}
-        <div className="text-center">
-          <div className="text-4xl font-bold mb-2">
-            <Odometer 
-              value={displayScore} 
-              format="(.1)" 
-              duration={800}
-              theme="minimal"
-            />/5
+      <CardContent className="flex-1 p-4 lg:p-5 flex flex-col space-y-4 relative z-10">
+        {/* Model and task name */}
+        <div>
+          <h3 className="text-lg font-semibold mb-1">Constrained Response</h3>
+          <div className="text-sm text-zinc-400 line-clamp-2">
+            Provide a comprehensive analysis of [TOPIC] using exactly these headings in this order: 1. Background (2 sentences) 2. Key...
           </div>
-          <div className="flex justify-center space-x-1">
-            {stars.map((star, i) => (
-              <Star
-                key={i}
-                className={`h-6 w-6 ${
-                  star.fill === "full" ? "fill-primary text-primary" : 
-                  star.fill === "half" ? "fill-primary text-primary opacity-50" : 
-                  "text-muted-foreground"
-                }`}
-              />
-            ))}
+        </div>
+        
+        {/* Model details */}
+        <div className="flex justify-between items-center">
+          <div className="text-lg font-medium">GPT-3.5 Turbo</div>
+          <div className="flex items-center">
+            <Badge variant="outline" className="bg-emerald-900/20 text-emerald-400 border-emerald-800">
+              Speed<span className="hidden sm:inline ml-1">: Very Fast</span>
+            </Badge>
+          </div>
+        </div>
+        
+        <div className="space-y-1 text-sm text-zinc-400">
+          <div>Cost: ${((metrics?.costUsd || 0) * 1000).toFixed(1)}/1M</div>
+          <div className="line-clamp-2">
+            This is a complex question requiring careful analysis. Looking at the available evidence, we...
           </div>
         </div>
         
@@ -144,12 +152,12 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
         
         {/* Token Usage */}
         <div>
-          <h3 className="flex items-center gap-2 text-sm font-medium mb-3">
+          <h3 className="flex items-center gap-2 text-sm font-medium mb-2">
             <FileText className="h-4 w-4 text-primary" />
             Token Usage
           </h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-0.5">
               <div className="text-xs text-muted-foreground">Input</div>
               <div className="font-medium">
                 <Odometer 
@@ -166,7 +174,7 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
                 />
               </div>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               <div className="text-xs text-muted-foreground">Output</div>
               <div className="font-medium">
                 <Odometer 
@@ -188,12 +196,12 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
         
         {/* Latency */}
         <div>
-          <h3 className="flex items-center gap-2 text-sm font-medium mb-3">
+          <h3 className="flex items-center gap-2 text-sm font-medium mb-2">
             <Clock className="h-4 w-4 text-primary" />
             Latency
           </h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-0.5">
               <div className="text-xs text-muted-foreground">First Token</div>
               <div className="font-medium">
                 <Odometer 
@@ -203,7 +211,7 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
                 />ms
               </div>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               <div className="text-xs text-muted-foreground">Total Time</div>
               <div className="font-medium">
                 {metrics.latencyTotal >= 1000 ? (
@@ -224,49 +232,13 @@ const MetricsCard: React.FC<{ onAnimationComplete?: () => void }> = ({ onAnimati
           </div>
         </div>
         
-        {/* Quality Metrics */}
-        <div>
-          <h3 className="flex items-center gap-2 text-sm font-medium mb-3">
-            <div className="h-4 w-4 text-primary flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 6H4V18H20V6Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M4 10H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M8 14H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            Quality Metrics
-          </h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <div className="text-xs text-muted-foreground">Coverage</div>
-              <div className="font-medium">
-                <Odometer 
-                  value={metrics.coverage * 100} 
-                  format="d" 
-                  duration={750}
-                />%
-              </div>
-            </div>
-            <div className="space-y-1">
-              <div className="text-xs text-muted-foreground">Factual</div>
-              <div className="font-medium">
-                <Odometer 
-                  value={metrics.factual * 100} 
-                  format="d" 
-                  duration={750}
-                />%
-              </div>
-            </div>
-          </div>
-        </div>
-        
         {/* Total Cost */}
         <div>
-          <h3 className="flex items-center gap-2 text-sm font-medium mb-3">
+          <h3 className="flex items-center gap-2 text-sm font-medium mb-2">
             <CreditCard className="h-4 w-4 text-primary" />
             Total Cost
           </h3>
-          <div className="text-xl font-bold text-center">
+          <div className="text-xl font-bold text-center text-primary">
             $<Odometer 
               value={metrics.costUsd} 
               format="(0.0000)" 
