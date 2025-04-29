@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -7,6 +8,7 @@ interface ThreeDCarouselProps {
   items: {
     title: string;
     content: string;
+    task?: string;
   }[];
   label?: string;
 }
@@ -49,7 +51,7 @@ export function ThreeDPhotoCarousel({
           <ChevronLeft className="h-6 w-6" />
         </button>
         
-        <div className="relative h-[220px] w-full max-w-4xl mx-auto perspective-1000">
+        <div className="relative h-[200px] w-full max-w-4xl mx-auto perspective-1000">
           {items.map((item, index) => (
             <Card
               key={index}
@@ -63,8 +65,15 @@ export function ThreeDPhotoCarousel({
               onClick={getPosition(index) === "prev" ? handlePrev : getPosition(index) === "next" ? handleNext : undefined}
             >
               <CardContent className="p-4 h-full">
-                <h3 className="text-lg font-semibold mb-2 text-center">{item.title}</h3>
-                <div className="text-sm text-muted-foreground prompt-font overflow-y-auto max-h-32 p-2 bg-muted/30 rounded">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-semibold">{item.title}</h3>
+                  {item.task && (
+                    <Badge variant="secondary" className="text-xs">
+                      {item.task}
+                    </Badge>
+                  )}
+                </div>
+                <div className="text-sm text-muted-foreground prompt-font overflow-y-auto max-h-24 p-2 bg-muted/30 rounded">
                   {item.content}
                 </div>
               </CardContent>

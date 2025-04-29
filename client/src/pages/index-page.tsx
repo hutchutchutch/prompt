@@ -22,7 +22,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { AnimatedNumber } from "@/components/ui/animated-number";
 import { Crown } from "lucide-react";
 import { ThreeDPhotoCarousel } from "@/components/ui/3d-carousel";
-import { promptTechniques, modelOutputs } from "@/data/carousel-data";
+import { EvaluationCard } from "@/components/ui/evaluation-card";
+import { promptTechniques, modelOutputs, evaluationData } from "@/data/carousel-data";
 
 export default function IndexPage() {
   const { user, demoLoginMutation, isLoading } = useAuth();
@@ -215,8 +216,8 @@ export default function IndexPage() {
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* New Hero Section with Carousels */}
-        <div className="mb-24 flex flex-col items-center justify-center">
+        {/* New Hero Section with Carousels and Evaluation Card */}
+        <div className="mb-24">
           <div className="text-center mb-12">
             <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
               <span className="block mb-2">Find Your Best Prompt</span>
@@ -224,23 +225,38 @@ export default function IndexPage() {
             </h1>
           </div>
           
-          <div className="w-full">
-            <ThreeDPhotoCarousel items={promptTechniques} label="Prompts" />
-            <ThreeDPhotoCarousel items={modelOutputs} label="Models" />
-          </div>
-          
-          <div className="flex gap-4 mt-6 justify-center">
-            <Button asChild size="lg">
-              <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => demoLoginMutation.mutate()}
-              disabled={demoLoginMutation.isPending}
-            >
-              {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
-            </Button>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="col-span-1 lg:col-span-2">
+              <ThreeDPhotoCarousel items={promptTechniques} label="Prompts" />
+              <ThreeDPhotoCarousel items={modelOutputs} label="Models" />
+              
+              <div className="flex gap-4 mt-6 justify-center">
+                <Button asChild size="lg">
+                  <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => demoLoginMutation.mutate()}
+                  disabled={demoLoginMutation.isPending}
+                >
+                  {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
+                </Button>
+              </div>
+            </div>
+            
+            <div className="col-span-1 flex items-start">
+              <EvaluationCard 
+                overallScore={evaluationData.overallScore}
+                inputTokens={evaluationData.inputTokens}
+                inputCost={evaluationData.inputCost}
+                outputTokens={evaluationData.outputTokens}
+                outputCost={evaluationData.outputCost}
+                totalCost={evaluationData.totalCost}
+                firstTokenLatency={evaluationData.firstTokenLatency}
+                totalTime={evaluationData.totalTime}
+              />
+            </div>
           </div>
         </div>
         
