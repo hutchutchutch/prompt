@@ -80,21 +80,21 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50">
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 bg-gray-50 dark:bg-[#1A1A1A]">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
           <svg className="mx-auto h-12 w-12 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" fill="currentColor"/>
           </svg>
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-[#E0E0E0]">
             {activeTab === "signin" ? "Sign in to PromptLab" : "Create your account"}
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm text-gray-600 dark:text-[#B0B0B0]">
             {activeTab === "signin" ? (
               <>
                 Or{" "}
                 <button 
-                  className="font-medium text-primary hover:text-primary/80"
+                  className="font-medium text-primary hover:text-primary/80 dark:text-[#4FF8E5] dark:hover:text-[#4FF8E5]/80"
                   onClick={() => setActiveTab("signup")}
                 >
                   create a new account
@@ -104,7 +104,7 @@ export default function AuthPage() {
               <>
                 Already have an account?{" "}
                 <button 
-                  className="font-medium text-primary hover:text-primary/80"
+                  className="font-medium text-primary hover:text-primary/80 dark:text-[#4FF8E5] dark:hover:text-[#4FF8E5]/80"
                   onClick={() => setActiveTab("signin")}
                 >
                   Sign in
