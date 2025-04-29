@@ -8,40 +8,36 @@ export const models: ModelCard[] = [
   {
     id: "claude-opus",
     title: "Claude 3 Opus",
-    content: `Quantum computers use "qubits" instead of regular bits. While normal bits are 0 OR 1 (like light switches), qubits can be 0, 1, or both simultaneously (superposition).
-
-This allows quantum computers to process many possibilities at once, making them much faster for certain complex problems that would take regular computers thousands of years.`
+    content: "As an AI language model designed to provide helpful, harmless, and honest information, I'll analyze this question carefully. The key issue here is understanding the difference between correlation and causation..."
   },
   {
-    id: "gpt4",
-    title: "GPT-4",
-    content: `Regular computers use bits (0 or 1), like coins landing heads or tails. Quantum computers use "qubits" that can be both values at once while calculating - like a spinning coin that's somehow both heads and tails.
-
-This "superposition" plus "entanglement" (where qubits affect each other instantly) lets quantum computers solve certain complex problems much faster.`
+    id: "gpt-4o",
+    title: "GPT-4o",
+    content: "To address this question thoroughly, I need to consider multiple perspectives. First, let's examine the historical context. The correlation between these variables has been documented in several studies, but causation requires more rigorous analysis..."
   },
   {
-    id: "claude-sonnet",
-    title: "Claude 3 Sonnet",
-    content: `Normal computers use bits (0/1) like on/off switches. Quantum computers use "qubits" that can be both 0 and 1 simultaneously thanks to "superposition."
-
-Think of a maze: a normal computer tries one path at a time, but a quantum computer explores multiple paths at once, making it faster for solving complex problems like designing medicines.`
-  },
-  {
-    id: "gemini",
+    id: "gemini-1.5-pro",
     title: "Gemini 1.5 Pro",
-    content: `Regular computers use bits (0/1) like tiny switches. Quantum computers use "qubits" that can be 0, 1, or both at once ("superposition").
-
-Another property called "entanglement" connects qubits so changing one instantly affects others.
-
-These properties help solve problems that would take normal computers millions of years, like designing new medicines.`
+    content: "This is an interesting question that touches on multiple domains. From a scientific standpoint, we need to evaluate the evidence systematically. Several factors could explain the observed relationship, including confounding variables..."
   },
   {
-    id: "llama3",
-    title: "Llama 3",
-    content: `Regular computers use bits - either 0 or 1. Quantum computers use "qubits" which can be 0, 1, or both simultaneously ("superposition").
-
-Qubits can also be "entangled" - connected so that changing one instantly affects another regardless of distance.
-
-This allows quantum computers to solve complex problems much faster than classical computers.`
+    id: "llama-3-70b",
+    title: "Llama 3 70B",
+    content: "Let me approach this methodically. The relationship you're asking about has been studied in various contexts. While there appears to be a statistical correlation, determining causality requires controlling for multiple variables and conducting longitudinal studies..."
+  },
+  {
+    id: "mixtral-8x22b",
+    title: "Mixtral 8x22B",
+    content: "This question touches on an important distinction in data analysis. When we observe two phenomena occurring together, we must be careful not to assume one causes the other. Let me walk through some potential explanations..."
+  },
+  {
+    id: "claude-haiku",
+    title: "Claude 3 Haiku",
+    content: "I'll analyze this step by step. The data shows a correlation, but correlation doesn't imply causation. Several factors could explain this relationship including reverse causality, common causes, or coincidence..."
+  },
+  {
+    id: "gpt-3.5-turbo",
+    title: "GPT-3.5 Turbo",
+    content: "This is a complex question requiring careful analysis. Looking at the available evidence, we can identify several patterns, but we should be cautious about drawing causal conclusions without experimental validation..."
   }
 ];

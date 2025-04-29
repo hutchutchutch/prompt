@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { prompts, models, EvalMetrics, fakeFetchEval } from '@/data';
+import { EvalMetrics, fakeFetchEval } from '@/data/evaluations';
 
 interface PromptState {
   promptIdx: number;
@@ -14,32 +14,40 @@ interface PromptState {
   fetchMetrics: (p: number, m: number) => Promise<void>;
 }
 
-export const usePromptStore = create<PromptState>((set) => ({
+export const usePromptStore = create<PromptState>((set, get) => ({
+  // initial state
   promptIdx: 0,
   modelIdx: 0,
   metrics: null,
-  loading: true,
+  loading: false,
   
-  nextPrompt: () => set((s) => ({ 
-    promptIdx: (s.promptIdx + 1) % prompts.length 
-  })),
-  
-  nextModel: () => set((s) => ({ 
-    modelIdx: (s.modelIdx + 1) % models.length 
-  })),
-  
-  setPromptIdx: (idx: number) => set({ 
-    promptIdx: idx 
-  }),
-  
-  setModelIdx: (idx: number) => set({ 
-    modelIdx: idx 
-  }),
-  
-  fetchMetrics: async (p, m) => {
-    set({ loading: true });
-    // simulate latency; later replace with real fetch
-    const data = await fakeFetchEval(p, m);
-    set({ metrics: data, loading: false });
+  // actions
+  nextPrompt: () => {
+    const { promptIdx } = get();
+    set({ promptIdx: promptIdx + 1 });
   },
+  
+  nextModel: () => {
+    const { modelIdx } = get();
+    set({ modelIdx: modelIdx + 1 });
+  },
+  
+  setPromptIdx: (idx: number) => {
+    set({ promptIdx: idx });
+  },
+  
+  setModelIdx: (idx: number) => {
+    set({ modelIdx: idx });
+  },
+  
+  fetchMetrics: async (p: number, m: number) => {
+    set({ loading: true });
+    try {
+      const metrics = await fakeFetchEval(p, m);
+      set({ metrics, loading: false });
+    } catch (err) {
+      console.error('Error fetching metrics:', err);
+      set({ loading: false });
+    }
+  }
 }));

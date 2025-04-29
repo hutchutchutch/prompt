@@ -1,510 +1,56 @@
-import { useState, useEffect } from "react";
-import { useParams, useLocation, useRoute } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
-import { PromptInput } from "@/components/wizard/prompt-input";
-import { ModelSelector } from "@/components/wizard/model-selector";
-import { FrameworkBadge } from "@/components/wizard/framework-badge";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { ProgressBar } from "@/components/progress-bar";
-import { useToast } from "@/hooks/use-toast";
-import { useWebSocket } from "@/lib/websocket";
-import { Framework, PromptTest, WizardFormData } from "@/types";
-import { ArrowLeft, AlertCircle, Loader2 } from "lucide-react";
-import { Link } from "wouter";
+import React, { useEffect } from 'react';
+import { PromptCarousel } from '@/components/ui/PromptCarousel';
+import { ModelCarousel } from '@/components/ui/ModelCarousel';
+import { EvaluationCard } from '@/components/ui/EvaluationCard';
+import { usePromptStore } from '@/store/promptStore';
 
 export default function WizardPage() {
-  const params = useParams<{ step?: string }>();
-  const [, navigate] = useLocation();
-  const [match, params2] = useRoute("/wizard/progress");
-  const { toast } = useToast();
+  const { promptIdx, modelIdx, fetchMetrics } = usePromptStore();
   
-  // Parse the current step or default to "1"
-  const currentStep = params.step || "1";
-  
-  // Get test ID from URL if on progress page
-  const testId = match ? new URLSearchParams(window.location.search).get("testId") : null;
-  
-  // Wizard form state
-  const [formData, setFormData] = useState<WizardFormData>({
-    promptText: "",
-    desiredOutcome: "",
-    selectedModels: [],
-    selectedFrameworks: [],
-    redTeamEnabled: false,
-    iterationBudget: 5,
-  });
-  
-  // WebSocket state for test progress
-  const { 
-    connect, 
-    disconnect, 
-    progressData, 
-    testCompleted, 
-    isConnected,
-    testId: wsTestId
-  } = useWebSocket();
-  
-  // Fetch frameworks
-  const { data: frameworks } = useQuery<Framework[]>({
-    queryKey: ["/api/frameworks"],
-  });
-  
-  // Create test mutation
-  const createTestMutation = useMutation({
-    mutationFn: async (data: WizardFormData) => {
-      const response = await fetch("/api/tests", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-      
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to create test");
-      }
-      
-      return response.json() as Promise<PromptTest>;
-    },
-    onSuccess: (data) => {
-      // Navigate to progress page with the test ID
-      navigate(`/wizard/progress?testId=${data.id}`);
-    },
-    onError: (error) => {
-      toast({
-        title: "Error creating test",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  });
-  
-  // Connect to WebSocket when on progress page and testId is available
+  // Initialize with first prompt and model
   useEffect(() => {
-    if (currentStep === "progress" && testId && !isConnected) {
-      connect(parseInt(testId));
-    }
-    
-    return () => {
-      if (isConnected) {
-        disconnect();
-      }
-    };
-  }, [currentStep, testId, isConnected]);
-  
-  // Navigate to results page when test is completed
-  useEffect(() => {
-    if (testCompleted && wsTestId) {
-      toast({
-        title: "Test completed",
-        description: "Redirecting to results page",
-      });
-      
-      navigate(`/results/${wsTestId}`);
-    }
-  }, [testCompleted, wsTestId]);
-  
-  // Handle form input changes
-  const handleInputChange = (field: keyof WizardFormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-  
-  // Toggle model selection
-  const handleModelToggle = (modelId: string) => {
-    setFormData(prev => {
-      const selectedModels = prev.selectedModels.includes(modelId)
-        ? prev.selectedModels.filter(id => id !== modelId)
-        : [...prev.selectedModels, modelId];
-      
-      return { ...prev, selectedModels };
-    });
-  };
-  
-  // Toggle framework selection
-  const handleFrameworkToggle = (frameworkId: string) => {
-    setFormData(prev => {
-      const selectedFrameworks = prev.selectedFrameworks.includes(frameworkId)
-        ? prev.selectedFrameworks.filter(id => id !== frameworkId)
-        : [...prev.selectedFrameworks, frameworkId];
-      
-      return { ...prev, selectedFrameworks };
-    });
-  };
-  
-  // Handle form submission
-  const handleSubmit = () => {
-    // Validate form data
-    if (!formData.promptText) {
-      toast({
-        title: "Validation Error",
-        description: "Prompt text is required",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (!formData.desiredOutcome) {
-      toast({
-        title: "Validation Error",
-        description: "Desired outcome is required",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (formData.selectedModels.length === 0) {
-      toast({
-        title: "Validation Error",
-        description: "Please select at least one model",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    if (formData.selectedFrameworks.length === 0) {
-      toast({
-        title: "Validation Error",
-        description: "Please select at least one framework",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    // Submit form
-    createTestMutation.mutate(formData);
-  };
-  
-  // Navigate to next step
-  const goToNextStep = () => {
-    if (currentStep === "1") {
-      navigate("/wizard/2");
-    } else if (currentStep === "2") {
-      navigate("/wizard/3");
-    } else if (currentStep === "3") {
-      handleSubmit();
-    }
-  };
-  
-  // Navigate to previous step
-  const goToPrevStep = () => {
-    if (currentStep === "2") {
-      navigate("/wizard/1");
-    } else if (currentStep === "3") {
-      navigate("/wizard/2");
-    } else {
-      navigate("/dashboard");
-    }
-  };
-  
-  // Check if current step is valid
-  const isStepValid = () => {
-    if (currentStep === "1") {
-      return formData.promptText.trim() !== "" && formData.desiredOutcome.trim() !== "";
-    } else if (currentStep === "2") {
-      return formData.selectedModels.length > 0 && formData.selectedFrameworks.length > 0;
-    }
-    return true;
-  };
-  
-  // Render step content
-  const renderStepContent = () => {
-    switch (currentStep) {
-      case "1":
-        return (
-          <Card>
-            <CardContent className="px-4 py-5 sm:p-6">
-              <PromptInput
-                value={formData.promptText}
-                onChange={(value) => handleInputChange("promptText", value)}
-                maxTokens={4000}
-                className="mb-6"
-              />
-              
-              <div className="mb-6">
-                <PromptInput
-                  value={formData.desiredOutcome}
-                  onChange={(value) => handleInputChange("desiredOutcome", value)}
-                  maxTokens={1000}
-                  label="Desired Outcome"
-                  placeholder="The response should include..."
-                  isRequired={true}
-                />
-              </div>
-              
-              <div className="flex justify-end">
-                <Button 
-                  onClick={goToNextStep}
-                  disabled={!isStepValid()}
-                >
-                  Continue to Models & Frameworks
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        );
-        
-      case "2":
-        return (
-          <Card>
-            <CardContent className="px-4 py-5 sm:p-6">
-              <div className="mb-6">
-                <h3 className="text-lg font-medium mb-4">Select Models to Test</h3>
-                <ModelSelector
-                  selectedModels={formData.selectedModels}
-                  onToggle={handleModelToggle}
-                />
-              </div>
-              
-              <Separator className="my-6" />
-              
-              <div className="mb-6">
-                <h3 className="text-lg font-medium mb-4">Select Frameworks</h3>
-                <div className="flex flex-wrap gap-2">
-                  {frameworks?.map((framework) => (
-                    <FrameworkBadge
-                      key={framework.id}
-                      name={framework.name}
-                      description={framework.description}
-                      enabled={framework.enabled}
-                      selected={formData.selectedFrameworks.includes(framework.name)}
-                      onClick={() => framework.enabled && handleFrameworkToggle(framework.name)}
-                    />
-                  ))}
-                </div>
-              </div>
-              
-              <div className="flex justify-between">
-                <Button variant="outline" onClick={goToPrevStep}>
-                  Back
-                </Button>
-                <Button 
-                  onClick={goToNextStep}
-                  disabled={!isStepValid()}
-                >
-                  Continue to Settings
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        );
-        
-      case "3":
-        return (
-          <Card>
-            <CardContent className="px-4 py-5 sm:p-6">
-              <div className="mb-6">
-                <h3 className="text-lg font-medium mb-4">Test Settings</h3>
-                
-                <div className="space-y-6">
-                  <div className="flex flex-col space-y-2">
-                    <label className="text-sm font-medium">
-                      Iteration Budget
-                    </label>
-                    <div className="flex items-center space-x-4">
-                      <Slider
-                        value={[formData.iterationBudget || 5]}
-                        min={1}
-                        max={10}
-                        step={1}
-                        onValueChange={(value) => handleInputChange("iterationBudget", value[0])}
-                        className="flex-1"
-                      />
-                      <span className="text-sm font-medium w-8 text-center">
-                        {formData.iterationBudget || 5}
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      Higher values may increase cost but improve results
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <label className="text-sm font-medium mb-1 block">
-                        Enable Red-Team Testing
-                      </label>
-                      <p className="text-xs text-muted-foreground">
-                        Test prompt security against attacks and vulnerabilities
-                      </p>
-                    </div>
-                    <Switch
-                      checked={formData.redTeamEnabled}
-                      onCheckedChange={(checked) => handleInputChange("redTeamEnabled", checked)}
-                    />
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mb-6 bg-amber-950/20 border border-amber-800/30 rounded-md p-4">
-                <div className="flex">
-                  <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
-                  <div>
-                    <h4 className="text-sm font-medium text-amber-400">Review Before Running</h4>
-                    <div className="mt-2 text-xs text-amber-300/90">
-                      <p>You're about to test {formData.selectedModels.length} models with {formData.selectedFrameworks.length} frameworks.</p>
-                      <p className="mt-1">This will generate {formData.selectedModels.length * formData.selectedFrameworks.length} different tests.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-between">
-                <Button variant="outline" onClick={goToPrevStep}>
-                  Back
-                </Button>
-                <Button 
-                  onClick={handleSubmit}
-                  disabled={createTestMutation.isPending}
-                >
-                  {createTestMutation.isPending ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Running...
-                    </>
-                  ) : (
-                    "Run Tests"
-                  )}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        );
-        
-      case "progress":
-        return (
-          <Card>
-            <CardContent className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium mb-4">Test Progress</h3>
-              
-              {testId ? (
-                <div className="space-y-6">
-                  {Object.keys(progressData).length === 0 ? (
-                    <div className="text-center py-8">
-                      <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary mb-4" />
-                      <p className="text-muted-foreground">Connecting to test session...</p>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="grid gap-4">
-                        {Object.entries(progressData).map(([key, data]) => {
-                          const [modelId, variantId] = key.split(':');
-                          return (
-                            <div key={key} className="border border-border rounded-md p-4 bg-card">
-                              <div className="flex justify-between mb-2">
-                                <span className="font-medium text-sm">{modelId} - {variantId}</span>
-                                <span className="text-sm text-muted-foreground">{data.progress}%</span>
-                              </div>
-                              <ProgressBar 
-                                percent={data.progress} 
-                                status={data.progress < 100 ? "loading" : "success"}
-                                showLabel={false}
-                              />
-                              <div className="mt-2 text-sm text-muted-foreground">{data.message}</div>
-                              
-                              {data.firstTokenLatency && (
-                                <div className="mt-2 text-xs text-muted-foreground/70">
-                                  First token: {data.firstTokenLatency}ms
-                                </div>
-                              )}
-                              
-                              {data.totalTime && (
-                                <div className="text-xs text-muted-foreground/70">
-                                  Total time: {data.totalTime}ms
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                      
-                      {testCompleted && (
-                        <div className="mt-4 text-center">
-                          <p className="text-green-600 mb-4">All tests completed!</p>
-                          <Button asChild>
-                            <Link href={`/results/${testId}`}>View Results</Link>
-                          </Button>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p>No test ID provided. Please start a new test.</p>
-                  <Button className="mt-4" asChild>
-                    <Link href="/wizard">New Test</Link>
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        );
-        
-      default:
-        return (
-          <div className="text-center">
-            <p>Invalid step. Please return to the wizard.</p>
-            <Button className="mt-4" asChild>
-              <Link href="/wizard">Return to Wizard</Link>
-            </Button>
-          </div>
-        );
-    }
-  };
-  
+    fetchMetrics(promptIdx, modelIdx);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className="min-h-screen bg-background">
-      <header className="bg-card border-b border-border shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <button 
-                onClick={goToPrevStep}
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <ArrowLeft className="h-6 w-6" />
-              </button>
-              <h1 className="ml-3 text-xl font-bold">
-                {currentStep === "progress" ? "Test Progress" : "New Prompt Test"}
-              </h1>
-            </div>
-            {currentStep !== "progress" && (
-              <div className="text-sm text-muted-foreground">
-                Step {currentStep} of 3
-              </div>
-            )}
+    <div className="container mx-auto py-8 px-4 min-h-screen">
+      <h1 className="text-4xl font-bold text-center mb-8">Prompt Engineering Lab</h1>
+      
+      <div className="grid lg:grid-cols-2 gap-8">
+        <div className="space-y-8">
+          <PromptCarousel />
+          <ModelCarousel />
+        </div>
+        
+        <div className="flex items-center justify-center">
+          <EvaluationCard />
+        </div>
+      </div>
+      
+      <div className="mt-16 bg-card p-6 rounded-lg shadow-card">
+        <h2 className="text-2xl font-semibold mb-4">About PromptLab</h2>
+        <p className="text-muted-foreground">
+          PromptLab helps you discover the optimal combination of prompt techniques and models for your specific use case. 
+          Experiment with different prompt patterns and compare model performance across key metrics like accuracy, speed, and cost.
+        </p>
+        
+        <div className="mt-6 grid sm:grid-cols-3 gap-4">
+          <div className="p-4 bg-primary/10 rounded-lg">
+            <h3 className="font-medium mb-2">Analyze Performance</h3>
+            <p className="text-sm text-muted-foreground">Compare models across quality metrics, latency, and cost efficiency.</p>
+          </div>
+          
+          <div className="p-4 bg-primary/10 rounded-lg">
+            <h3 className="font-medium mb-2">Optimize Prompts</h3>
+            <p className="text-sm text-muted-foreground">Test different prompt engineering techniques to improve output quality.</p>
+          </div>
+          
+          <div className="p-4 bg-primary/10 rounded-lg">
+            <h3 className="font-medium mb-2">Identify Vulnerabilities</h3>
+            <p className="text-sm text-muted-foreground">Discover and address potential security risks in your prompts.</p>
           </div>
         </div>
-      </header>
-
-      <div className="max-w-3xl mx-auto sm:px-6 lg:px-8 py-8">
-        {currentStep !== "progress" && (
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-medium">
-                {currentStep === "1" ? "Enter Your Prompt" : 
-                 currentStep === "2" ? "Select Models & Frameworks" : 
-                 "Configure Test Settings"}
-              </h2>
-              <div className="text-sm text-muted-foreground">
-                {currentStep === "1" || currentStep === "2" ? "Required" : "Optional"}
-              </div>
-            </div>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {currentStep === "1" ? "Enter the exact prompt you want to test and the desired outcome." : 
-               currentStep === "2" ? "Choose models and frameworks to test your prompt with." :
-               "Customize testing settings and security options."}
-            </p>
-          </div>
-        )}
-
-        {renderStepContent()}
       </div>
     </div>
   );

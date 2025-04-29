@@ -1,111 +1,158 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { prompts } from '@/data/prompts';
 import { usePromptStore } from '@/store/promptStore';
-import { prompts } from '@/data';
 
-// Shared transforms in px; container perspective = 1000px
+// Variants for the card animations
 const cardVariants = {
-  active:   { x:   0,   z:   0, opacity: 1, scale: 1,  rotateY:   0, transition: { duration: 0.5, ease: 'easeInOut' } },
-  prev:     { x: '-30%', z: -80, opacity: .8, scale: .9, rotateY:  15, transition: { duration: 0.5, ease: 'easeInOut' } },
-  next:     { x:  '30%', z: -80, opacity: .8, scale: .9, rotateY: -15, transition: { duration: 0.5, ease: 'easeInOut' } },
-  inactive: { z: -120, opacity: 0, scale: .75, transition: { duration: 0.5, ease: 'easeInOut' } },
-};
-
-// Helper function to determine card position
-const getPosition = (index: number, activeIndex: number, length: number) => {
-  if (index === activeIndex) return 'active';
-  if ((index === activeIndex + 1) || (activeIndex === length - 1 && index === 0)) return 'next';
-  if ((index === activeIndex - 1) || (activeIndex === 0 && index === length - 1)) return 'prev';
-  return 'inactive';
+  selected: {
+    y: -20,
+    scale: 1.1,
+    boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.2)',
+    zIndex: 10,
+    transition: { duration: 0.3 }
+  },
+  notSelected: (direction: number) => ({
+    y: 0,
+    scale: 0.9,
+    opacity: 0.7,
+    x: direction * 30,
+    zIndex: 5,
+    boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.1)',
+    transition: { duration: 0.3 }
+  }),
+  hidden: (direction: number) => ({
+    y: 0,
+    scale: 0.8,
+    opacity: 0,
+    x: direction * 100,
+    zIndex: 1,
+    transition: { duration: 0.3 }
+  })
 };
 
 export const PromptCarousel: React.FC = () => {
-  const { promptIdx, nextPrompt } = usePromptStore();
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const { promptIdx, setPromptIdx } = usePromptStore();
+  const [direction, setDirection] = useState(0);
 
-  // Setup autoplay with pause-on-hover
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
-    const startInterval = () => {
-      intervalRef.current = setInterval(() => {
-        nextPrompt();
-      }, 5000); // 5s cadence
-    };
-
-    startInterval();
-    
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [nextPrompt]);
-
-  const handleHoverStart = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
+  const nextPrompt = () => {
+    setDirection(1);
+    setPromptIdx((promptIdx + 1) % prompts.length);
   };
 
-  const handleHoverEnd = () => {
-    if (!intervalRef.current) {
-      intervalRef.current = setInterval(() => {
-        nextPrompt();
-      }, 5000);
-    }
+  const prevPrompt = () => {
+    setDirection(-1);
+    setPromptIdx((promptIdx - 1 + prompts.length) % prompts.length);
   };
 
-  const handleCardClick = (index: number) => {
-    const position = getPosition(index, promptIdx, prompts.length);
-    if (position === 'prev' || position === 'next') {
-      usePromptStore.getState().setPromptIdx(index);
-    }
-  };
+  // Get previous, current, and next prompt indices
+  const prevIdx = (promptIdx - 1 + prompts.length) % prompts.length;
+  const nextIdx = (promptIdx + 1) % prompts.length;
 
   return (
-    <div className="relative w-full overflow-hidden py-10">
-      <div className="absolute top-0 left-0 z-10 bg-primary text-primary-foreground text-xs px-3 py-1 rounded-br-md font-medium">
-        Prompts
+    <div className="relative flex flex-col items-center py-6">
+      <h2 className="text-2xl font-bold mb-8 text-foreground">Prompt Techniques</h2>
+      
+      <div className="relative w-full min-h-[280px] flex items-center justify-center">
+        {/* Previous Prompt Card */}
+        <motion.div 
+          className="absolute w-full max-w-[250px]"
+          custom={-1}
+          variants={cardVariants}
+          animate="notSelected"
+          transition={{ duration: 0.3 }}
+        >
+          <PromptCard prompt={prompts[prevIdx]} isPrevious />
+        </motion.div>
+        
+        {/* Current Prompt Card */}
+        <motion.div 
+          className="absolute w-full max-w-[250px]"
+          variants={cardVariants}
+          animate="selected"
+          transition={{ duration: 0.3 }}
+        >
+          <PromptCard prompt={prompts[promptIdx]} isSelected />
+        </motion.div>
+        
+        {/* Next Prompt Card */}
+        <motion.div 
+          className="absolute w-full max-w-[250px]"
+          custom={1}
+          variants={cardVariants}
+          animate="notSelected"
+          transition={{ duration: 0.3 }}
+        >
+          <PromptCard prompt={prompts[nextIdx]} isNext />
+        </motion.div>
       </div>
       
-      <motion.div 
-        className="flex items-center justify-center h-full"
-        onHoverStart={handleHoverStart}
-        onHoverEnd={handleHoverEnd}
-      >
-        <div className="relative h-[200px] w-full max-w-[250px] mx-auto" style={{ perspective: '1000px' }}>
-          {prompts.map((prompt, index) => (
-            <motion.div
-              key={prompt.id}
-              className="absolute top-0 left-0 right-0 mx-auto transition-all h-[200px] w-full max-w-[250px]"
-              variants={cardVariants}
-              animate={getPosition(index, promptIdx, prompts.length)}
-              whileHover={{ scale: getPosition(index, promptIdx, prompts.length) === 'active' ? 1.02 : undefined }}
-              onClick={() => handleCardClick(index)}
-            >
-              <Card className="h-full shadow-card border border-border/50 dark:border-border/30 overflow-hidden">
-                <CardContent className="p-4 h-full">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-lg font-semibold">{prompt.title}</h3>
-                    {prompt.task && (
-                      <Badge variant="secondary" className="text-xs">
-                        {prompt.task}
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="text-sm text-muted-foreground prompt-font overflow-y-auto max-h-24 p-2 bg-muted/30 rounded">
-                    {prompt.content}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
+      {/* Navigation Buttons */}
+      <div className="flex space-x-4 mt-6">
+        <Button 
+          variant="outline" 
+          size="icon" 
+          onClick={prevPrompt}
+          className="rounded-full hover:bg-primary/10 hover:text-primary"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </Button>
+        <Button 
+          variant="outline" 
+          size="icon" 
+          onClick={nextPrompt}
+          className="rounded-full hover:bg-primary/10 hover:text-primary"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </Button>
+      </div>
+      
+      {/* Pagination Indicator */}
+      <div className="flex justify-center mt-2">
+        <span className="text-sm text-muted-foreground">
+          {promptIdx + 1} / {prompts.length}
+        </span>
+      </div>
     </div>
   );
 };
+
+interface PromptCardProps {
+  prompt: {
+    id: string;
+    title: string;
+    task: string;
+    content: string;
+  };
+  isSelected?: boolean;
+  isPrevious?: boolean;
+  isNext?: boolean;
+}
+
+const PromptCard: React.FC<PromptCardProps> = ({ prompt, isSelected, isPrevious, isNext }) => {
+  return (
+    <Card className={`h-full overflow-hidden transition-all duration-200 ${isSelected ? 'shadow-lg animate-float' : 'shadow'}`}>
+      <CardContent className="p-5 flex flex-col h-full">
+        <div className="flex flex-col mb-3">
+          <h3 className="font-bold text-lg truncate">{prompt.title}</h3>
+          <div className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary w-fit mt-1">
+            {prompt.task}
+          </div>
+        </div>
+        
+        <div className="flex-grow overflow-hidden text-sm text-muted-foreground line-clamp-6">
+          {prompt.content}
+        </div>
+        
+        <div className="mt-3 pt-3 border-t border-border/40 flex justify-between items-center text-xs text-muted-foreground">
+          <div>ID: {prompt.id}</div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default PromptCarousel;
