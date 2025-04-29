@@ -22,6 +22,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { AnimatedNumber } from "@/components/ui/animated-number";
 import { Crown } from "lucide-react";
 import { ThreeDPhotoCarousel } from "@/components/ui/3d-carousel";
+import ThreeDStack from "@/components/ui/3d-stack";
 import { EvaluationCard } from "@/components/ui/evaluation-card";
 import { promptTechniques, modelOutputs, evaluationData } from "@/data/carousel-data";
 

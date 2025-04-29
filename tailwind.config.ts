@@ -5,6 +5,12 @@ export default {
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      perspective: { 
+        '800': '800px' 
+      },
+      transformOrigin: {
+        'center-bottom': 'center bottom',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -97,5 +103,25 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  plugins: [
+    require("tailwindcss-animate"), 
+    require("@tailwindcss/typography"),
+    function({ addUtilities }: { addUtilities: any }) {
+      const newUtilities = {
+        '.preserve-3d': {
+          'transform-style': 'preserve-3d',
+        },
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+        },
+        '.rotate-x-8': {
+          transform: 'rotateX(-8deg)',
+        },
+        '.rotate-y-5': {
+          transform: 'rotateY(5deg)',
+        },
+      }
+      addUtilities(newUtilities)
+    }
+  ],
 } satisfies Config;
