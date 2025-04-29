@@ -280,7 +280,10 @@ export default function IndexPage() {
                   100% { opacity: 1; }
                 }
                 
-                /* We'll use custom animation via inline styles */
+                @keyframes growWidth {
+                  0% { width: 0%; }
+                  100% { width: var(--metric-width); }
+                }
                 
                 @keyframes wiggleGrow {
                   0% { transform: rotate(90deg) scale(1); }
@@ -296,6 +299,10 @@ export default function IndexPage() {
                 
                 .animate-wiggle-grow {
                   animation: wiggleGrow 1s ease-in-out;
+                }
+                
+                .animate-grow-width {
+                  animation: growWidth 1s ease-out forwards;
                 }
               `,
                 }}
@@ -319,13 +326,10 @@ export default function IndexPage() {
                   </div>
                   <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-primary rounded-full"
+                      className="h-full bg-primary rounded-full animate-grow-width"
                       style={{
-                        width: "92%", 
-                        transitionProperty: "width",
-                        transitionDuration: "1s",
-                        transitionTimingFunction: "ease-out"
-                      }}
+                        '--metric-width': '92%'
+                      } as React.CSSProperties}
                       key={`progress-main-${currentCategoryIndex}`}
                     ></div>
                   </div>
@@ -368,15 +372,11 @@ export default function IndexPage() {
                         </div>
                         <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-primary rounded-full"
+                            className="h-full bg-primary rounded-full animate-grow-width"
                             style={{
-                              width: `${metric.score * 100}%`,
-                              animation: "none",
-                              transitionProperty: "width",
-                              transitionDuration: "1s",
-                              transitionTimingFunction: "ease-out",
-                              transitionDelay: `${i * 150 + 300}ms`
-                            }}
+                              '--metric-width': `${metric.score * 100}%`,
+                              animationDelay: `${i * 150 + 300}ms`,
+                            } as React.CSSProperties}
                             key={`progress-${currentCategoryIndex}-${i}`}
                           ></div>
                         </div>
