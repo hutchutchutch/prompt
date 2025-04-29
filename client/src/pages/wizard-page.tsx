@@ -254,7 +254,7 @@ export default function WizardPage() {
           <Card>
             <CardContent className="px-4 py-5 sm:p-6">
               <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Select Models to Test</h3>
+                <h3 className="text-lg font-medium mb-4">Select Models to Test</h3>
                 <ModelSelector
                   selectedModels={formData.selectedModels}
                   onToggle={handleModelToggle}
@@ -264,7 +264,7 @@ export default function WizardPage() {
               <Separator className="my-6" />
               
               <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Select Frameworks</h3>
+                <h3 className="text-lg font-medium mb-4">Select Frameworks</h3>
                 <div className="flex flex-wrap gap-2">
                   {frameworks?.map((framework) => (
                     <FrameworkBadge
@@ -299,7 +299,7 @@ export default function WizardPage() {
           <Card>
             <CardContent className="px-4 py-5 sm:p-6">
               <div className="mb-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Test Settings</h3>
+                <h3 className="text-lg font-medium mb-4">Test Settings</h3>
                 
                 <div className="space-y-6">
                   <div className="flex flex-col space-y-2">
@@ -380,7 +380,7 @@ export default function WizardPage() {
         return (
           <Card>
             <CardContent className="px-4 py-5 sm:p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Test Progress</h3>
+              <h3 className="text-lg font-medium mb-4">Test Progress</h3>
               
               {testId ? (
                 <div className="space-y-6">
@@ -459,23 +459,23 @@ export default function WizardPage() {
   };
   
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="bg-white shadow">
+    <div className="min-h-screen bg-background">
+      <header className="bg-card border-b border-border shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <button 
                 onClick={goToPrevStep}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-muted-foreground hover:text-primary transition-colors"
               >
                 <ArrowLeft className="h-6 w-6" />
               </button>
-              <h1 className="ml-3 text-xl font-bold text-gray-900">
+              <h1 className="ml-3 text-xl font-bold">
                 {currentStep === "progress" ? "Test Progress" : "New Prompt Test"}
               </h1>
             </div>
             {currentStep !== "progress" && (
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-muted-foreground">
                 Step {currentStep} of 3
               </div>
             )}
@@ -487,16 +487,16 @@ export default function WizardPage() {
         {currentStep !== "progress" && (
           <div className="mb-8">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-medium text-gray-900">
+              <h2 className="text-lg font-medium">
                 {currentStep === "1" ? "Enter Your Prompt" : 
                  currentStep === "2" ? "Select Models & Frameworks" : 
                  "Configure Test Settings"}
               </h2>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-muted-foreground">
                 {currentStep === "1" || currentStep === "2" ? "Required" : "Optional"}
               </div>
             </div>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-muted-foreground">
               {currentStep === "1" ? "Enter the exact prompt you want to test and the desired outcome." : 
                currentStep === "2" ? "Choose models and frameworks to test your prompt with." :
                "Customize testing settings and security options."}

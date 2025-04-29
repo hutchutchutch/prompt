@@ -286,11 +286,11 @@ export default function IndexPage() {
                 }
                 
                 @keyframes wiggleGrow {
-                  0% { transform: rotate(90deg) scale(1); }
-                  25% { transform: rotate(80deg) scale(1.3); }
-                  50% { transform: rotate(100deg) scale(1.3); }
-                  75% { transform: rotate(85deg) scale(1.1); }
-                  100% { transform: rotate(90deg) scale(1); }
+                  0% { transform:  scale(1); }
+                  25% { transform: rotate(-15deg) scale(1.3); }
+                  50% { transform: rotate(15deg) scale(1.3); }
+                  75% { transform: rotate(-5deg) scale(1.1); }
+                  100% { transform: rotate(5deg) scale(1); }
                 }
                 
                 .animate-fadeIn {
@@ -327,9 +327,11 @@ export default function IndexPage() {
                   <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-primary rounded-full animate-grow-width"
-                      style={{
-                        '--metric-width': '92%'
-                      } as React.CSSProperties}
+                      style={
+                        {
+                          "--metric-width": "92%",
+                        } as React.CSSProperties
+                      }
                       key={`progress-main-${currentCategoryIndex}`}
                     ></div>
                   </div>
@@ -373,10 +375,12 @@ export default function IndexPage() {
                         <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
                           <div
                             className="h-full bg-primary rounded-full animate-grow-width"
-                            style={{
-                              '--metric-width': `${metric.score * 100}%`,
-                              animationDelay: `${i * 150 + 300}ms`,
-                            } as React.CSSProperties}
+                            style={
+                              {
+                                "--metric-width": `${metric.score * 100}%`,
+                                animationDelay: `${i * 150 + 300}ms`,
+                              } as React.CSSProperties
+                            }
                             key={`progress-${currentCategoryIndex}-${i}`}
                           ></div>
                         </div>
@@ -404,7 +408,9 @@ export default function IndexPage() {
         {/* What LLMs Do Well Section */}
         <div className="my-16">
           <h2 className="text-3xl font-bold mb-2">LLMs are incredible</h2>
-          <p className="text-xl text-muted-foreground mb-6">But you have to measure HOW incredible they are</p>
+          <p className="text-xl text-muted-foreground mb-6">
+            But you have to measure HOW incredible they are
+          </p>
 
           {/* Task Type Tabs */}
           <div className="flex overflow-x-auto pb-2 mb-6 space-x-2 border-b">
