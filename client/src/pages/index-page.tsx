@@ -22,7 +22,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { AnimatedNumber } from "@/components/ui/animated-number";
 import { Crown } from "lucide-react";
 
-
 export default function IndexPage() {
   const { user, demoLoginMutation, isLoading } = useAuth();
   const [, navigate] = useLocation();
@@ -260,7 +259,14 @@ export default function IndexPage() {
                     variant="outline"
                     className="bg-secondary text-secondary-foreground flex items-center gap-1"
                   >
-                    <Crown className="h-4 w-4" />
+                    <Crown 
+                      className="h-4 w-4"
+                      style={{ 
+                        transformOrigin: "center",
+                        animation: `wiggleGrow 1.5s ease-in-out`
+                      }}
+                      key={`crown-${currentCategoryIndex}`} 
+                    />
                     Best Model
                   </Badge>
                 </h3>
@@ -279,8 +285,20 @@ export default function IndexPage() {
                   100% { width: 100%; }
                 }
                 
+                @keyframes wiggleGrow {
+                  0% { transform: rotate(90deg) scale(1); }
+                  25% { transform: rotate(80deg) scale(1.3); }
+                  50% { transform: rotate(100deg) scale(1.3); }
+                  75% { transform: rotate(85deg) scale(1.1); }
+                  100% { transform: rotate(90deg) scale(1); }
+                }
+                
                 .animate-fadeIn {
                   animation: fadeIn 0.5s ease-out;
+                }
+                
+                .animate-wiggle-grow {
+                  animation: wiggleGrow 1s ease-in-out;
                 }
               `,
                 }}
