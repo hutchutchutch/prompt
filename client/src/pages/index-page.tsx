@@ -21,6 +21,8 @@ import { examplePrompts } from "@/data/example-prompts";
 import { useAuth } from "@/hooks/use-auth";
 import { AnimatedNumber } from "@/components/ui/animated-number";
 import { Crown } from "lucide-react";
+import { ThreeDPhotoCarousel } from "@/components/ui/3d-carousel";
+import { promptTechniques, modelOutputs } from "@/data/carousel-data";
 
 export default function IndexPage() {
   const { user, demoLoginMutation, isLoading } = useAuth();
@@ -213,32 +215,50 @@ export default function IndexPage() {
       </nav>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Hero Section */}
+        {/* New Hero Section with Carousels */}
+        <div className="mb-24 flex flex-col items-center justify-center">
+          <div className="text-center mb-12">
+            <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
+              <span className="block mb-2">Find Your Best Prompt</span>
+              <span className="block text-primary">With the Best Model</span>
+            </h1>
+          </div>
+          
+          <div className="w-full">
+            <ThreeDPhotoCarousel items={promptTechniques} label="Prompts" />
+            <ThreeDPhotoCarousel items={modelOutputs} label="Models" />
+          </div>
+          
+          <div className="flex gap-4 mt-6 justify-center">
+            <Button asChild size="lg">
+              <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
+            </Button>
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => demoLoginMutation.mutate()}
+              disabled={demoLoginMutation.isPending}
+            >
+              {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
+            </Button>
+          </div>
+        </div>
+        
+        {/* Original Hero Section - Moved Down */}
         <div className="mb-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left column: Heading and CTAs */}
           <div className="text-left">
-            <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               <span className="block">Test Your</span>
               <span className="block text-primary">AI Prompts</span>
               <span className="block">Across All Models</span>
-            </h1>
-            <p className="mt-4 text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl max-w-xl">
+            </h2>
+            <p className="mt-4 text-base text-muted-foreground sm:text-lg md:mt-5 max-w-xl">
               Find the best model and prompt combination for your specific use
               case. Compare performance, cost, and accuracy in one place.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <Button asChild size="lg">
-                <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
-              </Button>
-              <Button
-                variant="secondary"
-                size="lg"
-                onClick={() => demoLoginMutation.mutate()}
-                disabled={demoLoginMutation.isPending}
-              >
-                {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
-              </Button>
-              <Button variant="outline" size="lg" asChild>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button variant="secondary" asChild>
                 <Link href="#how-it-works">Learn more</Link>
               </Button>
             </div>
