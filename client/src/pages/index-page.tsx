@@ -225,39 +225,41 @@ export default function IndexPage() {
             </h1>
           </div>
           
-          <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
+          <div className="flex flex-col lg:flex-row gap-6 lg:items-start justify-center">
             <div className="lg:w-1/2 flex flex-col items-center">
               <div className="w-full max-w-xs">
                 <ThreeDPhotoCarousel items={promptTechniques} label="Prompts" />
                 <ThreeDPhotoCarousel items={modelOutputs} label="Models" />
               </div>
-              
-              <div className="flex gap-4 mt-6 justify-center">
-                <Button asChild size="lg">
-                  <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  onClick={() => demoLoginMutation.mutate()}
-                  disabled={demoLoginMutation.isPending}
-                >
-                  {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
-                </Button>
-              </div>
             </div>
             
-            <div className="lg:w-1/2">
-              <EvaluationCard 
-                overallScore={evaluationData.overallScore}
-                inputTokens={evaluationData.inputTokens}
-                inputCost={evaluationData.inputCost}
-                outputTokens={evaluationData.outputTokens}
-                outputCost={evaluationData.outputCost}
-                totalCost={evaluationData.totalCost}
-                firstTokenLatency={evaluationData.firstTokenLatency}
-                totalTime={evaluationData.totalTime}
-              />
+            <div className="lg:w-1/2 flex flex-col items-center">
+              <div className="w-full min-w-[300px] max-w-[400px]">
+                <EvaluationCard 
+                  overallScore={evaluationData.overallScore}
+                  inputTokens={evaluationData.inputTokens}
+                  inputCost={evaluationData.inputCost}
+                  outputTokens={evaluationData.outputTokens}
+                  outputCost={evaluationData.outputCost}
+                  totalCost={evaluationData.totalCost}
+                  firstTokenLatency={evaluationData.firstTokenLatency}
+                  totalTime={evaluationData.totalTime}
+                />
+                
+                <div className="flex gap-4 mt-6 justify-center">
+                  <Button asChild size="lg">
+                    <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    onClick={() => demoLoginMutation.mutate()}
+                    disabled={demoLoginMutation.isPending}
+                  >
+                    {demoLoginMutation.isPending ? "Loading..." : "Try Demo Mode"}
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

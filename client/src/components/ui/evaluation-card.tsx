@@ -46,7 +46,7 @@ export function EvaluationCard({
   };
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col mx-auto">
       <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
         <CardTitle className="text-xl font-semibold">Performance Evaluation</CardTitle>
       </CardHeader>
