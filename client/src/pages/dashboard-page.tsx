@@ -250,7 +250,7 @@ export default function DashboardPage() {
       </div>
 
       {/* 2. Summary / Recommendation Area */}
-      <Card className="mb-6 dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_8px_16px_rgba(0,0,0,0.3),0_0_0_1px_rgba(79,248,229,0.05)] dark:transition-all dark:duration-300 dark:rounded-xl dark:overflow-hidden">
+      <Card className="mb-6 dark:bg-[#1A1A1A] dark:border-[#2A2A2A] dark:shadow-[0_0_32px_8px_rgba(79,248,229,0.25),0_4px_12px_rgba(0,0,0,0.3)] dark:hover:shadow-[0_0_48px_12px_rgba(79,248,229,0.35),0_8px_16px_rgba(0,0,0,0.3)] dark:transition-all dark:duration-300 dark:rounded-xl dark:overflow-hidden">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1">

@@ -18,7 +18,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const isDemo = user?.role === "demo";
   
   return (
-    <div className="min-h-screen bg-background dark:bg-[#121212]">
+    <div className="min-h-screen bg-background dark:bg-[#121212] relative">
+      {/* Teal glow accent for dark mode */}
+      <div className="hidden dark:block pointer-events-none fixed inset-0 z-0" aria-hidden="true">
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-[60vw] h-[40vh] rounded-full blur-3xl opacity-30" style={{background: 'radial-gradient(ellipse at center, rgba(79,248,229,0.18) 0%, rgba(79,248,229,0.04) 80%, transparent 100%)'}} />
+      </div>
       {/* Demo Mode Banner */}
       {isDemo && (
         <div className="bg-primary dark:bg-[#121212] dark:border-b dark:border-[#2A2A2A] text-primary-foreground dark:text-[#00F0FF] text-center py-1 px-4 text-sm font-medium flex items-center justify-center">

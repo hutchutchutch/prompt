@@ -153,7 +153,7 @@ export const PromptCarousel: React.FC = () => {
         </div>
         
         <div
-          className="relative w-full h-[280px] flex items-center justify-center overflow-hidden px-[14px]"
+          className="relative w-full h-[200px] flex items-center justify-center overflow-hidden px-[14px]"
           aria-live="polite"
           style={{
             WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
@@ -254,7 +254,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, isSelected, isPrevious,
   // Use a consistent dark badge style for all categories
   return (
     <motion.div
-      className={`overflow-hidden rounded-xl border aspect-[3/4] w-full max-w-[480px] max-h-[280px] h-full transition-all duration-300 cursor-pointer ${
+      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[480px] max-h-[200px] h-full transition-all duration-300 cursor-pointer ${
         isSelected
           ? 'bg-card text-card-foreground shadow-xl border-primary/30'
           : 'bg-background/80 text-muted-foreground shadow border-border/50'

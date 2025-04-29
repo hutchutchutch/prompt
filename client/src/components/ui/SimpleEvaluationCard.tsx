@@ -41,8 +41,8 @@ export const SimpleEvaluationCard: React.FC = () => {
 
   // Skeleton loader component
   const SkeletonCard: React.FC = () => (
-    <Card className="h-full flex flex-col mx-auto relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-card to-background animate-pulse"></div>
+    <Card className="h-full flex flex-col mx-auto relative overflow-hidden dark:bg-[#1A1A1A]">
+      <div className="absolute inset-0 bg-gradient-to-r from-card to-background animate-pulse dark:from-[#232323] dark:to-[#1A1A1A]"></div>
       <CardHeader className="bg-primary/30 text-primary-foreground rounded-t-lg">
         <div className="h-7 w-48 bg-card/20 rounded animate-pulse"></div>
       </CardHeader>
@@ -75,11 +75,11 @@ export const SimpleEvaluationCard: React.FC = () => {
   const MetricsCard: React.FC = () => {
     return (
       <Card
-        className="eval-panel h-full flex flex-col mx-auto relative overflow-hidden shadow-lg"
+        className="eval-panel h-full flex flex-col mx-auto relative overflow-hidden shadow-lg dark:bg-[#1A1A1A] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
         style={{ position: "sticky", top: 96, zIndex: 20 }}
       >
-        {/* Glow background effect - animated based on score */}
-        {showGlow && (
+        {/* Remove or comment out the animated teal glow background */}
+        {/* {showGlow && (
           <motion.div
             className="absolute inset-0 rounded-lg bg-primary/30 blur-2xl"
             initial={{ opacity: 0, scale: 0.2 }}
@@ -89,7 +89,7 @@ export const SimpleEvaluationCard: React.FC = () => {
             }}
             transition={{ duration: 1.2, ease: "easeOut" }}
           />
-        )}
+        )} */}
         
         <CardHeader className="bg-primary text-primary-foreground rounded-t-lg relative z-10 px-4 py-3">
           <div className="flex items-center justify-between">
@@ -196,49 +196,9 @@ export const SimpleEvaluationCard: React.FC = () => {
     );
   };
 
-  // --- Auto-Optimize Dialog State ---
-  const [optimizeOpen, setOptimizeOpen] = React.useState(false);
-
-  // --- Sparkles Icon (inline for now) ---
-  const Sparkles = () => (
-    <svg className="inline-block mr-1 -mt-1" width="20" height="20" fill="none" viewBox="0 0 24 24">
-      <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.07-7.07l-1.41 1.41M6.34 17.66l-1.41 1.41M17.66 17.66l-1.41-1.41M6.34 6.34L4.93 4.93" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round"/>
-      <circle cx="12" cy="12" r="5" stroke="#14b8a6" strokeWidth="2"/>
-    </svg>
-  );
-
   return (
     <div className="w-full min-w-[300px] max-w-[400px] mx-auto">
       {loading ? <SkeletonCard /> : <MetricsCard />}
-      {/* Evaluation Panel Footer */}
-      <div className="w-full flex justify-center mt-4">
-        <button
-          className="px-6 py-2 rounded-lg bg-teal-500 text-white font-semibold shadow-lg flex items-center gap-2 text-base hover:bg-teal-600 transition-all"
-          onClick={() => setOptimizeOpen(true)}
-        >
-          <Sparkles />
-          Auto-Optimize
-        </button>
-      </div>
-      {/* Auto-Optimize Dialog (stub) */}
-      {optimizeOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-background rounded-xl shadow-2xl p-8 min-w-[340px] max-w-[90vw]">
-            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Sparkles /> Auto-Optimize
-            </h2>
-            <p className="mb-4 text-sm text-muted-foreground">
-              (Dialog UI and optimization flow to be implemented)
-            </p>
-            <button
-              className="mt-2 px-4 py-2 rounded bg-zinc-800 text-zinc-100 hover:bg-zinc-700"
-              onClick={() => setOptimizeOpen(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
