@@ -259,13 +259,13 @@ export default function IndexPage() {
                     variant="outline"
                     className="bg-secondary text-secondary-foreground flex items-center gap-1"
                   >
-                    <Crown 
+                    <Crown
                       className="h-4 w-4"
-                      style={{ 
+                      style={{
                         transformOrigin: "center",
-                        animation: `wiggleGrow 1.5s ease-in-out`
+                        animation: `wiggleGrow 1.5s ease-in-out`,
                       }}
-                      key={`crown-${currentCategoryIndex}`} 
+                      key={`crown-${currentCategoryIndex}`}
                     />
                     Best Model
                   </Badge>
@@ -280,10 +280,7 @@ export default function IndexPage() {
                   100% { opacity: 1; }
                 }
                 
-                @keyframes growWidth {
-                  0% { width: 0%; }
-                  100% { width: 100%; }
-                }
+                /* We'll use custom animation via inline styles */
                 
                 @keyframes wiggleGrow {
                   0% { transform: rotate(90deg) scale(1); }
@@ -322,11 +319,14 @@ export default function IndexPage() {
                   </div>
                   <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-primary rounded-full transition-all duration-1000"
+                      className="h-full bg-primary rounded-full"
                       style={{
-                        width: "92%",
-                        animation: "growWidth 1s ease-out",
+                        width: "92%", 
+                        transitionProperty: "width",
+                        transitionDuration: "1s",
+                        transitionTimingFunction: "ease-out"
                       }}
+                      key={`progress-main-${currentCategoryIndex}`}
                     ></div>
                   </div>
                   <div className="flex justify-between mt-1">
@@ -371,8 +371,13 @@ export default function IndexPage() {
                             className="h-full bg-primary rounded-full"
                             style={{
                               width: `${metric.score * 100}%`,
-                              animation: `growWidth 1s ease-out ${i * 100 + 300}ms`,
+                              animation: "none",
+                              transitionProperty: "width",
+                              transitionDuration: "1s",
+                              transitionTimingFunction: "ease-out",
+                              transitionDelay: `${i * 150 + 300}ms`
                             }}
+                            key={`progress-${currentCategoryIndex}-${i}`}
                           ></div>
                         </div>
                       </div>
