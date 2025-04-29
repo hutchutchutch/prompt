@@ -403,7 +403,8 @@ export default function IndexPage() {
 
         {/* What LLMs Do Well Section */}
         <div className="my-16">
-          <h2 className="text-3xl font-bold mb-6">What LLMs Can Do For You</h2>
+          <h2 className="text-3xl font-bold mb-2">LLMs are incredible</h2>
+          <p className="text-xl text-muted-foreground mb-6">But you have to measure HOW incredible they are</p>
 
           {/* Task Type Tabs */}
           <div className="flex overflow-x-auto pb-2 mb-6 space-x-2 border-b">
