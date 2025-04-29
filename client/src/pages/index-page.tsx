@@ -226,11 +226,10 @@ export default function IndexPage() {
             </h1>
           </div>
           
-          <div className="flex flex-col lg:flex-row gap-6 lg:items-start justify-center">
+          <div className="flex flex-col lg:flex-row gap-10 lg:items-center justify-center">
             <div className="lg:w-1/2 flex flex-col items-center">
-              <div className="w-full max-w-xs">
-                <ThreeDPhotoCarousel items={promptTechniques} label="Prompts" />
-                <ThreeDPhotoCarousel items={modelOutputs} label="Models" />
+              <div className="w-full flex justify-center">
+                <ThreeDStack />
               </div>
             </div>
             
