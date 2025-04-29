@@ -115,7 +115,7 @@ export default function AuthPage() {
         </div>
         
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <div className="bg-white dark:bg-[#1F1F1F] py-8 px-4 shadow sm:rounded-lg sm:px-10 dark:shadow-[0_4px_12px_rgba(0,0,0,0.4)] dark:border dark:border-[#2A2A2A]">
             <Tabs defaultValue={activeTab} value={activeTab} onValueChange={(value) => setActiveTab(value as "signin" | "signup")}>
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="signin">Sign In</TabsTrigger>
@@ -150,7 +150,7 @@ export default function AuthPage() {
                         <FormItem>
                           <div className="flex items-center justify-between">
                             <FormLabel>Password</FormLabel>
-                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80">
+                            <a href="#" className="text-sm font-medium text-primary hover:text-primary/80 dark:text-[#4FF8E5] dark:hover:text-[#4FF8E5]/80">
                               Forgot password?
                             </a>
                           </div>
@@ -198,7 +198,7 @@ export default function AuthPage() {
                       <Separator />
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                      <span className="px-2 bg-white dark:bg-[#1F1F1F] text-gray-500 dark:text-[#B0B0B0]">Or continue with</span>
                     </div>
                   </div>
                   
@@ -312,11 +312,11 @@ export default function AuthPage() {
                 </Form>
                 
                 <div className="mt-6">
-                  <p className="text-xs text-gray-500 text-center">
+                  <p className="text-xs text-gray-500 dark:text-[#B0B0B0] text-center">
                     By signing up, you agree to our{" "}
-                    <a href="#" className="text-primary hover:text-primary/80">Terms of Service</a>{" "}
+                    <a href="#" className="text-primary hover:text-primary/80 dark:text-[#4FF8E5] dark:hover:text-[#4FF8E5]/80">Terms of Service</a>{" "}
                     and{" "}
-                    <a href="#" className="text-primary hover:text-primary/80">Privacy Policy</a>.
+                    <a href="#" className="text-primary hover:text-primary/80 dark:text-[#4FF8E5] dark:hover:text-[#4FF8E5]/80">Privacy Policy</a>.
                   </p>
                 </div>
                 
@@ -326,7 +326,7 @@ export default function AuthPage() {
                       <Separator />
                     </div>
                     <div className="relative flex justify-center text-sm">
-                      <span className="px-2 bg-white text-gray-500">Or try instantly</span>
+                      <span className="px-2 bg-white dark:bg-[#1F1F1F] text-gray-500 dark:text-[#B0B0B0]">Or try instantly</span>
                     </div>
                   </div>
                   
