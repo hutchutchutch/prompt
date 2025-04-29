@@ -303,7 +303,7 @@ export default function WizardPage() {
                 
                 <div className="space-y-6">
                   <div className="flex flex-col space-y-2">
-                    <label className="text-sm font-medium text-gray-700">
+                    <label className="text-sm font-medium">
                       Iteration Budget
                     </label>
                     <div className="flex items-center space-x-4">
@@ -315,21 +315,21 @@ export default function WizardPage() {
                         onValueChange={(value) => handleInputChange("iterationBudget", value[0])}
                         className="flex-1"
                       />
-                      <span className="text-sm font-medium text-gray-900 w-8 text-center">
+                      <span className="text-sm font-medium w-8 text-center">
                         {formData.iterationBudget || 5}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       Higher values may increase cost but improve results
                     </p>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1 block">
+                      <label className="text-sm font-medium mb-1 block">
                         Enable Red-Team Testing
                       </label>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         Test prompt security against attacks and vulnerabilities
                       </p>
                     </div>
@@ -341,12 +341,12 @@ export default function WizardPage() {
                 </div>
               </div>
               
-              <div className="mb-6 bg-amber-50 border border-amber-200 rounded-md p-4">
+              <div className="mb-6 bg-amber-950/20 border border-amber-800/30 rounded-md p-4">
                 <div className="flex">
                   <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
                   <div>
-                    <h4 className="text-sm font-medium text-amber-800">Review Before Running</h4>
-                    <div className="mt-2 text-xs text-amber-700">
+                    <h4 className="text-sm font-medium text-amber-400">Review Before Running</h4>
+                    <div className="mt-2 text-xs text-amber-300/90">
                       <p>You're about to test {formData.selectedModels.length} models with {formData.selectedFrameworks.length} frameworks.</p>
                       <p className="mt-1">This will generate {formData.selectedModels.length * formData.selectedFrameworks.length} different tests.</p>
                     </div>
@@ -387,7 +387,7 @@ export default function WizardPage() {
                   {Object.keys(progressData).length === 0 ? (
                     <div className="text-center py-8">
                       <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary mb-4" />
-                      <p className="text-gray-500">Connecting to test session...</p>
+                      <p className="text-muted-foreground">Connecting to test session...</p>
                     </div>
                   ) : (
                     <>
@@ -395,26 +395,26 @@ export default function WizardPage() {
                         {Object.entries(progressData).map(([key, data]) => {
                           const [modelId, variantId] = key.split(':');
                           return (
-                            <div key={key} className="border rounded-md p-4">
+                            <div key={key} className="border border-border rounded-md p-4 bg-card">
                               <div className="flex justify-between mb-2">
                                 <span className="font-medium text-sm">{modelId} - {variantId}</span>
-                                <span className="text-sm text-gray-500">{data.progress}%</span>
+                                <span className="text-sm text-muted-foreground">{data.progress}%</span>
                               </div>
                               <ProgressBar 
                                 percent={data.progress} 
                                 status={data.progress < 100 ? "loading" : "success"}
                                 showLabel={false}
                               />
-                              <div className="mt-2 text-sm text-gray-500">{data.message}</div>
+                              <div className="mt-2 text-sm text-muted-foreground">{data.message}</div>
                               
                               {data.firstTokenLatency && (
-                                <div className="mt-2 text-xs text-gray-400">
+                                <div className="mt-2 text-xs text-muted-foreground/70">
                                   First token: {data.firstTokenLatency}ms
                                 </div>
                               )}
                               
                               {data.totalTime && (
-                                <div className="text-xs text-gray-400">
+                                <div className="text-xs text-muted-foreground/70">
                                   Total time: {data.totalTime}ms
                                 </div>
                               )}
@@ -435,7 +435,7 @@ export default function WizardPage() {
                   )}
                 </div>
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <p>No test ID provided. Please start a new test.</p>
                   <Button className="mt-4" asChild>
                     <Link href="/wizard">New Test</Link>
