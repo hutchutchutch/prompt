@@ -7,12 +7,21 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LlmTaskShowcase } from "@/components/llm-task-showcase";
 import { examplePrompts } from "@/data/example-prompts";
 import { useAuth } from "@/hooks/use-auth";
 import { AnimatedNumber } from "@/components/ui/animated-number";
+import { Crown } from "lucide-react";
+
 
 export default function IndexPage() {
   const { user, demoLoginMutation, isLoading } = useAuth();
@@ -20,16 +29,16 @@ export default function IndexPage() {
   const [selectedTaskType, setSelectedTaskType] = useState<string | null>(null);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
-  
+
   // For LLM showcase examples
   const taskTypes = [
     "classification",
     "entityExtraction",
     "summarization",
     "documentation",
-    "explanation"
+    "explanation",
   ];
-  
+
   // Model performance data for each category
   const modelPerformanceData = [
     {
@@ -40,8 +49,8 @@ export default function IndexPage() {
         { name: "Content Coverage (ROUGE-1)", score: 0.87 },
         { name: "Key Point Retention (ROUGE-2)", score: 0.79 },
         { name: "Flow Preservation (ROUGE-L)", score: 0.83 },
-        { name: "Factual Accuracy", score: 0.96 }
-      ]
+        { name: "Factual Accuracy", score: 0.96 },
+      ],
     },
     {
       category: "Information Extraction",
@@ -50,9 +59,9 @@ export default function IndexPage() {
       metrics: [
         { name: "Extraction Accuracy (Precision)", score: 0.92 },
         { name: "Extraction Completeness (Recall)", score: 0.88 },
-        { name: "Overall Extraction Quality (F1-Score)", score: 0.90 },
-        { name: "Structured Format Compliance", score: 0.95 }
-      ]
+        { name: "Overall Extraction Quality (F1-Score)", score: 0.9 },
+        { name: "Structured Format Compliance", score: 0.95 },
+      ],
     },
     {
       category: "Question Answering",
@@ -62,8 +71,8 @@ export default function IndexPage() {
         { name: "Perfect Match Rate (Exact Match)", score: 0.81 },
         { name: "Answer Overlap (F1-Score)", score: 0.89 },
         { name: "Factual Correctness", score: 0.94 },
-        { name: "Question Relevance", score: 0.92 }
-      ]
+        { name: "Question Relevance", score: 0.92 },
+      ],
     },
     {
       category: "Text Classification",
@@ -73,8 +82,8 @@ export default function IndexPage() {
         { name: "Overall Correctness (Accuracy)", score: 0.95 },
         { name: "Classification Reliability (Precision)", score: 0.92 },
         { name: "Category Coverage (Recall)", score: 0.89 },
-        { name: "Balanced Performance (F1-Score)", score: 0.91 }
-      ]
+        { name: "Balanced Performance (F1-Score)", score: 0.91 },
+      ],
     },
     {
       category: "Code Generation",
@@ -84,8 +93,8 @@ export default function IndexPage() {
         { name: "Test Pass Rate (Pass@k)", score: 0.91 },
         { name: "Code Correctness", score: 0.88 },
         { name: "Code Quality Score", score: 0.86 },
-        { name: "Readability Index", score: 0.93 }
-      ]
+        { name: "Readability Index", score: 0.93 },
+      ],
     },
     {
       category: "Conversational AI",
@@ -94,45 +103,49 @@ export default function IndexPage() {
       metrics: [
         { name: "Goal Achievement", score: 0.87 },
         { name: "Response Appropriateness", score: 0.92 },
-        { name: "Information Accuracy", score: 0.90 },
-        { name: "User Experience", score: 0.94 }
-      ]
-    }
+        { name: "Information Accuracy", score: 0.9 },
+        { name: "User Experience", score: 0.94 },
+      ],
+    },
   ];
-  
+
   const currentTask = selectedTaskType || taskTypes[currentTaskIndex];
   const taskData = examplePrompts[currentTask as keyof typeof examplePrompts];
-  const allTaskCategories = taskTypes.map(type => examplePrompts[type as keyof typeof examplePrompts].taskCategory);
-  
+  const allTaskCategories = taskTypes.map(
+    (type) => examplePrompts[type as keyof typeof examplePrompts].taskCategory,
+  );
+
   // Only redirect if user is already authenticated
   useEffect(() => {
     // Only run after auth state is determined
     if (!isLoading && user) {
       // If already logged in, go to dashboard
-      navigate('/dashboard');
+      navigate("/dashboard");
     }
     // No automatic demo login - let users explore the landing page first
   }, [isLoading, user, navigate]);
-  
+
   useEffect(() => {
     if (selectedTaskType) return; // Don't cycle if user has selected a tab
-    
+
     const interval = setInterval(() => {
       setCurrentTaskIndex((current) => (current + 1) % taskTypes.length);
     }, 8000); // 8 seconds per task type
-    
+
     return () => clearInterval(interval);
   }, [selectedTaskType]);
-  
+
   // Cycle through categories for the hero animation
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentCategoryIndex((current) => (current + 1) % modelPerformanceData.length);
+      setCurrentCategoryIndex(
+        (current) => (current + 1) % modelPerformanceData.length,
+      );
     }, 5000); // 5 seconds per category
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   // Handle tab selection to pause animation
   const handleTaskSelect = (taskType: string) => {
     if (selectedTaskType === taskType) {
@@ -179,8 +192,8 @@ export default function IndexPage() {
               >
                 Docs
               </Link>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 onClick={() => demoLoginMutation.mutate()}
                 disabled={demoLoginMutation.isPending}
               >
@@ -211,14 +224,15 @@ export default function IndexPage() {
               <span className="block">Across All Models</span>
             </h1>
             <p className="mt-4 text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl max-w-xl">
-              Find the best model and prompt combination for your specific use case. Compare performance, cost, and accuracy in one place.
+              Find the best model and prompt combination for your specific use
+              case. Compare performance, cost, and accuracy in one place.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <Button asChild size="lg">
                 <Link href={user ? "/wizard" : "/auth"}>Try your prompt</Link>
               </Button>
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 size="lg"
                 onClick={() => demoLoginMutation.mutate()}
                 disabled={demoLoginMutation.isPending}
@@ -230,24 +244,31 @@ export default function IndexPage() {
               </Button>
             </div>
           </div>
-          
+
           {/* Right column: Animated model performance card */}
           <div className="h-full flex items-center justify-center">
-            <div 
-              className="bg-card rounded-lg shadow-md overflow-hidden w-full max-w-md transform transition-all duration-500 ease-in-out hover:shadow-lg border border-border"
-            >
+            <div className="bg-card rounded-lg shadow-md overflow-hidden w-full max-w-md transform transition-all duration-500 ease-in-out hover:shadow-lg border border-border">
               <div className="bg-primary text-primary-foreground px-6 py-4">
                 <h3 className="text-lg font-semibold flex items-center justify-between">
-                  <span key={modelPerformanceData[currentCategoryIndex].category} className="animate-fadeIn">
+                  <span
+                    key={modelPerformanceData[currentCategoryIndex].category}
+                    className="animate-fadeIn"
+                  >
                     {modelPerformanceData[currentCategoryIndex].category}
                   </span>
-                  <Badge variant="outline" className="bg-primary-foreground bg-opacity-20 text-primary-foreground border-primary-foreground border-opacity-30">
+                  <Badge
+                    variant="outline"
+                    className="bg-secondary text-secondary-foreground flex items-center gap-1"
+                  >
+                    <Crown className="h-4 w-4" />
                     Best Model
                   </Badge>
                 </h3>
               </div>
-              
-              <style dangerouslySetInnerHTML={{ __html: `                
+
+              <style
+                dangerouslySetInnerHTML={{
+                  __html: `                
                 @keyframes fadeIn {
                   0% { opacity: 0; }
                   100% { opacity: 1; }
@@ -261,32 +282,42 @@ export default function IndexPage() {
                 .animate-fadeIn {
                   animation: fadeIn 0.5s ease-out;
                 }
-              `}} />
-              
+              `,
+                }}
+              />
+
               <div className="p-6">
                 <div className="mb-6">
                   <div className="flex justify-between items-center mb-2">
-                    <span key={modelPerformanceData[currentCategoryIndex].bestModel} className="text-2xl font-bold text-card-foreground animate-fadeIn">
+                    <span
+                      key={modelPerformanceData[currentCategoryIndex].bestModel}
+                      className="text-2xl font-bold text-card-foreground animate-fadeIn"
+                    >
                       {modelPerformanceData[currentCategoryIndex].bestModel}
                     </span>
-                    <span key={modelPerformanceData[currentCategoryIndex].provider} className="text-sm text-muted-foreground animate-fadeIn">
+                    <span
+                      key={modelPerformanceData[currentCategoryIndex].provider}
+                      className="text-sm text-muted-foreground animate-fadeIn"
+                    >
                       {modelPerformanceData[currentCategoryIndex].provider}
                     </span>
                   </div>
                   <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-primary rounded-full transition-all duration-1000" 
-                      style={{ 
-                        width: '92%',
-                        animation: 'growWidth 1s ease-out'
+                    <div
+                      className="h-full bg-primary rounded-full transition-all duration-1000"
+                      style={{
+                        width: "92%",
+                        animation: "growWidth 1s ease-out",
                       }}
                     ></div>
                   </div>
                   <div className="flex justify-between mt-1">
-                    <span className="text-xs text-muted-foreground">Performance Score</span>
+                    <span className="text-xs text-muted-foreground">
+                      Performance Score
+                    </span>
                     <div className="flex items-center">
-                      <AnimatedNumber 
-                        value={92} 
+                      <AnimatedNumber
+                        value={92}
                         className="text-xs font-medium"
                         duration={1500}
                       />
@@ -294,35 +325,49 @@ export default function IndexPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-card-foreground">Evaluation Metrics</h4>
-                  {modelPerformanceData[currentCategoryIndex].metrics.map((metric, i) => (
-                    <div key={`${currentCategoryIndex}-${i}`} className="space-y-1 animate-fadeIn" style={{ animationDelay: `${i * 100}ms` }}>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-muted-foreground">{metric.name}</span>
-                        <AnimatedNumber 
-                          value={metric.score} 
-                          className="text-sm font-medium text-card-foreground"
-                          formatOptions={{ decimals: 2 }}
-                          duration={1500}
-                        />
+                  <h4 className="text-sm font-medium text-card-foreground">
+                    Evaluation Metrics
+                  </h4>
+                  {modelPerformanceData[currentCategoryIndex].metrics.map(
+                    (metric, i) => (
+                      <div
+                        key={`${currentCategoryIndex}-${i}`}
+                        className="space-y-1 animate-fadeIn"
+                        style={{ animationDelay: `${i * 100}ms` }}
+                      >
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-muted-foreground">
+                            {metric.name}
+                          </span>
+                          <AnimatedNumber
+                            value={metric.score}
+                            className="text-sm font-medium text-card-foreground"
+                            formatOptions={{ decimals: 2 }}
+                            duration={1500}
+                          />
+                        </div>
+                        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-primary rounded-full"
+                            style={{
+                              width: `${metric.score * 100}%`,
+                              animation: `growWidth 1s ease-out ${i * 100 + 300}ms`,
+                            }}
+                          ></div>
+                        </div>
                       </div>
-                      <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-primary rounded-full" 
-                          style={{ 
-                            width: `${metric.score * 100}%`,
-                            animation: `growWidth 1s ease-out ${i * 100 + 300}ms`
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
-                
+
                 <div className="mt-6 pt-4 border-t border-border">
-                  <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
+                  <Button
+                    variant="link"
+                    className="text-sm p-0 h-auto text-primary"
+                    asChild
+                  >
                     <Link href={user ? "/wizard" : "/auth"}>
                       Try with your prompt →
                     </Link>
@@ -336,18 +381,20 @@ export default function IndexPage() {
         {/* What LLMs Do Well Section */}
         <div className="my-16">
           <h2 className="text-3xl font-bold mb-6">What LLMs Can Do For You</h2>
-          
+
           {/* Task Type Tabs */}
           <div className="flex overflow-x-auto pb-2 mb-6 space-x-2 border-b">
             {taskTypes.map((taskType, index) => {
               const isActive = currentTask === taskType;
-              const taskCategory = examplePrompts[taskType as keyof typeof examplePrompts].taskCategory;
+              const taskCategory =
+                examplePrompts[taskType as keyof typeof examplePrompts]
+                  .taskCategory;
               return (
                 <button
                   key={taskType}
                   onClick={() => handleTaskSelect(taskType)}
                   className={`px-4 py-2 rounded-t-lg whitespace-nowrap transition-colors ${
-                    isActive 
+                    isActive
                       ? "bg-primary text-primary-foreground font-medium"
                       : "bg-card hover:bg-muted text-card-foreground"
                   } ${
@@ -361,7 +408,7 @@ export default function IndexPage() {
               );
             })}
           </div>
-          
+
           <LlmTaskShowcase
             promptText={taskData.promptText}
             taskCategory={taskData.taskCategory}
@@ -371,59 +418,78 @@ export default function IndexPage() {
             businessValue={taskData.businessValue}
           />
         </div>
-        
+
         {/* Prompt of the Day */}
         <div className="my-16 bg-card rounded-lg shadow-md overflow-hidden max-w-4xl mx-auto border border-border">
           <CardHeader className="px-6 py-4 bg-primary text-primary-foreground">
-            <CardTitle className="text-xl font-semibold">Prompt of the Day: {taskData.taskCategory}</CardTitle>
+            <CardTitle className="text-xl font-semibold">
+              Prompt of the Day: {taskData.taskCategory}
+            </CardTitle>
           </CardHeader>
-          
+
           <CardContent className="px-6 py-4">
             <div className="prompt-font text-sm bg-muted p-4 rounded border border-border mb-4">
               {taskData.promptText}
             </div>
-            
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between">
               <div>
                 <span className="font-medium">Best model: </span>
-                <span className="text-primary">{taskData.bestQuality.model}</span>
+                <span className="text-primary">
+                  {taskData.bestQuality.model}
+                </span>
               </div>
-              
+
               <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
-                <Badge variant="secondary" className="text-green-600 dark:text-green-400">
+                <Badge
+                  variant="secondary"
+                  className="text-green-600 dark:text-green-400"
+                >
                   Quality: {taskData.bestQuality.score.toFixed(1)}/10
                 </Badge>
-                <Badge variant="secondary" className="text-blue-600 dark:text-blue-400">
+                <Badge
+                  variant="secondary"
+                  className="text-blue-600 dark:text-blue-400"
+                >
                   Speed: {taskData.bestQuality.time}ms
                 </Badge>
-                <Badge variant="secondary" className="text-purple-600 dark:text-purple-400">
+                <Badge
+                  variant="secondary"
+                  className="text-purple-600 dark:text-purple-400"
+                >
                   Cost: ${taskData.bestQuality.cost.toFixed(5)}
                 </Badge>
               </div>
             </div>
           </CardContent>
-          
+
           <CardFooter className="px-6 py-3 bg-muted border-t border-border flex justify-between">
             {user ? (
-              <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
-                <Link href="/wizard">
-                  Try with your settings →
-                </Link>
+              <Button
+                variant="link"
+                className="text-sm p-0 h-auto text-primary"
+                asChild
+              >
+                <Link href="/wizard">Try with your settings →</Link>
               </Button>
             ) : (
               <div className="flex gap-6">
-                <Button variant="link" className="text-sm p-0 h-auto text-primary" asChild>
-                  <Link href="/auth">
-                    Sign in to try →
-                  </Link>
+                <Button
+                  variant="link"
+                  className="text-sm p-0 h-auto text-primary"
+                  asChild
+                >
+                  <Link href="/auth">Sign in to try →</Link>
                 </Button>
-                <Button 
-                  variant="link" 
-                  className="text-sm p-0 h-auto text-primary" 
+                <Button
+                  variant="link"
+                  className="text-sm p-0 h-auto text-primary"
                   onClick={() => demoLoginMutation.mutate()}
                   disabled={demoLoginMutation.isPending}
                 >
-                  {demoLoginMutation.isPending ? "Loading..." : "Try in demo mode →"}
+                  {demoLoginMutation.isPending
+                    ? "Loading..."
+                    : "Try in demo mode →"}
                 </Button>
               </div>
             )}
@@ -691,17 +757,26 @@ export default function IndexPage() {
               <h3 className="text-lg font-semibold mb-4">Product</h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>
-                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     Features
                   </a>
                 </li>
                 <li>
-                  <a href="#pricing" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#pricing"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     Pricing
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     Security
                   </a>
                 </li>
@@ -711,17 +786,26 @@ export default function IndexPage() {
               <h3 className="text-lg font-semibold mb-4">Resources</h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>
-                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     Documentation
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     API Reference
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     Blog
                   </a>
                 </li>
@@ -731,17 +815,26 @@ export default function IndexPage() {
               <h3 className="text-lg font-semibold mb-4">Company</h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>
-                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     About
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     Contact
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary hover:dark:text-slate-100 transition-colors">
+                  <a
+                    href="#"
+                    className="hover:text-primary hover:dark:text-slate-100 transition-colors"
+                  >
                     Privacy
                   </a>
                 </li>
