@@ -10,42 +10,32 @@ export const RecommendationHeader: React.FC = () => {
   
   console.log("Current metrics:", metrics);
   
-  // Find the best prompt and model based on the metrics
-  // In a real app, this would be determined by the backend
-  // For now, we'll use the current prompt and model as the recommendation
-  const recommendedPromptId = metrics.promptId;
-  const recommendedModelId = metrics.modelId;
-  
-  console.log("Recommended promptId:", recommendedPromptId);
-  console.log("Recommended modelId:", recommendedModelId);
-  
-  // Find the indices of the recommended prompt and model
-  const recommendedPromptIdx = prompts.findIndex(p => p.id === recommendedPromptId);
-  const recommendedModelIdx = models.findIndex(m => m.id === recommendedModelId);
-  
-  // Get the prompt and model objects
-  const recommendedPrompt = recommendedPromptIdx >= 0 ? prompts[recommendedPromptIdx] : null;
-  const recommendedModel = recommendedModelIdx >= 0 ? models[recommendedModelIdx] : null;
+  // Find the highest scoring combo
+  const best = Array.isArray(metrics)
+    ? metrics.reduce((max, curr) => (curr.score > (max?.score ?? -Infinity) ? curr : max), null)
+    : null;
+
+  const bestPrompt = best ? prompts.find(p => p.id === best.promptId) : null;
+  const bestModel = best ? models.find(m => m.id === best.modelId) : null;
+  const bestScore = best?.score;
+
+  if (!bestPrompt || !bestModel) return null;
   
   // Handle click to apply recommendation
   const handleRecommendationClick = () => {
     console.log("Recommendation clicked!");
-    console.log("Recommended prompt index:", recommendedPromptIdx);
-    console.log("Recommended model index:", recommendedModelIdx);
+    console.log("Recommended prompt index:", bestPromptIdx);
+    console.log("Recommended model index:", bestModelIdx);
     
-    if (recommendedPromptIdx >= 0) {
-      setPromptIdx(recommendedPromptIdx);
-      console.log("Setting prompt index to:", recommendedPromptIdx);
+    if (bestPromptIdx >= 0) {
+      setPromptIdx(bestPromptIdx);
+      console.log("Setting prompt index to:", bestPromptIdx);
     }
-    if (recommendedModelIdx >= 0) {
-      setModelIdx(recommendedModelIdx);
-      console.log("Setting model index to:", recommendedModelIdx);
+    if (bestModelIdx >= 0) {
+      setModelIdx(bestModelIdx);
+      console.log("Setting model index to:", bestModelIdx);
     }
   };
-  
-  if (!recommendedPrompt || !recommendedModel) {
-    return null;
-  }
   
   return (
     <motion.div 
@@ -63,12 +53,17 @@ export const RecommendationHeader: React.FC = () => {
         <div className="flex flex-col space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Prompt Structure:</span>
-            <span className="font-medium text-sm">{recommendedPrompt.title}</span>
+            <span className="font-medium text-sm">{bestPrompt.title}</span>
           </div>
           
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Model:</span>
-            <span className="font-medium text-sm">{recommendedModel.title}</span>
+            <span className="font-medium text-sm">{bestModel.title}</span>
+          </div>
+          
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">Score:</span>
+            <span className="font-medium text-sm">{bestScore}</span>
           </div>
         </div>
         

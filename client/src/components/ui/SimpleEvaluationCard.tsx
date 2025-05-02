@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Clock, CreditCard, FileText } from 'lucide-react';
+import { Clock, CreditCard, FileText, Star } from 'lucide-react';
 import { usePromptStore } from '@/store/promptStore';
+import { models } from '@/data/models';
+import { Rating, RatingButton } from '@/components/ui/rating';
 
 // Simplified version of EvaluationCard without Odometer
 export const SimpleEvaluationCard: React.FC = () => {
-  const { metrics, loading } = usePromptStore();
+  const { metrics, loading, modelIdx } = usePromptStore();
   const [showGlow, setShowGlow] = useState(false);
 
   // Format number with commas
@@ -73,6 +75,8 @@ export const SimpleEvaluationCard: React.FC = () => {
 
   // Metrics card that shows actual data
   const MetricsCard: React.FC = () => {
+    const displayScore = metrics.score?.toFixed(1) ?? '0.0';
+    const model = models[modelIdx] || { title: 'Unknown' };
     return (
       <Card
         className="eval-panel h-full flex flex-col mx-auto relative overflow-hidden shadow-lg dark:bg-[#1A1A1A] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
@@ -92,13 +96,16 @@ export const SimpleEvaluationCard: React.FC = () => {
         )} */}
         
         <CardHeader className="bg-primary text-primary-foreground rounded-t-lg relative z-10 px-4 py-3">
-          <div className="flex items-center justify-between">
-            <span className="text-3xl font-extrabold flex items-center gap-2 drop-shadow-lg">
-              {metrics.score} / 100 <span className="text-2xl">⭐</span>
+          <div className="flex items-center justify-between w-full">
+            <span className="text-3xl font-extrabold flex items-center gap-3 drop-shadow-lg">
+              {displayScore}
+              <Rating value={metrics.score} readOnly>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <RatingButton key={i} size={32} />
+                ))}
+              </Rating>
             </span>
-            <Badge variant="outline" className="bg-amber-900/60 text-amber-300 whitespace-nowrap text-xs py-1">
-              OpenAI
-            </Badge>
+            <span className="text-base font-semibold text-primary-foreground/80 whitespace-nowrap">{model.title}</span>
           </div>
         </CardHeader>
         
