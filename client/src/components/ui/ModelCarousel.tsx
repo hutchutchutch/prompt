@@ -18,6 +18,10 @@ export const ModelCarousel: React.FC = () => {
   const [direction, setDirection] = useState(0);
   const controls = useAnimationControls();
   
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalModel, setModalModel] = useState<typeof models[0] | null>(null);
+  
   const nextModel = () => {
     setDirection(1);
     setModelIdx((modelIdx + 1) % models.length);
@@ -45,6 +49,13 @@ export const ModelCarousel: React.FC = () => {
   const handleCardClick = (index: number) => {
     setDirection(index > modelIdx ? 1 : -1);
     setModelIdx(index);
+  };
+  
+  // Open modal for a model
+  const handleModelCardClick = (model: typeof models[0]) => {
+    setModalModel(model);
+    setModalOpen(true);
+    console.log("Opening model modal for:", model.title);
   };
 
   return (
@@ -84,7 +95,7 @@ export const ModelCarousel: React.FC = () => {
       </div>
       
       <div
-        className="relative w-full h-[200px] flex items-center justify-center overflow-hidden px-[14px]"
+        className="relative w-full h-[280px] flex items-center justify-center overflow-hidden px-[14px]"
         aria-live="polite"
         style={{
           WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
@@ -105,10 +116,12 @@ export const ModelCarousel: React.FC = () => {
         
         {/* Current Model Card */}
         <div className="absolute z-20">
-          <ModelCard 
-            model={models[modelIdx]} 
-            isSelected 
-          />
+          <div onClick={() => handleModelCardClick(models[modelIdx])}>
+            <ModelCard 
+              model={models[modelIdx]} 
+              isSelected 
+            />
+          </div>
         </div>
         
         {/* Next Model Card */}
@@ -155,6 +168,24 @@ export const ModelCarousel: React.FC = () => {
           </span>
         </div>
       </div>
+      
+      {/* Placeholder for Model Modal */}
+      {modalOpen && modalModel && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-card p-6 rounded-lg shadow-lg max-w-2xl w-full">
+            <h2 className="text-xl font-bold mb-4">{modalModel.title}</h2>
+            <div className="mb-4">
+              <p className="text-muted-foreground mb-2">Model content:</p>
+              <div className="bg-background p-4 rounded border border-border">
+                {modalModel.content}
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <Button onClick={() => setModalOpen(false)}>Close</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -208,7 +239,7 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
   
   return (
     <motion.div
-      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[480px] max-h-[200px] h-full transition-all duration-300 cursor-pointer ${
+      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[480px] max-h-[280px] h-full transition-all duration-300 cursor-pointer ${
         isSelected
           ? 'bg-card text-card-foreground shadow-xl border-primary/30'
           : 'bg-background/80 text-muted-foreground shadow border-border/50'
@@ -230,7 +261,7 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
     >
       <div className="p-5 flex flex-col h-full">
         <h3 className="font-semibold text-base sm:text-lg text-zinc-100 mb-2">Output</h3>
-        <div className="flex-grow overflow-auto text-sm text-zinc-300 mb-2">
+        <div className="flex-grow overflow-auto text-sm text-zinc-300 mb-2 max-h-[180px]">
           {model.content}
         </div>
         <div className="h-px w-full bg-border/40 my-2"></div>
