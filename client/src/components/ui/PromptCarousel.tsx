@@ -16,7 +16,7 @@ const customTransition = {
   ease: [0.45, 0, 0.2, 1] 
 };
 
-export const PromptCarousel: React.FC = () => {
+export const PromptCarousel: React.FC<{className?: string}> = ({className = ''}) => {
   const { promptIdx, setPromptIdx, fetchMetrics } = usePromptStore();
   const [direction, setDirection] = useState(0);
   const controls = useAnimationControls();
@@ -95,76 +95,19 @@ export const PromptCarousel: React.FC = () => {
 
   return (
     <>
-      <div className="relative flex flex-col py-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-foreground">
-            Prompt chosen: {prompts[promptIdx].title} for {prompts[promptIdx].task}
-          </h2>
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={prevPrompt}
-              className="h-8 px-2 hover:bg-primary/10 hover:text-primary"
-            >
-              <ChevronLeft className="h-4 w-4 mr-1" />
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={nextPrompt}
-              className="h-8 px-2 hover:bg-primary/10 hover:text-primary"
-            >
-              Next
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Button>
-          </div>
-        </div>
-        
-        <div className="flex items-center mb-4">
-          <div>
-            <label htmlFor="prompt-structure-select" className="mr-2 text-sm text-muted-foreground font-medium">
-              Prompt Structure
-            </label>
-            <select
-              id="prompt-structure-select"
-              className="bg-zinc-800 text-zinc-200 rounded-md px-3 py-1.5 text-xs font-medium border border-border focus:outline-none focus:ring-2 focus:ring-primary"
-              value={activeFormat || ""}
-              onChange={e => handleFormatClick(e.target.value)}
-            >
-              <option value="">All</option>
-              {formats.map(format => (
-                <option key={format} value={format}>
-                  {format}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="ml-auto">
-            <Button
-              variant="outline"
-              size="sm"
-              className="h-8 px-3 bg-primary/10 hover:bg-primary/20 text-primary"
-            >
-              Create New
-            </Button>
-          </div>
-        </div>
-        
+      <div className={`relative w-full ${className}`}>        
         <div
-          className="relative w-full h-[280px] flex items-center justify-center overflow-hidden px-[14px]"
+          className="relative w-full h-[450px] flex items-center justify-center overflow-hidden"
           aria-live="polite"
-          style={{
-            WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
-            maskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)"
-          }}
         >
           {/* Previous Prompt Card */}
           <div 
-            className="absolute left-0 top-0 z-10"
+            className="absolute left-0 top-0 z-10 flex items-center"
             onClick={() => handleCardClick(prevIdx)}
           >
+            <div className="absolute -left-4 z-20 bg-primary/20 hover:bg-primary/30 rounded-full p-1 cursor-pointer">
+              <ChevronLeft className="h-6 w-6 text-primary" />
+            </div>
             <PromptCard
               prompt={prompts[prevIdx]}
               isPrevious
@@ -183,16 +126,19 @@ export const PromptCarousel: React.FC = () => {
           
           {/* Next Prompt Card */}
           <div
-            className="absolute right-0 top-0 z-10"
+            className="absolute right-0 top-0 z-10 flex items-center"
             onClick={() => handleCardClick(nextIdx)}
           >
             <PromptCard
               prompt={prompts[nextIdx]}
               isNext
             />
+            <div className="absolute -right-4 z-20 bg-primary/20 hover:bg-primary/30 rounded-full p-1 cursor-pointer">
+              <ChevronRight className="h-6 w-6 text-primary" />
+            </div>
           </div>
         </div>
-        
+
         {/* Pagination Indicator */}
         <div className="flex justify-center mt-4">
           <div className="bg-card/30 backdrop-blur-sm rounded-full px-3 py-1.5 flex space-x-1.5">
@@ -254,7 +200,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, isSelected, isPrevious,
   // Use a consistent dark badge style for all categories
   return (
     <motion.div
-      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[480px] max-h-[280px] h-full transition-all duration-300 cursor-pointer ${
+      className={`overflow-hidden rounded-xl border w-full max-w-[340px] h-[450px] transition-all duration-300 cursor-pointer ${
         isSelected
           ? 'bg-card text-card-foreground shadow-xl border-primary/30'
           : 'bg-background/80 text-muted-foreground shadow border-border/50'
@@ -294,7 +240,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, isSelected, isPrevious,
         
         <div className="h-px w-full bg-border/40 my-2"></div>
         
-        <div className="flex-grow overflow-auto text-sm text-zinc-300 max-h-[180px] relative">
+        <div className="flex-grow overflow-auto text-sm text-zinc-300 max-h-[330px] relative">
           {prompt.content}
         </div>
         

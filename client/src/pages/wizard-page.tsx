@@ -14,6 +14,28 @@ import { PlayCircle } from 'lucide-react';
 import { ResultBench } from '@/components/wizard/ResultBench';
 
 export default function WizardPage() {
+  // CSS styles for consistent card heights
+  React.useEffect(() => {
+    // Add CSS to ensure consistent card height
+    const style = document.createElement('style');
+    style.textContent = `
+      .card-container {
+        display: flex;
+        align-items: flex-end;
+        height: 450px;
+        width: 100%;
+      }
+      
+      .card-container > div {
+        width: 100%;
+      }
+    `;
+    document.head.appendChild(style);
+    
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
   const { promptIdx, modelIdx, fetchMetrics, addToHistory, metrics } = usePromptStore();
   const [location, setLocation] = useLocation();
   
@@ -115,31 +137,34 @@ export default function WizardPage() {
         </motion.div>
         
         <motion.div
-          className="flex flex-row gap-4"
+          className="flex flex-row gap-8"
           variants={childVariants}
         >
           {/* First column: Prompt */}
-          <div className="flex flex-col gap-4 w-full lg:w-1/3">
-            <h2 className="text-xl font-semibold text-center mb-2">Prompt</h2>
-            <div className="h-[300px]"> {/* Increased height */}
-              <PromptCarousel />
+          <div className="w-full lg:w-1/3 flex flex-col items-center">
+            <h2 className="text-xl font-semibold text-center mb-6">Prompt</h2>
+            <div className="w-full max-w-[340px]">
+              <div className="card-container h-[450px] flex items-end">
+                <PromptCarousel />
+              </div>
             </div>
           </div>
           
           {/* Second column: Model */}
-          <div className="flex flex-col gap-4 w-full lg:w-1/3">
-            <h2 className="text-xl font-semibold text-center mb-2">Model</h2>
-            <div className="h-[300px]"> {/* Increased height */}
-              <ModelCarousel />
+          <div className="w-full lg:w-1/3 flex flex-col items-center">
+            <h2 className="text-xl font-semibold text-center mb-6">Model</h2>
+            <div className="w-full max-w-[340px]">
+              <div className="card-container h-[450px] flex items-end">
+                <ModelCarousel />
+              </div>
             </div>
           </div>
           
           {/* Third column: Output */}
-          <div className="flex flex-col items-center justify-start w-full lg:w-1/3">
-            <h2 className="text-xl font-semibold text-center mb-2">Output</h2>
-            <div className="w-full max-w-[400px] mx-auto cursor-pointer"> {/* Added cursor-pointer */}
-              <RecommendationHeader />
-              <div onClick={handleEvalCardClick}>
+          <div className="w-full lg:w-1/3 flex flex-col items-center">
+            <h2 className="text-xl font-semibold text-center mb-6">Output</h2>
+            <div className="w-full max-w-[340px]">
+              <div className="card-container h-[450px] flex items-end" onClick={handleEvalCardClick}>
                 <SimpleEvaluationCard />
               </div>
             </div>

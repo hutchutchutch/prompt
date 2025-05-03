@@ -5,7 +5,7 @@ import { models } from '@/data/models';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
 
-export const RecommendationHeader: React.FC = () => {
+export const RecommendationHeader: React.FC<{className?: string}> = ({className = ''}) => {
   const { setPromptIdx, setModelIdx, metrics } = usePromptStore();
   
   console.log("Current metrics:", metrics);
@@ -20,6 +20,10 @@ export const RecommendationHeader: React.FC = () => {
   const bestScore = best?.score;
 
   if (!bestPrompt || !bestModel) return null;
+  
+  // Find indices for best prompt and model
+  const bestPromptIdx = bestPrompt ? prompts.findIndex(p => p.id === bestPrompt.id) : -1;
+  const bestModelIdx = bestModel ? models.findIndex(m => m.id === bestModel.id) : -1;
   
   // Handle click to apply recommendation
   const handleRecommendationClick = () => {
@@ -39,7 +43,7 @@ export const RecommendationHeader: React.FC = () => {
   
   return (
     <motion.div 
-      className="w-full mb-2 cursor-pointer"
+      className={`w-full cursor-pointer ${className}`}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={handleRecommendationClick}

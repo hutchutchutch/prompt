@@ -13,7 +13,7 @@ const customTransition = {
   ease: [0.45, 0, 0.2, 1] 
 };
 
-export const ModelCarousel: React.FC = () => {
+export const ModelCarousel: React.FC<{className?: string}> = ({className = ''}) => {
   const { promptIdx, modelIdx, setModelIdx, fetchMetrics } = usePromptStore();
   const [direction, setDirection] = useState(0);
   const controls = useAnimationControls();
@@ -59,55 +59,20 @@ export const ModelCarousel: React.FC = () => {
   };
 
   return (
-    <div className="relative flex flex-col py-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-foreground">
-          Model chosen: {models[modelIdx].title} from {(() => {
-            const id = models[modelIdx].id;
-            if (id.includes('claude')) return 'Anthropic';
-            if (id.includes('gpt')) return 'OpenAI';
-            if (id.includes('gemini')) return 'Google';
-            if (id.includes('llama')) return 'Meta';
-            if (id.includes('mixtral')) return 'Mistral';
-            return 'Other';
-          })()}
-        </h2>
-        <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={prevModel}
-            className="h-8 px-2 hover:bg-primary/10 hover:text-primary"
-          >
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Previous
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={nextModel}
-            className="h-8 px-2 hover:bg-primary/10 hover:text-primary"
-          >
-            Next
-            <ChevronRight className="h-4 w-4 ml-1" />
-          </Button>
-        </div>
-      </div>
-      
+    <div className={`relative w-full ${className}`}>
       <div
-        className="relative w-full h-[280px] flex items-center justify-center overflow-hidden px-[14px]"
+        className="relative w-full h-[450px] flex items-center justify-center overflow-hidden"
         aria-live="polite"
-        style={{
-          WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)",
-          maskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%)"
-        }}
       >
         {/* Fade cards at edges using CSS mask-image */}
         {/* Previous Model Card */}
         <div 
-          className="absolute left-0 top-0 z-10"
+          className="absolute left-0 top-0 z-10 flex items-center"
           onClick={() => handleCardClick(prevIdx)}
         >
+          <div className="absolute -left-4 z-20 bg-primary/20 hover:bg-primary/30 rounded-full p-1 cursor-pointer">
+            <ChevronLeft className="h-6 w-6 text-primary" />
+          </div>
           <ModelCard 
             model={models[prevIdx]} 
             isPrevious 
@@ -126,13 +91,16 @@ export const ModelCarousel: React.FC = () => {
         
         {/* Next Model Card */}
         <div 
-          className="absolute right-0 top-0 z-10"
+          className="absolute right-0 top-0 z-10 flex items-center"
           onClick={() => handleCardClick(nextIdx)}
         >
           <ModelCard 
             model={models[nextIdx]} 
             isNext 
           />
+          <div className="absolute -right-4 z-20 bg-primary/20 hover:bg-primary/30 rounded-full p-1 cursor-pointer">
+            <ChevronRight className="h-6 w-6 text-primary" />
+          </div>
         </div>
       </div>
       
@@ -154,20 +122,7 @@ export const ModelCarousel: React.FC = () => {
         </div>
       </div>
       
-      {/* Model/Prompt Combination Status */}
-      <div className="mt-2 flex justify-center">
-        <div className="px-3 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-xs text-primary-foreground/90 flex items-center gap-1.5">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span>
-            Testing <span className="font-semibold">{models[modelIdx].title}</span> with <span className="font-semibold">{
-              promptIdx >= 0 && promptIdx < (prompts?.length || 0) ? 
-              prompts[promptIdx]?.title : "selected prompt"}
-            </span>
-          </span>
-        </div>
-      </div>
+    
       
       {/* Placeholder for Model Modal */}
       {modalOpen && modalModel && (
@@ -239,7 +194,7 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
   
   return (
     <motion.div
-      className={`overflow-hidden rounded-xl border aspect-[16/9] w-full max-w-[480px] max-h-[280px] h-full transition-all duration-300 cursor-pointer ${
+      className={`overflow-hidden rounded-xl border w-full max-w-[340px] h-[450px] transition-all duration-300 cursor-pointer ${
         isSelected
           ? 'bg-card text-card-foreground shadow-xl border-primary/30'
           : 'bg-background/80 text-muted-foreground shadow border-border/50'
@@ -261,7 +216,7 @@ const ModelCard: React.FC<ModelCardProps> = ({ model, isSelected, isPrevious, is
     >
       <div className="p-5 flex flex-col h-full">
         <h3 className="font-semibold text-base sm:text-lg text-zinc-100 mb-2">Output</h3>
-        <div className="flex-grow overflow-auto text-sm text-zinc-300 mb-2 max-h-[180px]">
+        <div className="flex-grow overflow-auto text-sm text-zinc-300 mb-2 max-h-[330px]">
           {model.content}
         </div>
         <div className="h-px w-full bg-border/40 my-2"></div>
