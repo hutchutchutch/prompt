@@ -10,8 +10,13 @@ import { Rating, RatingButton } from '@/components/ui/rating';
 /**
  * Simplified version of EvaluationCard without Odometer.
  * If `output` is provided, displays the output string instead of metrics.
+ * If `expectedOutput` is provided, displays it for evaluation reference.
  */
-export const SimpleEvaluationCard: React.FC<{className?: string; output?: string}> = ({className = '', output}) => {
+export const SimpleEvaluationCard: React.FC<{
+  className?: string;
+  output?: string;
+  expectedOutput?: string;
+}> = ({className = '', output, expectedOutput}) => {
   const { metrics, loading, modelIdx } = usePromptStore();
   const [showGlow, setShowGlow] = useState(false);
 
@@ -77,13 +82,19 @@ export const SimpleEvaluationCard: React.FC<{className?: string; output?: string
   );
 
   // Output card for displaying generated output
-  const OutputCard: React.FC<{output: string}> = ({ output }) => (
+  const OutputCard: React.FC<{output: string; expectedOutput?: string}> = ({ output, expectedOutput }) => (
     <Card className="h-[450px] flex flex-col mx-auto relative overflow-hidden shadow-lg dark:bg-[#1A1A1A]">
       <CardHeader className="bg-primary text-primary-foreground rounded-t-lg relative z-10 px-3 py-2">
         <CardTitle className="text-lg font-bold">Model Output</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 p-4 flex flex-col space-y-3 relative z-10">
         <pre className="whitespace-pre-wrap text-sm text-foreground">{output}</pre>
+        {expectedOutput && (
+          <div className="mt-4 p-2 rounded bg-primary/10 border border-primary/20">
+            <div className="text-xs font-semibold text-primary mb-1">Expected Output</div>
+            <div className="whitespace-pre-line text-sm text-muted-foreground">{expectedOutput}</div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -221,7 +232,7 @@ export const SimpleEvaluationCard: React.FC<{className?: string; output?: string
   return (
     <div className={`w-full ${className}`}>
       {output
-        ? <OutputCard output={output} />
+        ? <OutputCard output={output} expectedOutput={expectedOutput} />
         : loading
           ? <SkeletonCard />
           : <MetricsCard />

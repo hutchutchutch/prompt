@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { PromptCarousel } from '@/components/ui/PromptCarousel';
 import { ModelCarousel } from '@/components/ui/ModelCarousel';
-import { ModelGridToggle } from '@/components/wizard/ModelGridToggle';
 import { SimpleEvaluationCard } from '@/components/ui/SimpleEvaluationCard';
 import { RecommendationHeader } from '@/components/wizard/RecommendationHeader';
 import { usePromptStore } from '@/store/promptStore';
@@ -13,15 +12,22 @@ import { PlayCircle } from 'lucide-react';
 
 import { ResultBench } from '@/components/wizard/ResultBench';
 import { UserMessage } from '@/components/ui/UserMessage';
+import { ExpectedOutput } from '@/components/ui/ExpectedOutput';
 
 export default function WizardPage() {
   // CSS styles for consistent card heights
   const [userMessage, setUserMessage] = useState("");
+  const [expectedOutput, setExpectedOutput] = useState("");
   const [output, setOutput] = useState<string | null>(null);
 
   // Handler for user message input change
   const handleUserMessageChange = (value: string) => {
     setUserMessage(value);
+  };
+
+  // Handler for expected output input change
+  const handleExpectedOutputChange = (value: string) => {
+    setExpectedOutput(value);
   };
 
   // Handler for user message submit
@@ -156,45 +162,67 @@ export default function WizardPage() {
           </Button>
         </motion.div>
         
+        {/* Top row: UserMessage (left) and ExpectedOutput (right) */}
         <motion.div
-          className="flex flex-row gap-8"
+          className="flex flex-col lg:flex-row gap-8 mb-10"
           variants={childVariants}
         >
-          {/* First column: Prompt */}
-          <div className="w-full lg:w-1/3 flex flex-col items-center">
-            <h2 className="text-xl font-semibold text-center mb-6">Prompt</h2>
-            <div className="w-full max-w-[340px]">
-              <div className="card-container h-[450px] flex items-end">
-                <PromptCarousel />
-              </div>
-              <UserMessage
-                value={userMessage}
-                onChange={handleUserMessageChange}
-                onSubmit={handleUserMessageSubmit}
-              />
-            </div>
+          <div className="w-full lg:w-1/2 flex flex-col">
+            <UserMessage
+              value={userMessage}
+              onChange={handleUserMessageChange}
+              onSubmit={handleUserMessageSubmit}
+            />
           </div>
-          
-          {/* Second column: Model */}
-          <div className="w-full lg:w-1/3 flex flex-col items-center">
-            <h2 className="text-xl font-semibold text-center mb-6">Model</h2>
-            <div className="w-full max-w-[340px]">
-              <div className="card-container h-[450px] flex items-end">
-                <ModelCarousel />
-              </div>
-            </div>
-          </div>
-          
-          {/* Third column: Output */}
-          <div className="w-full lg:w-1/3 flex flex-col items-center">
-            <h2 className="text-xl font-semibold text-center mb-6">Output</h2>
-            <div className="w-full max-w-[340px]">
-              <div className="card-container h-[450px] flex items-end" onClick={handleEvalCardClick}>
-                <SimpleEvaluationCard output={output || ""} />
-              </div>
-            </div>
+          <div className="w-full lg:w-1/2 flex flex-col">
+            <ExpectedOutput
+              value={expectedOutput}
+              onChange={handleExpectedOutputChange}
+              // Optionally, add onSubmit or validation here
+            />
           </div>
         </motion.div>
+
+        {/* Only show the rest of the workflow if userMessage is filled */}
+        {userMessage.trim() && (
+          <motion.div
+            className="flex flex-row gap-8"
+            variants={childVariants}
+          >
+            {/* First column: Prompt */}
+            <div className="w-full lg:w-1/3 flex flex-col items-center">
+              <h2 className="text-xl font-semibold text-center mb-6">Prompt</h2>
+              <div className="w-full max-w-[340px]">
+                <div className="card-container h-[450px] flex items-end">
+                  <PromptCarousel />
+                </div>
+              </div>
+            </div>
+            
+            {/* Second column: Model */}
+            <div className="w-full lg:w-1/3 flex flex-col items-center">
+              <h2 className="text-xl font-semibold text-center mb-6">Model</h2>
+              <div className="w-full max-w-[340px]">
+                <div className="card-container h-[450px] flex items-end">
+                  <ModelCarousel />
+                </div>
+              </div>
+            </div>
+            
+            {/* Third column: Output */}
+            <div className="w-full lg:w-1/3 flex flex-col items-center">
+              <h2 className="text-xl font-semibold text-center mb-6">Output</h2>
+              <div className="w-full max-w-[340px]">
+                <div className="card-container h-[450px] flex items-end" onClick={handleEvalCardClick}>
+                  <SimpleEvaluationCard
+                    output={output || ""}
+                    expectedOutput={expectedOutput}
+                  />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
         
         <motion.div
           className="mt-12 flex justify-center"
