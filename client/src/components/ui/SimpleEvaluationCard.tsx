@@ -7,8 +7,11 @@ import { usePromptStore } from '@/store/promptStore';
 import { models } from '@/data/models';
 import { Rating, RatingButton } from '@/components/ui/rating';
 
-// Simplified version of EvaluationCard without Odometer
-export const SimpleEvaluationCard: React.FC<{className?: string}> = ({className = ''}) => {
+/**
+ * Simplified version of EvaluationCard without Odometer.
+ * If `output` is provided, displays the output string instead of metrics.
+ */
+export const SimpleEvaluationCard: React.FC<{className?: string; output?: string}> = ({className = '', output}) => {
   const { metrics, loading, modelIdx } = usePromptStore();
   const [showGlow, setShowGlow] = useState(false);
 
@@ -69,6 +72,18 @@ export const SimpleEvaluationCard: React.FC<{className?: string}> = ({className 
             ))}
           </div>
         </div>
+      </CardContent>
+    </Card>
+  );
+
+  // Output card for displaying generated output
+  const OutputCard: React.FC<{output: string}> = ({ output }) => (
+    <Card className="h-[450px] flex flex-col mx-auto relative overflow-hidden shadow-lg dark:bg-[#1A1A1A]">
+      <CardHeader className="bg-primary text-primary-foreground rounded-t-lg relative z-10 px-3 py-2">
+        <CardTitle className="text-lg font-bold">Model Output</CardTitle>
+      </CardHeader>
+      <CardContent className="flex-1 p-4 flex flex-col space-y-3 relative z-10">
+        <pre className="whitespace-pre-wrap text-sm text-foreground">{output}</pre>
       </CardContent>
     </Card>
   );
@@ -205,7 +220,12 @@ export const SimpleEvaluationCard: React.FC<{className?: string}> = ({className 
 
   return (
     <div className={`w-full ${className}`}>
-      {loading ? <SkeletonCard /> : <MetricsCard />}
+      {output
+        ? <OutputCard output={output} />
+        : loading
+          ? <SkeletonCard />
+          : <MetricsCard />
+      }
     </div>
   );
 };

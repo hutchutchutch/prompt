@@ -12,9 +12,29 @@ import { Button } from '@/components/ui/button';
 import { PlayCircle } from 'lucide-react';
 
 import { ResultBench } from '@/components/wizard/ResultBench';
+import { UserMessage } from '@/components/ui/UserMessage';
 
 export default function WizardPage() {
   // CSS styles for consistent card heights
+  const [userMessage, setUserMessage] = useState("");
+  const [output, setOutput] = useState<string | null>(null);
+
+  // Handler for user message input change
+  const handleUserMessageChange = (value: string) => {
+    setUserMessage(value);
+  };
+
+  // Handler for user message submit
+  const handleUserMessageSubmit = () => {
+    // Aggregate UserMessage, System Message, and selected Model
+    // For now, mock output generation
+    // In a real app, fetch the prompt and model details from stores or props
+    const systemMessage = "System message from selected prompt"; // TODO: Replace with actual system message
+    const modelName = "Selected model"; // TODO: Replace with actual model name
+    const generatedOutput = `Model: ${modelName}\nSystem: ${systemMessage}\nUser: ${userMessage}\n\n[Mocked Output]`;
+    setOutput(generatedOutput);
+  };
+
   React.useEffect(() => {
     // Add CSS to ensure consistent card height
     const style = document.createElement('style');
@@ -147,6 +167,11 @@ export default function WizardPage() {
               <div className="card-container h-[450px] flex items-end">
                 <PromptCarousel />
               </div>
+              <UserMessage
+                value={userMessage}
+                onChange={handleUserMessageChange}
+                onSubmit={handleUserMessageSubmit}
+              />
             </div>
           </div>
           
@@ -165,7 +190,7 @@ export default function WizardPage() {
             <h2 className="text-xl font-semibold text-center mb-6">Output</h2>
             <div className="w-full max-w-[340px]">
               <div className="card-container h-[450px] flex items-end" onClick={handleEvalCardClick}>
-                <SimpleEvaluationCard />
+                <SimpleEvaluationCard output={output || ""} />
               </div>
             </div>
           </div>
